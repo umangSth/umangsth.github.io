@@ -6,14 +6,17 @@
 }
 
 :root {
-  --background: #ffffff;
+  --background: #f0f8f7;
   --foreground: #171717;
+  --primary: #ffffff;
+  --secondary: #c8e6b9d7;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
+    --background: #eef4d7;
     --foreground: #ededed;
+    --primary: #182c25;
   }
 }
 
@@ -21,4 +24,71 @@ body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
+  scroll-behavior: smooth;
 }
+
+
+#pacman circle {
+  stroke: black;
+  fill: none;
+  stroke-width: 50%;
+  stroke-dasharray: 30,8;
+  stroke-dashoffset: -4;
+}
+
+.group:hover #pacman circle {
+  animation: chomp 0.15s linear infinite alternate;
+}
+
+#main {
+  background: var(--background)
+}
+
+
+@keyframes chomp {
+  from {
+    stroke-dasharray: 38,8;
+    stroke-dashoffset: 0;
+  }
+  to {
+    stroke-dasharray: 30,8;
+    stroke-dashoffset: -4;
+  }
+}
+
+.group:hover #pencil {
+  animation: writing 0.3s ease-in-out infinite alternate;
+}
+
+@keyframes writing {
+  0% {
+    transform: rotate(20deg) translateY(2px) translateX(0px);
+  }
+  50% {
+    transform: rotate(15deg) translateY(-1px) translateX(2px);
+  }
+  100% {
+    transform: rotate(20deg) translateY(2px) translateX(4px);
+  }
+}
+
+.group:hover #resume {
+  animation: lift 1.2s ease-in-out infinite;
+  /* transform-origin: center bottom;  */
+}
+@keyframes lift {
+  0% {
+    transform: perspective(400px) rotateX(0) rotateY(0) rotateZ(0);
+  }
+  33% {
+    transform: perspective(400px) rotateX(-10deg) rotateY(5deg) rotateZ(-3deg) translateY(-6px);
+  }
+  66% {
+    transform: perspective(400px) rotateX(5deg) rotateY(-3deg) rotateZ(2deg) translateY(-3px);
+  }
+  100% {
+    transform: perspective(400px) rotateX(0) rotateY(0) rotateZ(0);
+  }
+}
+
+
