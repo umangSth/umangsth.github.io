@@ -66,7 +66,7 @@ export const About = () => {
 
 
     return (
-        <div className='flex flex-row gap-8 mb-16'>
+        <div className='flex flex-row gap-8 mb-8'>
             <section id='about' className="flex flex-col w-1/3 transition-all duration-1000 ease-in-out ">
                 <div className="flex flex-row gap-8 p-6 bg-[var(--primary)] rounded-t-2xl shadow-md hover:shadow-neutral-900">
                     <Image
@@ -108,7 +108,7 @@ export const About = () => {
                         return (
                             <div key={category} className="bg-white p-5 rounded-xl shadow-md hover:shadow-lg transition-all duration-300">
                                 <h3 className="text-lg font-semibold mb-3 text-gray-800 flex items-center">
-                                    <span className="w-8 h-8 bg-blue-100 text-blue-500 rounded-full flex items-center justify-center mr-2">
+                                    <span className="w-8 h-8  bg-[var(--secondary)] text-black-400  rounded-full flex items-center justify-center mr-2">
                                         <span className="text-xs">
                                             <Icon className="w-4 h-4" />
                                         </span>
@@ -120,7 +120,7 @@ export const About = () => {
                                 <div className="flex flex-wrap gap-2 mt-4">
                                     {skillsData[category].platform?.map((item: any) => (
                                         !item ? null :
-                                            <span key={item} className="px-2 py-1 bg-gray-100 text-xs text-gray-600 rounded">{item}</span>
+                                            <span key={item} className="px-2 py-1  bg-[var(--secondary)] text-xs text-black-500 rounded-full hover:scale-130 cursor-pointer">{item}</span>
                                     ))}
                                 </div>
                             </div>
