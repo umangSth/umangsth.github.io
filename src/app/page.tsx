@@ -4,6 +4,7 @@ import { About } from "./component/about";
 import { Experience } from "./component/exprience";
 import { Studies } from "./component/studies";
 import { Projects } from "./component/projects";
+import { TimeLine } from "./component/time-line";
 
 export default function Home() {
 
@@ -12,9 +13,11 @@ export default function Home() {
     <div id="main" className="min-h-screen pb-20 gap-16 sm:py-30 sm:px-35 font-[family-name:var(--font-geist-sans)]">
       
         <About />
+        <TimeLine />
         <Experience />
         <Studies />
         <Projects />
+       
 
 
       

@@ -1,7 +1,7 @@
 import { FaCode, FaProcedures, FaProjectDiagram, FaRProject } from "react-icons/fa";
 import { FaDiagramProject } from "react-icons/fa6";
 
-export const Projects = () => {
+export  const Projects = () => {
     return (
         <section className="mb-8 p-6 rounded-lg bg-white shadow-lg">
             <h2 className="text-2xl font-semibold mb-6 text-gray-800 flex items-center">
