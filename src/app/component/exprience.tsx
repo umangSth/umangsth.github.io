@@ -1,5 +1,5 @@
 import { FaBriefcase, FaBuilding, FaCode } from "react-icons/fa";
-import { experiences } from "./data";
+import { works } from "./data/data";
 
 export const Experience = () => {
     return (
@@ -12,7 +12,7 @@ export const Experience = () => {
             </h2>
 
             <div className="space-y-6">
-                {experiences.map((exp, index) => (
+                {works.map((exp, index) => (
                     <div key={index} className="group relative pl-8  hover:pl-10 transition-all">
                         <div className="p-6  rounded-lg shadow bg-gray-50 transition-colors">
                             <div className="mb-2">
@@ -21,7 +21,6 @@ export const Experience = () => {
                                     <h4 className="text-gray-700 font-medium mt-1">{exp.company}</h4>
                                     <p className="text-sm text-gray-500">{exp.dates}</p>
                                 </div>
-
                             </div>
                             <ul className="space-y-3 pl-4 border-t pt-4">
                                 {exp.responsibilities.map((item, i) => (

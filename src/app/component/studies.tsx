@@ -1,5 +1,5 @@
 import { FaUniversity } from "react-icons/fa";
-import { educations } from "./data";
+import { educations } from "./data/data";
 
 
 export const Studies = () => {

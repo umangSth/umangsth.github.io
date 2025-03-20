@@ -12,13 +12,16 @@ const experienceItems2 = [
     'Actively participated in Agile development, contributing to sprint planning, daily stand-ups, and collaborative coding efforts.'
 ]
 
-export const experiences = [
+export const works = [
     {
         responsibilities: experienceItems1,
         dates: "May 2024 - Present",
         company: "Serve Up Software (PTY) Ltd.",
         title: "Full Stack Developer",
-        time: { start: '2024-05-01', end: 'current' }
+        time: { 
+            start: '2024-07-01',
+            end: 'current' 
+        }
     }, 
     {
         responsibilities: experienceItems2,
@@ -46,7 +49,7 @@ export const experiences = [
                 'Completed numerous team projects, fostering collaborative problem-solving and effective communication within diverse groups,'
                 
             ],
-            time:{ start: '2023-01-01', end: '2024-09-28' }
+            time:{ start: '2023-01-01', end: '2024-08-28' }
         },
         {
             title: "BSc Computer Science & IT",
@@ -60,6 +63,6 @@ export const experiences = [
                 'Completed an internship (Boardway Infosys), gaining practical experience applying theoretical knowledge to real-world scenarios.',
                 
             ],
-            time:{ start: '2015-01-01', end: '2019-11-15' }
+            time:{ start: '2015-09-06', end: '2019-08-30' }
         }
     ]
