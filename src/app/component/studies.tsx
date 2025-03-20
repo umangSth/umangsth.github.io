@@ -1,37 +1,8 @@
 import { FaUniversity } from "react-icons/fa";
+import { educations } from "./data";
 
 
 export const Studies = () => {
-    const educations = [
-        {
-            title: "Full Stack Software Developer",
-            institution: "Lambton College",
-            location: "Toronto, ON, Canada",
-            material: [
-                'Mastered versatile programming language python, C#, Java, and JavaScript.',
-                'Acquired advanced skills in relational and non-relational database design and practical application.',
-                'Gained knowledge and practical skills in DevOps tools, ensuring streamlined and collaborative software development processes.',
-                'Acquired expertise in cloud computing technologies, understanding their applications in software development.',
-                'Completed numerous team projects, fostering collaborative problem-solving and effective communication within diverse groups,'
-                
-            ]
-        },
-        {
-            title: "BSc Computer Science & IT",
-            institution: "Tribhuvan University",
-            location: "Nepal",
-            material: [
-                'Acquired a strong foundation in digital logic and microprocessor architecture.',
-                'Studied the fundamental principles of computer architecture and gained proficiency in data structures.',
-                'Explored advanced algorithms and theoretical aspects of computation.',
-                'Applied statistical methods and studied the foundational concepts of discrete structures.',
-                'Completed an internship (Boardway Infosys), gaining practical experience applying theoretical knowledge to real-world scenarios.',
-                
-            ]
-        }
-    ]
-
-
     return (
         <section className="my-16 p-6 rounded-lg bg-white shadow-lg">
                         <h2 className="text-2xl font-semibold mb-6 text-gray-800 flex items-center">
