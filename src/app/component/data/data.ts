@@ -1,3 +1,5 @@
+import { FaDatabase, FaGlobe, FaLaptopCode, FaServer, FaTools } from "react-icons/fa"
+
 const experienceItems1 = [
     'Led a comprehensive project refactoring, improving code quality, scalability, and maintainability.',
     'Designed and developed role-based access control (RBAC), ensuring secure and modular system architecture.',
@@ -70,3 +72,40 @@ export const works = [
             color: 'rgb(255, 8, 86)'
         }
     ]
+
+
+   export const skillsData: any = {
+            Frontend: {
+                title: "Front-end Development",
+                description: "Proficient in React.js, Next.js, Redux, and Angular, with experience in TypeScript, JavaScript, HTML, CSS, Tailwind CSS, and Sass for building responsive and visually appealing user interfaces.",
+                platform: ["react", "nextjs", "redux", "angular", "typescript", "javascript", "html5", "css3", "tailwind"],
+                icon: FaLaptopCode,
+            },
+            Backend: {
+                title: "Back-end Development",
+                description: "Skilled in Node.js, ASP.NET Core, and MVC, specializing in RESTful API development, authentication, and server-side logic.",
+                platform: ["nodejs", "dotnet", "csharp", "express"],
+                icon: FaServer,
+            },
+            Database: {
+                title: "Database & ORM",
+                description: "Experienced with relational databases such as MS-SQL, MySQL, and PostgreSQL, including query optimization, and database schema design.",
+                platform: ["mysql", "postgresql", "mssql"],
+                icon: FaDatabase,
+            },
+            DevOps: {
+                title: "DevOps & Tools",
+                description: "Strong foundation in Docker, Git, CI/CD, and Agile methodologies (Scrum & Kanban) for streamlined deployment and development.",
+                platform: ["docker", "git", "github"],
+                icon: FaTools,
+            },
+            Languages: {
+                title: "Languages",
+                description: "English (Professional), Hindi(Fluent), and Nepali(Native).",
+                icon: FaGlobe,
+            }
+        }
+
+
+export const FullText = 'Results-driven and passionate Web Developer with around 3 years of experience in building and maintaining web applications. Proficient in React.js, Next.js, Redux, Angular for front-end development and Node.js, ASP.NET Core, and MVC for back-end services. Skilled in relational databases such as MS-SQL, MySQL, and PostgreSQL. Experienced in API development, Agile methodologies, and Docker. Passionate about writing clean, efficient, and maintainable code with CI/CD best practices.';
+  

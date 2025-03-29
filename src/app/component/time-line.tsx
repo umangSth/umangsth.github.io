@@ -50,23 +50,18 @@ interface YearGap {
 export const TimeLine = () => {
     const [date, setDate] = useState<Date>(new Date());
 
-        useEffect(() => {
+    useEffect(() => {
         setDate(new Date());
-        }, []);
+    }, []);
+
     const [currentTime, setCurrentTime] = useState<Date>(date);
     const [scrollProgress, setScrollProgress] = useState(0);
     const containerRef = useRef<HTMLElement>(null);
     const [colorCodes, setColorCodes] = useState<any>({});
-    const yearsGap: YearGap = {};
-
-
-
     const dividerLineColor = 'rgb(75 85 99)';
     const year = currentTime.getFullYear();
     const month = currentTime.getMonth();
     const yearFraction = ((month + currentTime.getDate() / 30) / 12);
-
-
     const listOfYears = [];
 
     for (let y = 2013; year >= y; y++) {
@@ -116,10 +111,7 @@ export const TimeLine = () => {
     const currentHeight = Math.max(minHeight, maxHeight * scrollProgress);
     const currentBodyHeight = maxHeight * scrollProgress;
     const tempIndex = Math.floor(currentBodyHeight / 100)
-    let tempArray = listOfYears.reverse().slice(0, tempIndex)
-    let tempRemainingTopHeight = 0;
-
-    // console.log("=========>",maxHeight, scrollProgress)
+    let tempArray = listOfYears.reverse().slice(0, tempIndex);
 
 
 
@@ -229,13 +221,11 @@ export const TimeLine = () => {
                     {(() => {
                         let cumulativeTop = 0;
                         let tempYearColorArray: any = {};
-                        let tempColorRecord: any = {};
                         let firstItemFlag = true;
                         let preColorArray: any
                         return tempArray.map((year, index) => {
                             const isCurrentYearLine = index === tempArray.length - 1;
                             const scrollProgressInYear = currentBodyHeight % 100;
-
                             let defaultColor = dividerLineColor;
                             let lineHeight;
 
@@ -247,7 +237,6 @@ export const TimeLine = () => {
                             } else {
                                 lineHeight = 80;
                             }
-
 
                             const lineStart = cumulativeTop;
                             const lineEnd = lineStart + lineHeight;
@@ -350,7 +339,7 @@ export const TimeLine = () => {
 
                             return isWithinView && (
                                 <div key={index}
-                                    className="absolute left-4 w-4/5 p-4 rounded-lg bg-blue-50 shadow-md transition-all duration-700 ease-out"
+                                    className="absolute left-4 w-full p-4 rounded-lg bg-blue-50 shadow-md transition-all duration-700 ease-out"
                                     style={{
                                         top: `${top}px`,
                                         height: `${height}px`,

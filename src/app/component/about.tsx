@@ -1,66 +1,108 @@
 'use client';
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { FaLaptopCode, FaReact, FaServer, FaDatabase, FaTools, FaGlobe } from "react-icons/fa";
+import { skillsData, FullText } from "./data/data";
 
 export const About = () => {
-
-    const [showFullAbout, setShowFullAbout] = useState(false);
+    
     const characterLimit = 150;
+    const [isExpanding, setIsExpanding] = useState(false);
+    const[isCollapsing, setIsCollapsing] = useState(false);
+    const [displayedText, setDisplayedText] = useState(FullText.slice(0, characterLimit) + '...');
     const [textHeight, setTextHeight] = useState('auto');
-    const textRef: any = useRef(null);
 
-    const text = 'Results-driven and passionate Web Developer with around 3 years of experience in building and maintaining web applications. Proficient in React.js, Next.js, Redux, Angular for front-end development and Node.js, ASP.NET Core, and MVC for back-end services. Skilled in relational databases such as MS-SQL, MySQL, and PostgreSQL. Experienced in API development, Agile methodologies, and Docker. Passionate about writing clean, efficient, and maintainable code with CI/CD best practices.';
-    const [activeSkill, setActiveSkill] = useState('Frontend');
+
+ 
+    const textRef: any = useRef<HTMLParagraphElement>(null);
+    const animationRef = useRef<number | null>(null);
+
+    // Initialize with truncated text
     useEffect(() => {
-        if (textRef.current) {
-            const fullHeight = textRef.current.scrollHeight;
-            const truncatedText = text.slice(0, characterLimit) + '...';
-            textRef.current.textContent = truncatedText;
-            const collapsedHeight = textRef.current.scrollHeight;
+        const initialText = FullText.slice(0, characterLimit) + '...';
+        setDisplayedText(initialText);
+    }, [])
 
-            setTextHeight(showFullAbout ? `${fullHeight}px` : `${collapsedHeight}px`);
-            if (showFullAbout) {
-                textRef.current.textContent = text;
+    // Update height whenever displayed text changes
+    useEffect(() => {
+        // Only run on the client
+        if (typeof window !== 'undefined' && textRef.current) {
+            setTextHeight(`${textRef.current.scrollHeight}px`);
+        }
+    }, [displayedText]);
+
+    // Handle expanding animation
+    useEffect(()=> {
+        console.log('is expanding', isExpanding)
+        if (!isExpanding)  return;
+
+        console.log('is expanding')
+        let currentIndex = characterLimit;
+        const truncatedText = FullText.slice(0, characterLimit);
+
+        const animateExpand = () => {
+            if (currentIndex <= FullText.length){
+                setDisplayedText(FullText.slice(0, currentIndex));
+                currentIndex++;
+                animationRef.current = requestAnimationFrame(animateExpand)
+            }else {
+                setIsExpanding(false);
+                animationRef.current = null;
             }
+        };
 
+        // start with truncated text without ellipsis
+        setDisplayedText(truncatedText);
+
+        // small deplay before starting animation
+        setTimeout(()=> {   
+            animationRef.current = requestAnimationFrame(animateExpand);
+        }, 4);
+
+        return () => {
+            if (animationRef.current) {
+                cancelAnimationFrame(animationRef.current);
+                animationRef.current = null;
+            }
         }
 
-    }, [showFullAbout])
-    const displayedText = showFullAbout ? text : text.slice(0, characterLimit) + (text.length > characterLimit ? '...' : '');
+    }, [isExpanding])
 
 
+    // Handle collapsing animation
+    useEffect(()=> {
+        if (!isCollapsing) return;
 
-    const skillsData: any = {
-        Frontend: {
-            title: "Front-end Development",
-            description: "Proficient in React.js, Next.js, Redux, and Angular, with experience in TypeScript, JavaScript, HTML, CSS, Tailwind CSS, and Sass for building responsive and visually appealing user interfaces.",
-            platform: ["react", "nextjs", "redux", "angular", "typescript", "javascript", "html5", "css3", "tailwind"],
-            icon: FaLaptopCode,
-        },
-        Backend: {
-            title: "Back-end Development",
-            description: "Skilled in Node.js, ASP.NET Core, and MVC, specializing in RESTful API development, authentication, and server-side logic.",
-            platform: ["nodejs", "dotnet", "csharp", "express"],
-            icon: FaServer,
-        },
-        Database: {
-            title: "Database & ORM",
-            description: "Experienced with relational databases such as MS-SQL, MySQL, and PostgreSQL, including query optimization, and database schema design.",
-            platform: ["mysql", "postgresql", "mssql"],
-            icon: FaDatabase,
-        },
-        DevOps: {
-            title: "DevOps & Tools",
-            description: "Strong foundation in Docker, Git, CI/CD, and Agile methodologies (Scrum & Kanban) for streamlined deployment and development.",
-            platform: ["docker", "git", "github"],
-            icon: FaTools,
-        },
-        Languages: {
-            title: "Languages",
-            description: "English (Professional), Hindi(Fluent), and Nepali(Native).",
-            // platform: ["globe"]
-            icon: FaGlobe,
+        let currentIndex = FullText.length;
+
+        const animateCollapse = () => {
+            if (currentIndex > characterLimit){
+                currentIndex--;
+                setDisplayedText(FullText.slice(0, currentIndex));
+                animationRef.current = requestAnimationFrame(animateCollapse)
+            } else {
+                setDisplayedText(FullText.slice(0, characterLimit) + '...');
+                setIsCollapsing(false);
+                animationRef.current = null;
+            }
+        };
+
+        animationRef.current = requestAnimationFrame(animateCollapse);
+        return () => {
+            if (animationRef.current) {
+                cancelAnimationFrame(animationRef.current);
+                animationRef.current = null;
+            }
+        }
+
+    },[isCollapsing])
+
+    const handleToggleText = () =>{
+        if (isExpanding || isCollapsing) return;
+
+        if (displayedText.length <= characterLimit + 3) {
+            setIsExpanding(true);
+        } else {
+            setIsCollapsing(true);
         }
     }
 
@@ -90,12 +132,13 @@ export const About = () => {
                         </p>
                     </div>
 
-                    {text.length > characterLimit && (
+                    {FullText.length > characterLimit && (
                         <button
                             className="text-blue-500 mt-2 self-start cursor-pointer"
-                            onClick={() => setShowFullAbout(!showFullAbout)}
+                            onClick={handleToggleText}
+                            disabled={isExpanding || isCollapsing}
                         >
-                            {showFullAbout ? 'Read less' : 'Read more'}
+                            {displayedText.length > characterLimit + 3 ? 'Read less' : 'Read more'}
                         </button>
                     )}
                 </div>
