@@ -5,11 +5,11 @@ interface ClockProps {
 
 export const Clock = (props: ClockProps) => {
     return (
-
-        <div id='clock' 
-        className="sticky top-10/12 flex"
+<div id='clock' 
+        className="aboslute top-10/12 z-12"
+       
         >
-        <svg viewBox="0 0 50 50" className="h-15 w-15 mr-2">
+        <svg viewBox="0 0 50 50" className="h-15 w-15">
             <circle cx="25" cy="25" r="20" className="stroke-current stroke-4 fill-none" />
 
             <line x1="25" y1="7" x2="25" y2="10" className="stroke-current stroke-2" />

@@ -14,8 +14,10 @@ export default function Home() {
 
       <About />
       <TimeLine />
+      {/* 
       <Experience />
-      <Studies />
+      <Studies /> 
+      */}
       <Projects />
 
 

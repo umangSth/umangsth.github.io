@@ -21,7 +21,8 @@ export const works = [
         time: { 
             start: '2024-07-01',
             end: 'current' 
-        }
+        },
+        color: 'rgb(255, 11, 180)'
     }, 
     {
         responsibilities: experienceItems2,
@@ -30,8 +31,9 @@ export const works = [
         title: "Junior Developer",
         time: {
             start: '2019-12-01',
-            end: '2022-03-01'
-        }
+            end: '2022-05-01'
+        },
+        color: 'rgb(255, 206, 86)'
     }
 ]
 
@@ -49,7 +51,8 @@ export const works = [
                 'Completed numerous team projects, fostering collaborative problem-solving and effective communication within diverse groups,'
                 
             ],
-            time:{ start: '2023-01-01', end: '2024-08-28' }
+            time:{ start: '2023-01-01', end: '2024-08-28' },
+            color: 'rgb(255, 177, 132)'
         },
         {
             title: "BSc Computer Science & IT",
@@ -63,6 +66,7 @@ export const works = [
                 'Completed an internship (Boardway Infosys), gaining practical experience applying theoretical knowledge to real-world scenarios.',
                 
             ],
-            time:{ start: '2015-09-06', end: '2019-08-30' }
+            time:{ start: '2015-09-06', end: '2019-08-30' },
+            color: 'rgb(255, 8, 86)'
         }
     ]
