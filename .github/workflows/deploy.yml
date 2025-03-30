@@ -10,22 +10,21 @@ permissions:
   pages: write
   id-token: write
 
-
-concurrency: 
+concurrency:
   group: "pages"
   cancel-in-progress: false
 
 jobs: 
-  build: 
+  build:
     runs-on: ubuntu-latest
-    steps: 
-      - name: Checkout 
+    steps:
+      - name: Checkout
         uses: actions/checkout@v3
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: 18
-          cache: 'npm'
+          cache: npm
       - name: Install dependencies
         run: npm ci
       - name: Build with Next.js
@@ -33,30 +32,17 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          name: next-output
           path: ./out
-
+  
   deploy: 
-    environment: 
+    environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     needs: build
-    steps: 
-      - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v3
-        with: 
-          name: next-output
-          path: ./out
-      
-      - name: Setup Pages
-        uses: actions/configure-pages@v3
-
-      - name: Upload page artifact
-        uses: actions/upload-pages-artifact@v1
-        with:
-          path: ./out
-
+    steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v1
+        uses: actions/deploy-pages@v2
+        with:
+          static_site_generator: nextjs

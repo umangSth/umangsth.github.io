@@ -37,8 +37,8 @@ interface YearColor {
 
 interface ColorCodes {
     [key: number]: {
-       height: number,
-       color: string
+        height: number,
+        color: string
     }
 };
 
@@ -57,7 +57,7 @@ interface ColorYearArray {
 
 export const TimeLine = () => {
     const [date, setDate] = useState<Date>(new Date());
-    const [expandedCards, setExpandedCards] = useState<{[key: string]: boolean}>({});
+    const [expandedCards, setExpandedCards] = useState<{ [key: string]: boolean }>({});
 
     useEffect(() => {
         setDate(new Date());
@@ -73,32 +73,32 @@ export const TimeLine = () => {
     const listOfYears = [];
 
     for (let y = 2013; year >= y; y++) {
-        listOfYears.push(y === year ? 'current Year' : y + "");
+        listOfYears.push(y === year ? 'current' : y + "");
     }
 
     const height_from_year = calculateMonthDifference('2014-12-25', date);
-    const minHeight:number = 150;
-    const maxHeight:number = height_from_year * CONSTANT_GAP;
+    const minHeight: number = 150;
+    const maxHeight: number = height_from_year * CONSTANT_GAP;
 
     const handleScroll = useCallback(() => {
         let inThrottle: boolean;
         return () => {
-          if (!inThrottle) {
-            const container = containerRef.current;
-            if (!container) return;
-    
-            const scrollDistance = maxHeight - minHeight;
-            const initialOffsetTop = container.offsetTop * 0.1;
-            const currentScroll = window.scrollY;
-            const scrolled = currentScroll - initialOffsetTop;
-            let progress = scrolled / scrollDistance;
-            progress = Math.min(1, Math.max(0, progress));
-            setScrollProgress(progress);
-            inThrottle = true;
-            setTimeout(() => (inThrottle = false), 16);
-          }
+            if (!inThrottle) {
+                const container = containerRef.current;
+                if (!container) return;
+
+                const scrollDistance = maxHeight - minHeight;
+                const initialOffsetTop = container.offsetTop * 0.1;
+                const currentScroll = window.scrollY;
+                const scrolled = currentScroll - initialOffsetTop;
+                let progress = scrolled / scrollDistance;
+                progress = Math.min(1, Math.max(0, progress));
+                setScrollProgress(progress);
+                inThrottle = true;
+                setTimeout(() => (inThrottle = false), 16);
+            }
         };
-      }, [maxHeight, minHeight]); // 16 ms throttle (~60 fps)
+    }, [maxHeight, minHeight]); // 16 ms throttle (~60 fps)
 
 
     useEffect(() => {
@@ -133,7 +133,7 @@ export const TimeLine = () => {
     // Calculate visibility of an item
     const calculateVisibility = (topPosition: number) => {
         // Start fading in before fully visible 
-        const distanceFromVisibility:number = topPosition - currentBodyHeight;
+        const distanceFromVisibility: number = topPosition - currentBodyHeight;
 
         if (topPosition < 0) return 0;
         if (distanceFromVisibility > ANIMATION_THRESHOLD) return 0;
@@ -162,7 +162,7 @@ export const TimeLine = () => {
         setColorCodes(newColorCodes);
     }, [currentBodyHeight, date])
 
-    
+
 
 
     return (
@@ -174,7 +174,7 @@ export const TimeLine = () => {
             }}
         >
             <div id='timeLineHeader' className="flex flex-row w-full mb-2 text-center">
-            <div className="flex flex-col items-center w-full">
+                <div className="flex flex-col items-center w-full">
                     <h2 className="text-2xl font-semibold text-gray-800 flex items-center">
                         <span className="w-10 h-10 bg-[var(--secondary)] text-black-500 rounded-full flex items-center justify-center mr-2">
                             <FaUniversity className="w-6 h-6" />
@@ -218,17 +218,17 @@ export const TimeLine = () => {
                                         color: edu.color
                                     }}>
                                     <div className="flex items-center justify-between mb-2">
-                                        <h3 className="font-semibold text-lg sm:text-sm lg:text-lg ">
+                                        <h3 className="font-semibold lg:text-lg sm:text-sm ">
                                             {edu.institution}-{edu.location}
                                         </h3>
-                                        <button 
-                                            onClick={() => setExpandedCards({...expandedCards, [`edu-${index}`]: !expandedCards[`edu-${index}`]})}
+                                        <button
+                                            onClick={() => setExpandedCards({ ...expandedCards, [`edu-${index}`]: !expandedCards[`edu-${index}`] })}
                                             className="text-xs cursor-pointer"
                                         >
                                             {expandedCards[`edu-${index}`] ? 'Show less' : 'Show more'}
                                         </button>
                                     </div>
-                                    <ul className="text-md list-disc list-inside pl-2 space-y-1.5 text-left">
+                                    <ul className="lg:text-md sm:text-sm text-sm list-disc list-inside pl-2 space-y-1.5 text-left">
                                         {edu.material.map((material, i) => (
                                             <li key={i} className="mb-1">{material}</li>
                                         ))}
@@ -245,12 +245,12 @@ export const TimeLine = () => {
                     {(() => {
                         let cumulativeTop = 0;
                         const tempYearColorArray: ColorYearArray = {};
-                        
+
                         let preColorArray: { height: number, color: string, top: number }
                         return tempArray.map((year, index) => {
                             const isCurrentYearLine = index === tempArray.length - 1;
                             const scrollProgressInYear = currentBodyHeight % 100;
-                            let lineHeight:number;
+                            let lineHeight: number;
 
                             if (index === 1) {
                                 lineHeight = yearFraction * 80;
@@ -265,11 +265,11 @@ export const TimeLine = () => {
                             const yearLabelHeight = 28;
 
                             const curColorArray: { height: number, color: string, top: number } = getColorForScroll(lineStart, colorCodes);
-                            if (year !== 'current Year') {
+                            if (year !== 'current') {
 
                                 const targetColorScrollPos = (currentBodyHeight - 128);
                                 const diffColorLoadFlag = !!(curColorArray.height - preColorArray.height);
-                                let takenHeight:number = 0;
+                                let takenHeight: number = 0;
                                 let preTemp = tempYearColorArray[parseInt(year) + 1];
                                 const curColorTopCrossFlag = curColorArray.top < targetColorScrollPos;
                                 let remaining = 0;
@@ -277,7 +277,7 @@ export const TimeLine = () => {
 
                                 if (year === '2024' && preTemp === undefined) {
                                     takenHeight = lineHeight + 28 + 28;
-                                    preTemp = { 
+                                    preTemp = {
                                         top: {
                                             height: 0,
                                             color: 'rgb(255, 99, 132)'
@@ -292,8 +292,8 @@ export const TimeLine = () => {
                                         },
                                         totalHeight: 0,
                                         remaining: 12220,
-                                        
-                                     };
+
+                                    };
                                     remaining = curColorArray.height - takenHeight;
                                 } else {
                                     takenHeight = preTemp.totalHeight + lineHeight + 28;
@@ -389,23 +389,23 @@ export const TimeLine = () => {
                                         position: 'absolute',
                                     }}>
                                     <div className="flex items-center  justify-between mb-2">
-                                        <h3 className="font-semibold text-lg sm:text-sm lg:text-lg ">
+                                        <h3 className="font-semibold lg:text-lg sm:text-sm ">
                                             {work.title} - {work.company}
                                         </h3>
-                                        <button 
-                                            onClick={() => setExpandedCards({...expandedCards, [`work-${index}`]: !expandedCards[`work-${index}`]})}
+                                        <button
+                                            onClick={() => setExpandedCards({ ...expandedCards, [`work-${index}`]: !expandedCards[`work-${index}`] })}
                                             className="text-xs  rounded  cursor-pointer p-1 mr-3"
                                         >
                                             {expandedCards[`work-${index}`] ? 'Show less' : 'Show more'}
                                         </button>
                                     </div>
-                                        <ul className="text-md  list-disc list-inside pl-2 space-y-1.5 text-left  text-ellipsis">
-                                            {work.responsibilities.map((responsibility, i) => (
-                                                <li key={i} className="mb-1">
-                                                    {responsibility}
-                                                </li>
-                                            ))}
-                                        </ul>
+                                    <ul className="lg:text-md sm:text-sm text-sm list-disc list-inside pl-2 space-y-1.5 text-left">
+                                        {work.responsibilities.map((responsibility, i) => (
+                                            <li key={i} className="mb-1">
+                                                {responsibility}
+                                            </li>
+                                        ))}
+                                    </ul>
                                 </div>
                             );
                         })}
@@ -420,12 +420,12 @@ export const TimeLine = () => {
 function getColorForScroll(scrollProgress: number, colorCodes: ColorCodes) {
     if (!colorCodes || Object.keys(colorCodes).length === 0) return { height: 0, color: 'rgb(255, 99, 132)', top: 0 };
 
-    let closestKey:number = parseInt(Object.keys(colorCodes)[0]);
-    let minDifference:number = Math.abs(scrollProgress - closestKey);
+    let closestKey: number = parseInt(Object.keys(colorCodes)[0]);
+    let minDifference: number = Math.abs(scrollProgress - closestKey);
 
 
     for (const key of Object.keys(colorCodes)) {
-        const temp  = parseInt(key);
+        const temp = parseInt(key);
         const difference = Math.abs(scrollProgress - temp);
         if (difference < minDifference) {
             minDifference = difference;

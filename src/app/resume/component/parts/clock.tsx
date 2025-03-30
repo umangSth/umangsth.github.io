@@ -6,7 +6,7 @@ interface ClockProps {
 export const Clock = (props: ClockProps) => {
     return (
 <div id='clock' 
-        className="aboslute top-10/12 z-12"
+        className="aboslute top-9/12 z-12"
        
         >
         <svg viewBox="0 0 50 50" className="h-15 w-15">
