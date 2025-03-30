@@ -7,7 +7,6 @@ export const Clock = (props: ClockProps) => {
     return (
 <div id='clock' 
         className="aboslute top-9/12 z-12"
-       
         >
         <svg viewBox="0 0 50 50" className="h-15 w-15">
             <circle cx="25" cy="25" r="20" className="stroke-current stroke-4 fill-none" />
