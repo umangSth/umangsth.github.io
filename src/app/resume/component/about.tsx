@@ -13,7 +13,7 @@ export const About = () => {
 
 
  
-    const textRef: any = useRef<HTMLParagraphElement>(null);
+    const textRef = useRef<HTMLParagraphElement>(null);
     const animationRef = useRef<number | null>(null);
 
     // Initialize with truncated text
@@ -161,7 +161,7 @@ export const About = () => {
                                 <p className="text-gray-700 text-sm leading-relaxed">{skillsData[category].description}</p>
 
                                 <div className="flex flex-wrap gap-2 mt-4">
-                                    {skillsData[category].platform?.map((item: any) => (
+                                    {skillsData[category].platform?.map((item: string) => (
                                         !item ? null :
                                             <span key={item} className="px-2 py-1 bg-[var(--secondary)] text-xs text-black-500 rounded-full hover:scale-130 cursor-pointer">{item}</span>
                                     ))}

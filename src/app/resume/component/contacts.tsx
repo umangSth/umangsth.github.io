@@ -1,10 +1,12 @@
+'use client';
+
 import React, { CSSProperties, useState } from 'react';
 import Image from 'next/image';
 
 const ContactSection = () => {
   const email = 'umang.sth099@gmail.com';
-  const linkedIn = 'https://www.linkedin.com/in/umanga-shrestha-299570261/';
-  const github = 'https://github.com/umangSth';
+  // const linkedIn = 'https://www.linkedin.com/in/umanga-shrestha-299570261/';
+  // const github = 'https://github.com/umangSth';
 
   const [copyStatus, setCopyStatus] = useState('');
   const [showLinkedinText, setShowLinkedinText] = useState(false);

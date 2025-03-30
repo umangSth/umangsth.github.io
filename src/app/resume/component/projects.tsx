@@ -1,4 +1,4 @@
-import { FaCode, FaProcedures, FaProjectDiagram, FaRProject } from "react-icons/fa";
+import { FaCode } from "react-icons/fa";
 import { FaDiagramProject } from "react-icons/fa6";
 
 export  const Projects = () => {

@@ -20,31 +20,50 @@ const calculateMonthDifference = (startDate: Date | string, endDate: Date | stri
 };
 
 
-const throttle = (func: Function, limit: number) => {
+const throttle = (func: ()=> void, limit: number) => {
     let inThrottle: boolean;
-    return function (this: any, ...args: any[]) {
+    return function () {
         if (!inThrottle) {
-            func.apply(this, args);
+            func();
             inThrottle = true;
             setTimeout(() => inThrottle = false, limit);
         }
     };
 }
 
-interface yearColor {
+interface YearColor {
     height: number,
     color: string
 }
-const defaultYearColor = { height: 0, color: 'rgb(255, 99, 132)' }
+// const defaultYearColor = { height: 0, color: 'rgb(255, 99, 132)' }
 
-interface YearGap {
+// interface YearGap {
+//     [key: string]: {
+//         upper: yearColor,
+//         middle: yearColor,
+//         lower: yearColor,
+//         actualHeight: number;
+//     }
+// }
+
+interface ColorCodes {
+    [key: number]: {
+       height: number,
+       color: string
+    }
+};
+
+interface ColorYearArray {
     [key: string]: {
-        upper: yearColor,
-        middle: yearColor,
-        lower: yearColor,
-        actualHeight: number;
+        top: YearColor,
+        mid: YearColor,
+        end: YearColor,
+        remaining: number,
+        totalHeight: number
     }
 }
+
+
 
 
 export const TimeLine = () => {
@@ -58,7 +77,7 @@ export const TimeLine = () => {
     const [currentTime, setCurrentTime] = useState<Date>(date);
     const [scrollProgress, setScrollProgress] = useState(0);
     const containerRef = useRef<HTMLElement>(null);
-    const [colorCodes, setColorCodes] = useState<any>({});
+    const [colorCodes, setColorCodes] = useState<ColorCodes>({});
     const dividerLineColor = 'rgb(75 85 99)';
     const year = currentTime.getFullYear();
     const month = currentTime.getMonth();
@@ -112,14 +131,14 @@ export const TimeLine = () => {
     const currentHeight = Math.max(minHeight, maxHeight * scrollProgress);
     const currentBodyHeight = maxHeight * scrollProgress;
     const tempIndex = Math.floor(currentBodyHeight / 100)
-    let tempArray = listOfYears.reverse().slice(0, tempIndex);
+    const tempArray = listOfYears.reverse().slice(0, tempIndex);
 
 
 
     // Calculate visibility of an item
     const calculateVisibility = (topPosition: number) => {
         // Start fading in before fully visible 
-        const distanceFromVisibility = topPosition - currentBodyHeight;
+        const distanceFromVisibility:number = topPosition - currentBodyHeight;
 
         if (topPosition < 0) return 0;
         if (distanceFromVisibility > ANIMATION_THRESHOLD) return 0;
@@ -130,7 +149,7 @@ export const TimeLine = () => {
     }
 
     useEffect(() => {
-        const newColorCodes: any = {};
+        const newColorCodes: ColorCodes = {};
 
         // calculate color codes for education and work sections
         works.forEach((work) => {
@@ -147,6 +166,8 @@ export const TimeLine = () => {
         })
         setColorCodes(newColorCodes);
     }, [currentBodyHeight])
+
+    
 
 
     return (
@@ -228,14 +249,14 @@ export const TimeLine = () => {
                 <div id='divider' className="w-1/13 h-full flex items-center  flex-col pt-0">
                     {(() => {
                         let cumulativeTop = 0;
-                        let tempYearColorArray: any = {};
+                        const tempYearColorArray: ColorYearArray = {};
                         let firstItemFlag = true;
                         let preColorArray: any
                         return tempArray.map((year, index) => {
                             const isCurrentYearLine = index === tempArray.length - 1;
                             const scrollProgressInYear = currentBodyHeight % 100;
                             let defaultColor = dividerLineColor;
-                            let lineHeight;
+                            let lineHeight:number;
 
                             if (index === 1) {
                                 lineHeight = yearFraction * 80;
@@ -250,20 +271,36 @@ export const TimeLine = () => {
                             const lineEnd = lineStart + lineHeight;
                             const yearLabelHeight = 28;
 
-                            let curColorArray: any = getColorForScroll(lineStart, colorCodes);
+                            const curColorArray: any = getColorForScroll(lineStart, colorCodes);
                             if (year !== 'current Year') {
 
                                 const targetColorScrollPos = (currentBodyHeight - 128);
                                 const diffColorLoadFlag = !!(curColorArray.height - preColorArray.height);
-                                let takenHeight = 0;
+                                let takenHeight:number = 0;
                                 let preTemp = tempYearColorArray[parseInt(year) + 1];
-                                let curColorTopCrossFlag = curColorArray.top < targetColorScrollPos;
+                                const curColorTopCrossFlag = curColorArray.top < targetColorScrollPos;
                                 let remaining = 0;
 
 
                                 if (year === '2024' && preTemp === undefined) {
                                     takenHeight = lineHeight + 28 + 28;
-                                    preTemp = { remaining: 12220 };
+                                    preTemp = { 
+                                        top: {
+                                            height: 0,
+                                            color: 'rgb(255, 99, 132)'
+                                        },
+                                        mid: {
+                                            height: 0,
+                                            color: 'rgb(255, 99, 132)'
+                                        },
+                                        end: {
+                                            height: 0,
+                                            color: 'rgb(255, 99, 132)'
+                                        },
+                                        totalHeight: 0,
+                                        remaining: 12220,
+                                        
+                                     };
                                     remaining = curColorArray.height - takenHeight;
                                 } else {
                                     takenHeight = preTemp.totalHeight + lineHeight + 28;
@@ -392,7 +429,7 @@ function getColorForScroll(scrollProgress: number, colorCodes: any) {
     if (!colorCodes || Object.keys(colorCodes).length === 0) return 0;
 
     let closestKey = Object.keys(colorCodes)[0];
-    let minDifference = Math.abs(scrollProgress - parseInt(closestKey));
+    let minDifference:number = Math.abs(scrollProgress - parseInt(closestKey));
 
 
     for (const key of Object.keys(colorCodes)) {

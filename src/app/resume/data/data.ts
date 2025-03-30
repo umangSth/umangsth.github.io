@@ -1,4 +1,4 @@
-import { BiGame } from "react-icons/bi"
+import React from "react"
 import { FaDatabase, FaGlobe, FaLaptopCode, FaServer, FaTools } from "react-icons/fa"
 
 const experienceItems1 = [
@@ -79,7 +79,17 @@ export const works = [
     ]
 
 
-   export const skillsData: any = {
+    interface Skill {
+        title: string,
+        description: string,
+        platform?: string[],
+        icon: React.ElementType
+    }
+    interface SkillsData {
+        [key: string]: Skill
+    }
+
+   export const skillsData:SkillsData  = {
             Frontend: {
                 title: "Front-end Development",
                 description: "Proficient in React.js, Next.js, Redux, and Angular, with experience in TypeScript, JavaScript, HTML, CSS, Tailwind CSS, and Sass for building responsive and visually appealing user interfaces.",
