@@ -1,3 +1,4 @@
+import { BiGame } from "react-icons/bi"
 import { FaDatabase, FaGlobe, FaLaptopCode, FaServer, FaTools } from "react-icons/fa"
 
 const experienceItems1 = [
@@ -24,7 +25,8 @@ export const works = [
             start: '2024-07-01',
             end: 'current' 
         },
-        color: 'rgb(255, 11, 180)'
+        color: 'rgb(74, 115, 74)',
+        bgColor: 'rgb(196, 228, 196)'
     }, 
     {
         responsibilities: experienceItems2,
@@ -35,7 +37,8 @@ export const works = [
             start: '2019-12-01',
             end: '2022-05-01'
         },
-        color: 'rgb(255, 206, 86)'
+        color: 'rgb(179, 129, 14)',
+        bgColor: 'rgb(255, 248, 190)' 
     }
 ]
 
@@ -54,7 +57,8 @@ export const works = [
                 
             ],
             time:{ start: '2023-01-01', end: '2024-08-28' },
-            color: 'rgb(255, 177, 132)'
+           color: 'rgb(70, 114, 186)',
+            bgColor: 'rgb(220, 235, 240)'
         },
         {
             title: "BSc Computer Science & IT",
@@ -69,7 +73,8 @@ export const works = [
                 
             ],
             time:{ start: '2015-09-06', end: '2019-08-30' },
-            color: 'rgb(255, 8, 86)'
+            color: 'rgb(145, 110, 150)',
+            bgColor: 'rgb(230, 220, 235)' 
         }
     ]
 

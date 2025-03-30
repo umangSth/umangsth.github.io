@@ -1,7 +1,7 @@
 'use client';
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { skillsData, FullText } from "./data/data";
+import { skillsData, FullText } from "../data/data";
 
 export const About = () => {
     
@@ -163,7 +163,7 @@ export const About = () => {
                                 <div className="flex flex-wrap gap-2 mt-4">
                                     {skillsData[category].platform?.map((item: any) => (
                                         !item ? null :
-                                            <span key={item} className="px-2 py-1  bg-[var(--secondary)] text-xs text-black-500 rounded-full hover:scale-130 cursor-pointer">{item}</span>
+                                            <span key={item} className="px-2 py-1 bg-[var(--secondary)] text-xs text-black-500 rounded-full hover:scale-130 cursor-pointer">{item}</span>
                                     ))}
                                 </div>
                             </div>

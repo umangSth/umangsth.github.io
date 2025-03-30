@@ -2,11 +2,11 @@
 
 'use client';
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 
 
-export const Header = () => {
+export const Header = (props: React.PropsWithChildren) => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isNavOpen, setIsNavOpen] = useState(false);
 
@@ -38,6 +38,7 @@ export const Header = () => {
     };
 
     return (
+        <>
         <header className="h-24 sm:h-32 flex items-center z-30 w-full fixed ">
             <div className="container mx-auto px-6 flex items-center justify-end">
                 <div className="flex items-center gap-4 sm:gap-6" onMouseLeave={() => toggleNavState('header-case')}>
@@ -50,7 +51,7 @@ export const Header = () => {
                           relative lg:static`}
                     >
                         <div className="flex  items-center gap-4">
-                            <Link href="#main" className="shadow-lg shadow-gray-300/50 hover:shadow-xl flex items-center px-4 py-2 bg-white dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-all group">
+                            <Link href="/" className="shadow-lg shadow-gray-300/50 hover:shadow-xl flex items-center px-4 py-2 bg-white dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-all group">
                                 <svg id="resume" viewBox="0 0 24 24" className="h-5 w-5 mr-2">
                                     {/* Main document body */}
                                     <rect x="2" y="4" width="18" height="20" rx="2" className="" />
@@ -106,5 +107,7 @@ export const Header = () => {
                 </div>
             </div>
         </header>
+        {props.children}
+        </>
     )
 }

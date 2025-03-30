@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState, useRef, useCallback } from "react";
 import { Clock } from "./parts/clock";
-import { works, educations } from "./data/data";
+import { works, educations } from "../data/data";
 import { FaBriefcase, FaUniversity } from "react-icons/fa";
 
 const CONSTANT_GAP = 10;
@@ -49,6 +49,7 @@ interface YearGap {
 
 export const TimeLine = () => {
     const [date, setDate] = useState<Date>(new Date());
+    const [expandedCards, setExpandedCards] = useState<{[key: string]: boolean}>({});
 
     useEffect(() => {
         setDate(new Date());
@@ -148,7 +149,6 @@ export const TimeLine = () => {
     }, [currentBodyHeight])
 
 
-
     return (
         <section ref={containerRef}
             className="mb-8 shadow-lg p-6 rounded-lg bg-white flex flex-col items-center transition-all duration-300 ease-out"
@@ -190,21 +190,29 @@ export const TimeLine = () => {
 
                             return isWithinView && (
                                 <div key={index}
-                                    className="absolute left-4 w-4/5 p-4 rounded-lg bg-green-50 shadow-md transition-all duration-700 ease-out"
+                                    className="absolute left-4 w-full p-4 rounded-lg bg-green-50 shadow-md transition-all duration-700 ease-out overflow-hidden"
                                     style={{
                                         top: `${top}px`,
-                                        height: `${height}px`,
+                                        height: expandedCards[`edu-${index}`] ? 'auto' : `${height}px`,
+                                        maxHeight: expandedCards[`edu-${index}`] ? '300px' : `${height}px`,
                                         opacity: visibility,
                                         transform: `translateY(${(1 - visibility) * 20}px)  scale(${0.9 + (visibility * 0.1)})`,
-                                        pointerEvents: visibility > 0.5 ? 'auto' : 'none'
+                                        pointerEvents: visibility > 0.5 ? 'auto' : 'none',
+                                        backgroundColor: edu.bgColor,
+                                        color: edu.color
                                     }}>
-                                    <div className="flex items-center mb-2">
-                                        <div className="w-3 h-3 bg-green-500 rounded-full mr-2" />
-                                        <h3 className="font-semibold text-sm text-green-800">
+                                    <div className="flex items-center justify-between mb-2">
+                                        <h3 className="font-semibold text-lg sm:text-sm lg:text-lg ">
                                             {edu.institution}-{edu.location}
                                         </h3>
+                                        <button 
+                                            onClick={() => setExpandedCards({...expandedCards, [`edu-${index}`]: !expandedCards[`edu-${index}`]})}
+                                            className="text-xs cursor-pointer"
+                                        >
+                                            {expandedCards[`edu-${index}`] ? 'Show less' : 'Show more'}
+                                        </button>
                                     </div>
-                                    <ul className="text-xs text-green-700 list-disc list-inside pl-2">
+                                    <ul className="text-md list-disc list-inside pl-2 space-y-1.5 text-left">
                                         {edu.material.map((material, i) => (
                                             <li key={i} className="mb-1">{material}</li>
                                         ))}
@@ -339,25 +347,36 @@ export const TimeLine = () => {
 
                             return isWithinView && (
                                 <div key={index}
-                                    className="absolute left-4 w-full p-4 rounded-lg bg-blue-50 shadow-md transition-all duration-700 ease-out"
+                                    className="absolute left-4 w-full p-4 rounded-lg shadow-md transition-all duration-700 ease-out overflow-hidden"
                                     style={{
                                         top: `${top}px`,
-                                        height: `${height}px`,
+                                        height: expandedCards[`work-${index}`] ? 'auto' : `${height}px`,
+                                        maxHeight: expandedCards[`work-${index}`] ? '300px' : `${height}px`,
                                         opacity: visibility,
                                         transform: `translateY(${(1 - visibility) * 20}px) scale(${0.9 + (visibility * 0.1)})`,
-                                        pointerEvents: visibility > 0.5 ? 'auto' : 'none'
+                                        pointerEvents: visibility > 0.5 ? 'auto' : 'none',
+                                        backgroundColor: work.bgColor,
+                                        color: work.color,
+                                        position: 'absolute',
                                     }}>
-                                    <div className="flex items-center mb-2">
-                                        <div className="w-3 h-3 bg-blue-500 rounded-full mr-2" />
-                                        <h3 className="font-semibold text-sm text-blue-800">
+                                    <div className="flex items-center  justify-between mb-2">
+                                        <h3 className="font-semibold text-lg sm:text-sm lg:text-lg ">
                                             {work.title} - {work.company}
                                         </h3>
+                                        <button 
+                                            onClick={() => setExpandedCards({...expandedCards, [`work-${index}`]: !expandedCards[`work-${index}`]})}
+                                            className="text-xs  rounded  cursor-pointer p-1 mr-3"
+                                        >
+                                            {expandedCards[`work-${index}`] ? 'Show less' : 'Show more'}
+                                        </button>
                                     </div>
-                                    <ul className="text-xs text-blue-700 list-disc list-inside pl-2">
-                                        {work.responsibilities.map((responsibility, i) => (
-                                            <li key={i} className="mb-1">{responsibility}</li>
-                                        ))}
-                                    </ul>
+                                        <ul className="text-md  list-disc list-inside pl-2 space-y-1.5 text-left  text-ellipsis">
+                                            {work.responsibilities.map((responsibility, i) => (
+                                                <li key={i} className="mb-1">
+                                                    {responsibility}
+                                                </li>
+                                            ))}
+                                        </ul>
                                 </div>
                             );
                         })}
