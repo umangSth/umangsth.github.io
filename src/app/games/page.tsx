@@ -1,4 +1,5 @@
 import Image from "next/image";
+import imageLoader from "../resume/helper_function/helper_function";
 export default function Games() {
     return (
       

@@ -2,6 +2,7 @@
 
 import React, { CSSProperties, useState } from 'react';
 import Image from 'next/image';
+import imageLoader from '../helper_function/helper_function';
 
 const ContactSection = () => {
   const email = 'umang.sth099@gmail.com';
@@ -99,7 +100,7 @@ const ContactSection = () => {
             >
               <div className="w-20 h-20 relative">
                 <Image
-                  src={imageLoader("/images/contact-logos/lightMode/linkedin.png")}
+                  src={imageLoader("/images/contact-logos/lightMode/linkedIn_1.png")}
                   alt="LinkedIn"
                   fill
                   sizes="80px"

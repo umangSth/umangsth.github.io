@@ -3,6 +3,7 @@ import Image from "next/image";
 import drawingsData from "./data/drawings.json"; // Import your JSON file
 import { useState } from "react";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import imageLoader from "../resume/helper_function/helper_function";
 
 
 export default function Drawings() {

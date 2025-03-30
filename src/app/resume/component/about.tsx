@@ -2,6 +2,7 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { skillsData, FullText } from "../data/data";
+import imageLoader from "../helper_function/helper_function";
 
 export const About = () => {
     
