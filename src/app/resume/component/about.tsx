@@ -112,7 +112,7 @@ export const About = () => {
             <section id='about' className="flex flex-col w-1/3 transition-all duration-1000 ease-in-out ">
                 <div className="flex flex-row gap-8 p-6 bg-[var(--primary)] rounded-t-2xl shadow-md hover:shadow-neutral-900">
                     <Image
-                        src="/images/avatar-logo/me.png"
+                        src={imageLoader("/images/avatar-logo/me.png")}
                         alt="Umanga Shrestha"
                         width={200}
                         height={200}

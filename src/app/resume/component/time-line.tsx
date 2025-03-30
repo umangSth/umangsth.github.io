@@ -24,16 +24,7 @@ interface YearColor {
     height: number,
     color: string
 }
-// const defaultYearColor = { height: 0, color: 'rgb(255, 99, 132)' }
 
-// interface YearGap {
-//     [key: string]: {
-//         upper: yearColor,
-//         middle: yearColor,
-//         lower: yearColor,
-//         actualHeight: number;
-//     }
-// }
 
 interface ColorCodes {
     [key: number]: {
@@ -80,25 +71,31 @@ export const TimeLine = () => {
     const minHeight: number = 150;
     const maxHeight: number = height_from_year * CONSTANT_GAP;
 
-    const handleScroll = useCallback(() => {
-        let inThrottle: boolean;
-        return () => {
-            if (!inThrottle) {
-                const container = containerRef.current;
-                if (!container) return;
 
-                const scrollDistance = maxHeight - minHeight;
-                const initialOffsetTop = container.offsetTop * 0.1;
-                const currentScroll = window.scrollY;
-                const scrolled = currentScroll - initialOffsetTop;
-                let progress = scrolled / scrollDistance;
-                progress = Math.min(1, Math.max(0, progress));
-                setScrollProgress(progress);
+    const throttle = (func: ()=> void, limit: number) => {
+        let inThrottle: boolean;
+        return function () {
+            if (!inThrottle) {
+                func();
                 inThrottle = true;
-                setTimeout(() => (inThrottle = false), 16);
+                setTimeout(() => inThrottle = false, limit);
             }
         };
-    }, [maxHeight, minHeight]); // 16 ms throttle (~60 fps)
+    }
+    
+
+    const handleScroll = useCallback(throttle(() => {
+        const container = containerRef.current;
+        if (!container) return;
+
+        const scrollDistance = maxHeight - minHeight;
+        const initialOffsetTop = container.offsetTop * 0.1;
+        const currentScroll = window.scrollY;
+        const scrolled = currentScroll - initialOffsetTop;
+        let progress = scrolled / scrollDistance;
+        progress = Math.min(1, Math.max(0, progress));
+        setScrollProgress(progress);
+    }, 16), [maxHeight, minHeight]); // 16 ms throttle (~60 fps)
 
 
     useEffect(() => {

@@ -60,7 +60,7 @@ const ContactSection = () => {
             >
               <div className="w-20 h-20 relative">
                 <Image
-                  src="/images/contact-logos/lightMode/gmail.png"
+                  src={imageLoader("/images/contact-logos/lightMode/gmail.png")}
                   alt="Email"
                   fill
                   sizes="80px"
@@ -99,7 +99,7 @@ const ContactSection = () => {
             >
               <div className="w-20 h-20 relative">
                 <Image
-                  src="/images/contact-logos/lightMode/linkedin.png"
+                  src={imageLoader("/images/contact-logos/lightMode/linkedin.png")}
                   alt="LinkedIn"
                   fill
                   sizes="80px"
@@ -128,7 +128,7 @@ const ContactSection = () => {
             >
               <div className="w-20 h-20 relative">
                 <Image
-                  src="/images/contact-logos/lightMode/github-mark.png"
+                  src={imageLoader("/images/contact-logos/lightMode/github-mark.png")}
                   alt="GitHub"
                   fill
                   sizes="80px"
