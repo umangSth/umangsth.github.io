@@ -20,17 +20,6 @@ const calculateMonthDifference = (startDate: Date | string, endDate: Date | stri
 };
 
 
-const throttle = (func: ()=> void, limit: number) => {
-    let inThrottle: boolean;
-    return function () {
-        if (!inThrottle) {
-            func();
-            inThrottle = true;
-            setTimeout(() => inThrottle = false, limit);
-        }
-    };
-}
-
 interface YearColor {
     height: number,
     color: string
@@ -78,7 +67,6 @@ export const TimeLine = () => {
     const [scrollProgress, setScrollProgress] = useState(0);
     const containerRef = useRef<HTMLElement>(null);
     const [colorCodes, setColorCodes] = useState<ColorCodes>({});
-    const dividerLineColor = 'rgb(75 85 99)';
     const year = currentTime.getFullYear();
     const month = currentTime.getMonth();
     const yearFraction = ((month + currentTime.getDate() / 30) / 12);
@@ -89,21 +77,28 @@ export const TimeLine = () => {
     }
 
     const height_from_year = calculateMonthDifference('2014-12-25', date);
-    const minHeight = 150;
-    const maxHeight = height_from_year * CONSTANT_GAP;
+    const minHeight:number = 150;
+    const maxHeight:number = height_from_year * CONSTANT_GAP;
 
-    const handleScroll = useCallback(throttle(() => {
-        const container = containerRef.current;
-        if (!container) return;
-
-        const scrollDistance = maxHeight - minHeight;
-        const initialOffsetTop = container.offsetTop * 0.1;
-        const currentScroll = window.scrollY;
-        const scrolled = currentScroll - initialOffsetTop;
-        let progress = scrolled / scrollDistance;
-        progress = Math.min(1, Math.max(0, progress));
-        setScrollProgress(progress);
-    }, 16), [maxHeight, minHeight]); // 16 ms throttle (~60 fps)
+    const handleScroll = useCallback(() => {
+        let inThrottle: boolean;
+        return () => {
+          if (!inThrottle) {
+            const container = containerRef.current;
+            if (!container) return;
+    
+            const scrollDistance = maxHeight - minHeight;
+            const initialOffsetTop = container.offsetTop * 0.1;
+            const currentScroll = window.scrollY;
+            const scrolled = currentScroll - initialOffsetTop;
+            let progress = scrolled / scrollDistance;
+            progress = Math.min(1, Math.max(0, progress));
+            setScrollProgress(progress);
+            inThrottle = true;
+            setTimeout(() => (inThrottle = false), 16);
+          }
+        };
+      }, [maxHeight, minHeight]); // 16 ms throttle (~60 fps)
 
 
     useEffect(() => {
@@ -165,7 +160,7 @@ export const TimeLine = () => {
 
         })
         setColorCodes(newColorCodes);
-    }, [currentBodyHeight])
+    }, [currentBodyHeight, date])
 
     
 
@@ -250,17 +245,15 @@ export const TimeLine = () => {
                     {(() => {
                         let cumulativeTop = 0;
                         const tempYearColorArray: ColorYearArray = {};
-                        let firstItemFlag = true;
-                        let preColorArray: any
+                        
+                        let preColorArray: { height: number, color: string, top: number }
                         return tempArray.map((year, index) => {
                             const isCurrentYearLine = index === tempArray.length - 1;
                             const scrollProgressInYear = currentBodyHeight % 100;
-                            let defaultColor = dividerLineColor;
                             let lineHeight:number;
 
                             if (index === 1) {
                                 lineHeight = yearFraction * 80;
-                                firstItemFlag = false;
                             } else if (isCurrentYearLine) {
                                 lineHeight = Math.min(scrollProgressInYear, 80);
                             } else {
@@ -271,7 +264,7 @@ export const TimeLine = () => {
                             const lineEnd = lineStart + lineHeight;
                             const yearLabelHeight = 28;
 
-                            const curColorArray: any = getColorForScroll(lineStart, colorCodes);
+                            const curColorArray: { height: number, color: string, top: number } = getColorForScroll(lineStart, colorCodes);
                             if (year !== 'current Year') {
 
                                 const targetColorScrollPos = (currentBodyHeight - 128);
@@ -311,7 +304,6 @@ export const TimeLine = () => {
                                 midHeight = midHeight < 0 ? 0 : midHeight > 80 ? 80 : midHeight;
 
 
-                                defaultColor = curColorArray.color;
                                 tempYearColorArray[year] = {
                                     top: {
                                         height: preTemp?.remaining > lineHeight ? lineHeight : preTemp.remaining,
@@ -425,20 +417,21 @@ export const TimeLine = () => {
     )
 }
 
-function getColorForScroll(scrollProgress: number, colorCodes: any) {
-    if (!colorCodes || Object.keys(colorCodes).length === 0) return 0;
+function getColorForScroll(scrollProgress: number, colorCodes: ColorCodes) {
+    if (!colorCodes || Object.keys(colorCodes).length === 0) return { height: 0, color: 'rgb(255, 99, 132)', top: 0 };
 
-    let closestKey = Object.keys(colorCodes)[0];
-    let minDifference:number = Math.abs(scrollProgress - parseInt(closestKey));
+    let closestKey:number = parseInt(Object.keys(colorCodes)[0]);
+    let minDifference:number = Math.abs(scrollProgress - closestKey);
 
 
     for (const key of Object.keys(colorCodes)) {
-        const difference = Math.abs(scrollProgress - parseInt(key));
+        const temp  = parseInt(key);
+        const difference = Math.abs(scrollProgress - temp);
         if (difference < minDifference) {
             minDifference = difference;
-            closestKey = key;
+            closestKey = temp;
         }
     }
 
-    return { height: colorCodes[closestKey].height, color: colorCodes[closestKey].color, top: parseInt(closestKey) };
+    return { height: colorCodes[closestKey].height, color: colorCodes[closestKey].color, top: closestKey };
 }
