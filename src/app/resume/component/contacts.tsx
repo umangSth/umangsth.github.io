@@ -2,6 +2,7 @@
 
 import React, { CSSProperties, useState } from 'react';
 import Image from 'next/image';
+import imageLoader from '../helper-function/helperFunctions';
 
 const ContactSection = () => {
   const email = 'umang.sth099@gmail.com';
@@ -60,7 +61,7 @@ const ContactSection = () => {
             >
               <div className="w-20 h-20 relative">
                 <Image
-                  src="/images/contact-logos/lightMode/gmail.png"
+                  src={imageLoader("/images/contact-logos/lightMode/gmail.png")}
                   alt="Email"
                   fill
                   sizes="80px"
@@ -99,7 +100,7 @@ const ContactSection = () => {
             >
               <div className="w-20 h-20 relative">
                 <Image
-                  src="/images/contact-logos/lightMode/linkedin.png"
+                  src={imageLoader("/images/contact-logos/lightMode/linkedin.png")}
                   alt="LinkedIn"
                   fill
                   sizes="80px"
@@ -128,7 +129,7 @@ const ContactSection = () => {
             >
               <div className="w-20 h-20 relative">
                 <Image
-                  src="/images/contact-logos/lightMode/github-mark.png"
+                  src={imageLoader("/images/contact-logos/lightMode/github-mark.png")}
                   alt="GitHub"
                   fill
                   sizes="80px"

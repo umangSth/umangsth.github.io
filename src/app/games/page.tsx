@@ -1,4 +1,5 @@
 import Image from "next/image";
+import imageLoader from "../resume/helper-function/helperFunctions";
 export default function Games() {
     return (
       
@@ -6,7 +7,7 @@ export default function Games() {
           <h1 className="text-4xl font-bold mb-8 text-gray-800">My Games</h1>
           <div className="relative w-96 h-64 mb-8">
             <Image
-              src="/images/miscellaneous/under-construction.jpg"
+              src={imageLoader("/images/miscellaneous/under-construction.jpg")}
               alt="Coming Soon"
               layout="fill"
               objectFit="contain"

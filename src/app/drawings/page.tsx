@@ -3,6 +3,7 @@ import Image from "next/image";
 import drawingsData from "./data/drawings.json"; // Import your JSON file
 import { useState } from "react";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import imageLoader from "../resume/helper-function/helperFunctions";
 
 
 export default function Drawings() {
@@ -25,7 +26,7 @@ export default function Drawings() {
         <div className="relative w-full max-w-2xl">
         <div className="relative w-full h-0 pb-[95%]">
           <Image
-            src={drawingsData[currentImageIndex].src}
+            src={imageLoader(drawingsData[currentImageIndex].src)}
             alt={`Drawing ${currentImageIndex + 1}`}
             sizes="(max-width: 950px) 200vw, 950px" 
             className="object-contain"
