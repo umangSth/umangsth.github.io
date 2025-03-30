@@ -74,7 +74,7 @@ export const TimeLine = () => {
     const listOfYears = [];
 
     for (let y = 2013; year >= y; y++) {
-        listOfYears.push(y === year ? 'current Year' : y + "");
+        listOfYears.push(y === year ? 'current' : y + "");
     }
 
     const height_from_year = calculateMonthDifference('2014-12-25', date);
@@ -224,7 +224,7 @@ export const TimeLine = () => {
                                         color: edu.color
                                     }}>
                                     <div className="flex items-center justify-between mb-2">
-                                        <h3 className="font-semibold text-lg sm:text-sm lg:text-lg ">
+                                    <h3 className="font-semibold xl:text-xl lg:text-lg sm:text-sm ">
                                             {edu.institution}-{edu.location}
                                         </h3>
                                         <button 
@@ -234,7 +234,7 @@ export const TimeLine = () => {
                                             {expandedCards[`edu-${index}`] ? 'Show less' : 'Show more'}
                                         </button>
                                     </div>
-                                    <ul className="text-md list-disc list-inside pl-2 space-y-1.5 text-left">
+                                    <ul className="lg:text-lg sm:text-sm text-sm list-disc list-inside pl-2 space-y-1.5 text-left">
                                         {edu.material.map((material, i) => (
                                             <li key={i} className="mb-1">{material}</li>
                                         ))}
@@ -270,7 +270,7 @@ export const TimeLine = () => {
                             const yearLabelHeight = 28;
 
                             const curColorArray: { height: number, color: string, top: number } = getColorForScroll(lineStart, colorCodes);
-                            if (year !== 'current Year') {
+                            if (year !== 'current') {
 
                                 const targetColorScrollPos = (currentBodyHeight - 128);
                                 const diffColorLoadFlag = !!(curColorArray.height - preColorArray.height);
@@ -394,7 +394,7 @@ export const TimeLine = () => {
                                         position: 'absolute',
                                     }}>
                                     <div className="flex items-center  justify-between mb-2">
-                                        <h3 className="font-semibold text-lg sm:text-sm lg:text-lg ">
+                                    <h3 className="font-semibold xl:text-xl lg:text-lg sm:text-sm ">
                                             {work.title} - {work.company}
                                         </h3>
                                         <button 
@@ -404,7 +404,7 @@ export const TimeLine = () => {
                                             {expandedCards[`work-${index}`] ? 'Show less' : 'Show more'}
                                         </button>
                                     </div>
-                                        <ul className="text-md  list-disc list-inside pl-2 space-y-1.5 text-left  text-ellipsis">
+                                    <ul className="lg:text-lg sm:text-sm text-sm list-disc list-inside pl-2 space-y-1.5 text-left">
                                             {work.responsibilities.map((responsibility, i) => (
                                                 <li key={i} className="mb-1">
                                                     {responsibility}

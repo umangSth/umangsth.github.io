@@ -6,7 +6,6 @@ const experienceItems1 = [
     'Designed and developed role-based access control (RBAC), ensuring secure and modular system architecture.',
     'Built and maintained high-performance web applications using Node.js, TypeScript, React, and Next.js.',
     'Collaborated with cross-functional teams to design, develop, and implement scalable software solutions.',
-    'Conducted thorough code reviews, refactoring, and testing to ensure software quality.'
 ]
 const experienceItems2 = [
     'Developed and maintained enterprise CRM systems using ASP.NET Core and Angular for corporate clients.',

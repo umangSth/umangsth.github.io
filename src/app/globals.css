@@ -27,12 +27,11 @@ body {
   scroll-behavior: smooth;
 }
 
-
 #pacman circle {
   stroke: black;
   fill: none;
   stroke-width: 50%;
-  stroke-dasharray: 30,8;
+  stroke-dasharray: 30, 8;
   stroke-dashoffset: -4;
 }
 
@@ -41,17 +40,16 @@ body {
 }
 
 #main {
-  background: var(--background)
+  background: var(--background);
 }
-
 
 @keyframes chomp {
   from {
-    stroke-dasharray: 38,8;
+    stroke-dasharray: 38, 8;
     stroke-dashoffset: 0;
   }
   to {
-    stroke-dasharray: 30,8;
+    stroke-dasharray: 30, 8;
     stroke-dashoffset: -4;
   }
 }
@@ -74,8 +72,8 @@ body {
 
 .group:hover #resume {
   animation: lift 1.2s ease-in-out infinite;
-  /* transform-origin: center bottom;  */
 }
+
 @keyframes lift {
   0% {
     transform: perspective(400px) rotateX(0) rotateY(0) rotateZ(0);
@@ -90,5 +88,3 @@ body {
     transform: perspective(400px) rotateX(0) rotateY(0) rotateZ(0);
   }
 }
-
-
