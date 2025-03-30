@@ -20,6 +20,7 @@ const calculateMonthDifference = (startDate: Date | string, endDate: Date | stri
 };
 
 
+
 interface YearColor {
     height: number,
     color: string
@@ -79,26 +80,31 @@ export const TimeLine = () => {
     const height_from_year = calculateMonthDifference('2014-12-25', date);
     const minHeight:number = 150;
     const maxHeight:number = height_from_year * CONSTANT_GAP;
-
-    const handleScroll = useCallback(() => {
-        let inThrottle: boolean;
-        return () => {
-          if (!inThrottle) {
-            const container = containerRef.current;
-            if (!container) return;
     
-            const scrollDistance = maxHeight - minHeight;
-            const initialOffsetTop = container.offsetTop * 0.1;
-            const currentScroll = window.scrollY;
-            const scrolled = currentScroll - initialOffsetTop;
-            let progress = scrolled / scrollDistance;
-            progress = Math.min(1, Math.max(0, progress));
-            setScrollProgress(progress);
-            inThrottle = true;
-            setTimeout(() => (inThrottle = false), 16);
-          }
+    const throttle = (func: ()=> void, limit: number) => {
+        let inThrottle: boolean;
+        return function () {
+            if (!inThrottle) {
+                func();
+                inThrottle = true;
+                setTimeout(() => inThrottle = false, limit);
+            }
         };
-      }, [maxHeight, minHeight]); // 16 ms throttle (~60 fps)
+    }
+    
+
+    const handleScroll = useCallback(throttle(() => {
+        const container = containerRef.current;
+        if (!container) return;
+
+        const scrollDistance = maxHeight - minHeight;
+        const initialOffsetTop = container.offsetTop * 0.1;
+        const currentScroll = window.scrollY;
+        const scrolled = currentScroll - initialOffsetTop;
+        let progress = scrolled / scrollDistance;
+        progress = Math.min(1, Math.max(0, progress));
+        setScrollProgress(progress);
+    }, 16), [maxHeight, minHeight]); // 16 ms throttle (~60 fps)
 
 
     useEffect(() => {
@@ -245,7 +251,6 @@ export const TimeLine = () => {
                     {(() => {
                         let cumulativeTop = 0;
                         const tempYearColorArray: ColorYearArray = {};
-                        
                         let preColorArray: { height: number, color: string, top: number }
                         return tempArray.map((year, index) => {
                             const isCurrentYearLine = index === tempArray.length - 1;
