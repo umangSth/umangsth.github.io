@@ -57,7 +57,7 @@ export const metadata: Metadata = {
     siteName: "Umanga Shrestha | Resume & Portfolio", 
     images: [
       {
-        url: "/og-image.png", 
+        url: "/images/og-image.png", 
         width: 1200, 
         height: 630,
         alt: "Preview image for Umanga Shrestha's Resume", 
