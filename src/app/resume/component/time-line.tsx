@@ -172,17 +172,17 @@ export const TimeLine = () => {
         >
             <div id='timeLineHeader' className="flex flex-row w-full mb-2 text-center">
                 <div className="flex flex-col items-center w-full">
-                    <h2 className="text-2xl font-semibold text-gray-800 flex items-center">
-                        <span className="w-10 h-10 bg-[var(--secondary)] text-black-500 rounded-full flex items-center justify-center mr-2">
-                            <FaUniversity className="w-6 h-6" />
+                    <h2 className="xl:text-xl lg:text-lg sm:text-sm text-sm font-semibold text-gray-800 flex items-center">
+                        <span className="w-8 h-8  lg:w-10 lg:h-10 xl:w-12 xl:h-12 bg-[var(--secondary)] text-black-500 rounded-full flex items-center justify-center mr-2">
+                            <FaUniversity className="w-5 h-5 xl:w-6 xl:h-6" />
                         </span>
                         Education
                     </h2>
                 </div>
                 <div className="flex flex-col items-center justify-end  w-full">
-                    <h2 className="text-2xl font-semibold text-gray-800 flex items-center">
-                        <span className="w-10 h-10 bg-[var(--secondary)] text-black-500 rounded-full flex items-center justify-center mr-2">
-                            <FaBriefcase className="w-6 h-6" />
+                    <h2 className="xl:text-xl lg:text-lg sm:text-sm text-sm font-semibold text-gray-800 flex items-center">
+                        <span className="w-8 h-8 lg:w-10 lg:h-10 bg-[var(--secondary)] text-black-500 rounded-full flex items-center justify-center mr-2">
+                            <FaBriefcase className="w-5 h-5 xl:w-6 xl:h-6" />
                         </span>
                         Work
                     </h2>
@@ -203,7 +203,7 @@ export const TimeLine = () => {
 
                             return isWithinView && (
                                 <div key={index}
-                                    className="absolute left-4 w-full p-4 rounded-lg bg-green-50 shadow-md transition-all duration-700 ease-out overflow-hidden"
+                                    className="absolute  w-full xl:p-6 lg:p-4 sm:p-2 p-1 rounded-lg bg-green-50 shadow-md transition-all duration-700 ease-out overflow-hidden"
                                     style={{
                                         top: `${top}px`,
                                         height: expandedCards[`edu-${index}`] ? 'auto' : `${height}px`,
@@ -215,7 +215,7 @@ export const TimeLine = () => {
                                         color: edu.color
                                     }}>
                                     <div className="flex items-center justify-between mb-2">
-                                        <h3 className="font-semibold lg:text-lg sm:text-sm ">
+                                        <h3 className="font-semibold  xl:text-lg lg:text-sm sm:text-xs text-xs ">
                                             {edu.institution}-{edu.location}
                                         </h3>
                                         <button
@@ -225,7 +225,7 @@ export const TimeLine = () => {
                                             {expandedCards[`edu-${index}`] ? 'Show less' : 'Show more'}
                                         </button>
                                     </div>
-                                    <ul className="lg:text-md sm:text-sm text-sm list-disc list-inside pl-2 space-y-1.5 text-left">
+                                    <ul className="text-xs lg:text-sm xl:text-lg  list-disc list-inside pl-2 space-y-1.5 text-left">
                                         {edu.material.map((material, i) => (
                                             <li key={i} className="mb-1">{material}</li>
                                         ))}
@@ -353,7 +353,7 @@ export const TimeLine = () => {
 
                                         </div>
                                     )}
-                                    <div className="px-2 py-1 bg-white rounded-full shadow-sm text-sm font-medium">
+                                    <div className="h-[28px] z-10 bg-white rounded-full shadow-sm xl:text-sm text-xs  py-1 px-2 content-center justify-center font-medium">
                                         {year}
                                     </div>
                                 </div>
@@ -386,17 +386,17 @@ export const TimeLine = () => {
                                         position: 'absolute',
                                     }}>
                                     <div className="flex items-center  justify-between mb-2">
-                                        <h3 className="font-semibold lg:text-lg sm:text-sm ">
+                                        <h3 className="font-semibold xl:text-lg lg:text-sm sm:text-xs text-xs">
                                             {work.title} - {work.company}
                                         </h3>
                                         <button
                                             onClick={() => setExpandedCards({ ...expandedCards, [`work-${index}`]: !expandedCards[`work-${index}`] })}
-                                            className="text-xs  rounded  cursor-pointer p-1 mr-3"
+                                            className="text-xs rounded cursor-pointer p-1 mr-3"
                                         >
                                             {expandedCards[`work-${index}`] ? 'Show less' : 'Show more'}
                                         </button>
                                     </div>
-                                    <ul className="lg:text-md sm:text-sm text-sm list-disc list-inside pl-2 space-y-1.5 text-left">
+                                    <ul className="text-xs lg:text-sm xl:text-lg  list-disc list-inside pl-2 space-y-1.5 text-left">
                                         {work.responsibilities.map((responsibility, i) => (
                                             <li key={i} className="mb-1">
                                                 {responsibility}

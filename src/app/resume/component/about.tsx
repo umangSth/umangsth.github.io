@@ -10,7 +10,7 @@ export const About = () => {
     const [isExpanding, setIsExpanding] = useState(false);
     const[isCollapsing, setIsCollapsing] = useState(false);
     const [displayedText, setDisplayedText] = useState(FullText.slice(0, characterLimit) + '...');
-    const [textHeight, setTextHeight] = useState('auto');
+    const [textHeight, setTextHeight] = useState('');
 
 
  
@@ -29,7 +29,7 @@ export const About = () => {
         if (typeof window !== 'undefined' && textRef.current) {
             setTextHeight(`${textRef.current.scrollHeight}px`);
         }
-    }, [displayedText]);
+    }, [displayedText, textHeight]);
 
     // Handle expanding animation
     useEffect(()=> {
@@ -109,25 +109,25 @@ export const About = () => {
 
 
     return (
-        <div className='flex flex-row gap-8 mb-8'>
-            <section id='about' className="flex flex-col w-1/3 transition-all duration-1000 ease-in-out ">
-                <div className="flex flex-row gap-8 p-6 bg-[var(--primary)] rounded-t-2xl shadow-md hover:shadow-neutral-900">
+        <div className='flex flex-col lg:flex-row  gap-8 mb-8'>
+            <section id='about' className="flex flex-col w-full lg:w-2/5 xl:w-1/3 transition-all duration-1000 ease-in-out ">
+                <div className="flex flex-row gap-8 lg:gap-4 p-6 bg-[var(--primary)] rounded-t-2xl shadow-md hover:shadow-neutral-900">
                     <Image
                         src={imageLoader("/images/avatar-logo/me.png")}
                         alt="Umanga Shrestha"
-                        width={200}
-                        height={200}
-                        className="border-2 border-gray-400 rounded-full shadow-lg shadow-gray-400/50 hover:shadow-xl"
+                        width={80}
+                        height={40}
+                        className="border-2 border-gray-400 rounded-full shadow-lg shadow-gray-400/50 hover:shadow-xl sm:w-32 sm:h-32 lg:w-40 lg:h-40"
                     />
                     <div className="flex flex-col justify-center">
-                        <h1 className="text-3xl font-bold text-gray-900 mb-1">Umanga Shrestha</h1>
-                        <p className="text-lg text-gray-600">Web Developer | Game Enthusiast | Amateur Artist</p>
+                        <h1 className="text-lg sm:text-lg lg:text-xl xl:text-2xl font-bold text-gray-900 mb-1">Umanga Shrestha</h1>
+                        <p className=" text-sm lg:text-sm xl:text-xl text-gray-600">Web Developer | Game Enthusiast | Amateur Artist</p>
                     </div>
                 </div>
                 <div
                     className="flex flex-col gap-1 items-left p-6  bg-[var(--secondary)] rounded-b-2xl shadow-md hover:shadow-neutral-900">
-                    <h2 className="text-1xl font-semibold mb-2 text-gray-800">ABOUT ME:</h2>
-                    <div className="overflow-hidden transition-all duration-500 ease-in-out" style={{ height: textHeight }}>
+                    <h2 className="text-sm lg:text-sm xl:text-lg font-semibold mb-2 text-gray-800">ABOUT ME:</h2>
+                    <div className="text-sm lg:text-sm xl:text-lg overflow-hidden transition-all duration-500 ease-in-out" style={{ height: textHeight }}>
                         <p ref={textRef} className="text-gray-700 leading-relaxed">
                             {displayedText}
                         </p>
@@ -135,7 +135,7 @@ export const About = () => {
 
                     {FullText.length > characterLimit && (
                         <button
-                            className="text-blue-500 mt-2 self-start cursor-pointer"
+                            className="text-blue-500 mt-2 text-sm lg:text-sm xl:text-lg  self-start cursor-pointer"
                             onClick={handleToggleText}
                             disabled={isExpanding || isCollapsing}
                         >
@@ -144,14 +144,14 @@ export const About = () => {
                     )}
                 </div>
             </section>
-            <section id='skill' className="mb-8 w-2/3">
-                <h2 className="text-2xl font-semibold mb-4 text-gray-800">SKILLS</h2>
-                <div className="grid grid-cols-2 gap-4">
+            <section id='skill' className="mb-8 lg:w-3/5 xl:w-2/3">
+                {/* <h2 className="text-lg sm:text-lg lg:text-xl xl:text-2xl font-semibold mb-4 text-gray-800">Skills</h2> */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                     {Object.keys(skillsData).map((category) => {
                         const Icon = skillsData[category].icon;
                         return (
                             <div key={category} className="bg-white p-5 rounded-xl shadow-md hover:shadow-lg transition-all duration-300">
-                                <h3 className="text-lg font-semibold mb-3 text-gray-800 flex items-center">
+                                <h3 className="text-sm lg:text-sm xl:text-lg font-semibold mb-3 text-gray-800 flex items-center">
                                     <span className="w-8 h-8  bg-[var(--secondary)] text-black-400  rounded-full flex items-center justify-center mr-2">
                                         <span className="text-xs">
                                             <Icon className="w-4 h-4" />
@@ -161,7 +161,7 @@ export const About = () => {
                                 </h3>
                                 <p className="text-gray-700 text-sm leading-relaxed">{skillsData[category].description}</p>
 
-                                <div className="flex flex-wrap gap-2 mt-4">
+                                <div className="text-sm lg:text-sm xl:text-lg flex flex-wrap gap-2 mt-4">
                                     {skillsData[category].platform?.map((item: string) => (
                                         !item ? null :
                                             <span key={item} className="px-2 py-1 bg-[var(--secondary)] text-xs text-black-500 rounded-full hover:scale-130 cursor-pointer">{item}</span>

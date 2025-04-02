@@ -59,7 +59,7 @@ const ContactSection = () => {
               }}
               className="cursor-pointer border-1 inline-block shadow-lg shadow-gray-500 hover:shadow-xl transition-shadow duration-300 rounded-full p-4 bg-white hover:bg-red-100"
             >
-              <div className="w-20 h-20 relative">
+              <div className="w-8 h-8 lg:w-10 lg:h-10 xl:w-12 xl:h-12 relative">
                 <Image
                   src={imageLoader("/images/contact-logos/lightMode/gmail.png")}
                   alt="Email"
@@ -98,7 +98,7 @@ const ContactSection = () => {
               rel="noopener noreferrer"
               className="cursor-pointer border-1 inline-block shadow-lg shadow-gray-500 hover:shadow-xl transition-shadow duration-300 rounded-full p-4 bg-white hover:bg-blue-100"
             >
-              <div className="w-20 h-20 relative">
+              <div className="w-8 h-8 lg:w-10 lg:h-10 xl:w-12 xl:h-12 relative">
                 <Image
                   src={imageLoader("/images/contact-logos/lightMode/linkedIn_1.png")}
                   alt="LinkedIn"
@@ -127,7 +127,7 @@ const ContactSection = () => {
               rel="noopener noreferrer"
               className="cursor-pointer border-1 inline-block shadow-lg shadow-gray-500 hover:shadow-xl transition-shadow duration-300 rounded-full p-4 bg-white hover:bg-gray-100"
             >
-              <div className="w-20 h-20 relative">
+              <div className="w-8 h-8 lg:w-10 lg:h-10 xl:w-12 xl:h-12 relative">
                 <Image
                   src={imageLoader("/images/contact-logos/lightMode/github-mark.png")}
                   alt="GitHub"
@@ -147,7 +147,7 @@ const ContactSection = () => {
       </section>
 
       <footer className="bg-gray-800 text-white p-4 text-center">
-        <p className="text-sm">
+        <p className="text-xs lg:text-sm xl:text-lg">
           &copy; {new Date().getFullYear()} Umanga Shrestha. All rights reserved. |
           This website is currently under development.
         </p>

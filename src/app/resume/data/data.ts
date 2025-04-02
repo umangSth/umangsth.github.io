@@ -6,7 +6,6 @@ const experienceItems1 = [
     'Designed and developed role-based access control (RBAC), ensuring secure and modular system architecture.',
     'Built and maintained high-performance web applications using Node.js, TypeScript, React, and Next.js.',
     'Collaborated with cross-functional teams to design, develop, and implement scalable software solutions.',
-    'Conducted thorough code reviews, refactoring, and testing to ensure software quality.'
 ]
 const experienceItems2 = [
     'Developed and maintained enterprise CRM systems using ASP.NET Core and Angular for corporate clients.',
@@ -49,7 +48,7 @@ export const works = [
             institution: "Lambton College",
             location: "Toronto, ON, Canada",
             material: [
-                'Mastered versatile programming language python, C#, Java, and JavaScript.',
+                'Mastered versatile programming language python, C#, Java,python, and JavaScript.',
                 'Acquired advanced skills in relational and non-relational database design and practical application.',
                 'Gained knowledge and practical skills in DevOps tools, ensuring streamlined and collaborative software development processes.',
                 'Acquired expertise in cloud computing technologies, understanding their applications in software development.',
