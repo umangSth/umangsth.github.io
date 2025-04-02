@@ -72,7 +72,7 @@ export const TimeLine = () => {
     const maxHeight: number = height_from_year * CONSTANT_GAP;
 
 
-    const throttle = (func: ()=> void, limit: number) => {
+    const throttle = (func: () => void, limit: number) => {
         let inThrottle: boolean;
         return function () {
             if (!inThrottle) {
@@ -82,26 +82,64 @@ export const TimeLine = () => {
             }
         };
     }
-    
+
 
     const handleScroll = useCallback(throttle(() => {
         const container = containerRef.current;
         if (!container) return;
 
-        const scrollDistance = maxHeight - minHeight;
-        const initialOffsetTop = container.offsetTop * 0.1;
-        const currentScroll = window.scrollY;
-        const scrolled = currentScroll - initialOffsetTop;
-        let progress = scrolled / scrollDistance;
+        const scrollDistance = maxHeight - minHeight; // total pixels the timeLine expands
+        const viewportHeight = window.innerHeight;
+        const containerTop = container.offsetTop; // where the container starts on the page
+        const currentScroll = window.scrollY; // how far the user has scrolled
+
+        // calculate the percentage of the timeLine that is visible
+        const stickyTriggerViewportOffset = viewportHeight * 0.80; // 80% of the viewport height
+
+        // calculate the window.scrollY value when teh container's top edge 
+        // reaches the desired trigger point in the viewport
+        const startStickScrollY = containerTop - stickyTriggerViewportOffset;
+
+        // calculate the window.scrollY value when the expansion should be complete
+        const endStickScrollY = startStickScrollY + scrollDistance;
+
+        let progress = 0;
+        if (currentScroll <= startStickScrollY) {
+            progress = 0;
+        } else if (currentScroll >= endStickScrollY) {
+            progress = 1;
+        } else {
+            const scrolledWithinRange = currentScroll - startStickScrollY;
+            progress = scrolledWithinRange / scrollDistance;
+        }
+        // Ensure progress stays strictly within 0 and 1 ( belt-and-suspenders)
         progress = Math.min(1, Math.max(0, progress));
         setScrollProgress(progress);
     }, 16), [maxHeight, minHeight]); // 16 ms throttle (~60 fps)
 
 
+    // Add resize listener to recalculate if needed, or rely on scroll handler
+    // which already uses current viewportHeight implicitly via window.scrollY relation to offsetTop.
     useEffect(() => {
         window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
+        // Optional: Add resize listener if layout shifts significantly on resize
+        // window.addEventListener('resize', handleScroll); // Call handleScroll on resize too
+
+        // initial call to handleScroll
+        handleScroll();
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll)
+            // window.removeEventListener('resize', handleScroll);
+        };
     }, [handleScroll]);
+
+    // Recalculate scroll progress when maxHeight changes (e.g., window resize affecting date calculations)
+    useEffect(() => {
+        handleScroll();
+    }, [maxHeight, handleScroll]);
+
+
 
     // Update clock time every minute when not scrolling
     useEffect(() => {

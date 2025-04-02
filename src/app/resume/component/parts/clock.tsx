@@ -6,7 +6,7 @@ interface ClockProps {
 export const Clock = (props: ClockProps) => {
     return (
         <div id='clock'>
-            <svg viewBox="0 0 50 50" className="h-15 w-15">
+            <svg viewBox="0 0 50 50" className="h-10 w-10 sm:h-12 sm:w-12 xl:h-15 xl:w-15">
                 <circle cx="25" cy="25" r="20" className="stroke-current stroke-4 fill-none" />
 
                 <line x1="25" y1="7" x2="25" y2="10" className="stroke-current stroke-2" />
