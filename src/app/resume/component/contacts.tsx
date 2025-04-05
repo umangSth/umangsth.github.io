@@ -114,10 +114,8 @@ const ContactSection = () => {
               </div>
             )}
           </div>
-
-          {/* GitHub */}
           <div
-            className="text-center relative" // Make this a positioning context
+            className="text-center relative"
             onMouseEnter={() => setShowGithubText(true)}
             onMouseLeave={() => setShowGithubText(false)}
           >
@@ -161,3 +159,4 @@ const ContactSection = () => {
 };
 
 export default ContactSection;
+

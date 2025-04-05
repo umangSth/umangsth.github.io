@@ -1,4 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
 @import "tailwindcss";
+
 
 @theme {
   --font-sans: var(--font-geist-sans);
@@ -6,6 +8,7 @@
 }
 
 :root {
+  font-family: 'Indie Flower', cursive;
   --background: #f0f8f7;
   --foreground: #171717;
   --primary: #ffffff;

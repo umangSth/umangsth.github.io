@@ -1,71 +1,116 @@
 [
     {
-        "src": "/images/drawings/1.jpg"
+        "src": "/images/drawings/1.jpg",
+        "alt": "Lion",
+        "description": " Lorem ipt. Suscipit minima fugit delectus consequuntur rem? Iusto molestias eos nulla perspiciatis, odit unde, beatae ab similique nam earum voluptatem, ea commodi non?"
     },{
-        "src": "/images/drawings/2.jpg"
+        "src": "/images/drawings/2.jpg",
+        "alt": "Horsie",
+        "description": " Lorem ipsum dolor sit amet consectetur adipisicinsequuntur rem? Iusto molestias eos nulla perspiciatis, odit unde, beatae ab similique nam earum voluptatem, ea commodi non?"
     },
     {
-        "src": "/images/drawings/3.jpg"
+        "src": "/images/drawings/3.jpg",
+        "alt": "colorful girl",
+        "description": " Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit minima fugit delectus consequuntur rem? Iusto molestias eos nulla perspiciatis, odit unde, beatae ab similique nam earum voluptatem, ea commodi non?"
+
     },{
-        "src": "/images/drawings/4.jpg"
+        "src": "/images/drawings/4.jpg",
+        "alt": "high Girl",
+        "description": " Ltetur adipisicing elit. Suscipit minima fugit delectus consequuntur rem? Iusto molestias eos nulla perspiciatis, odit unde, beatae ab similique nam earum voluptatem, ea commodi non?"
     },
     {
-        "src": "/images/drawings/5.jpg"
+        "src": "/images/drawings/5.jpg",
+        "alt": "tough girl",
+        "description": " Lorem ipsumctus consequuntur rem? Iusto molestias eos nulla perspiciatis, odit unde, beatae ab similique nam earum voluptatem, ea commodi non?"
     },
     {
-        "src": "/images/drawings/6.jpg"
+        "src": "/images/drawings/6.jpg",
+        "alt": "flower crown",
+        "description": " Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit minima fugit dmolestias eos nulla perspiciatis, odit unde, beatae ab similique nam earum voluptatem, ea commodi non?"
     },
     {
-        "src": "/images/drawings/7.jpg"
+        "src": "/images/drawings/7.jpg",
+        "alt": "side eye",
+        "description": " Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit minima fugit delectus consequuntur rem? Iusto molestias eos nulla perspiciatis, odit unde, beatae ab similique nam earum voluptatem, ea commodi non?"
     },
     {       
-        "src": "/images/drawings/8.jpg"
+        "src": "/images/drawings/8.jpg",
+        "alt": "angry girl",
+        "description": " Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit minima fugit delectus consequuntur rem? Iusto molestias eos nulla perspiciatis, odit unde, beatae ab similique nam earum voluptatem, ea commodi non?"
     },
     {
-        "src": "/images/drawings/9.jpg"
+        "src": "/images/drawings/9.jpg",
+        "alt": "colorless Samurai",
+        "description": " Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit minima fugit delectus consequuntur rem? Iusto molestias eos nulla perspiciatis, odit unde, beatae ab similique nam earum voluptatem, ea commodi non?"
     },
     {
-        "src": "/images/drawings/10.jpg"
+        "src": "/images/drawings/10.jpg",
+        "alt": "Luna & moon",
+        "description": " Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit minima fugit delectus consequuntur rem? Iusto molestias eos nulla perspiciatis, odit unde, beatae ab similique nam earum voluptatem, ea commodi non?"
     }
     ,
     {
-        "src": "/images/drawings/11.jpg"
+        "src": "/images/drawings/11.jpg",
+        "alt": "blindfold",
+        "description": " Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit minima fugit delectus consequuntur rem? Iusto molestias eos nulla perspiciatis, odit unde, beatae ab similique nam earum voluptatem, ea commodi non?"
     }
     ,
     {
-        "src": "/images/drawings/12.jpg"
+        "src": "/images/drawings/12.jpg",
+        "alt": "colorful hair",
+        "description": " Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit minima fugit delectus consequuntur rem? Iusto molestias eos nulla perspiciatis, odit unde, beatae ab similique nam earum voluptatem, ea commodi non?"
     }
     ,
     {
-        "src": "/images/drawings/13.jpg"
+        "src": "/images/drawings/13.jpg",
+        "alt": "no eyes",
+        "description": " Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit minima fugit delectus consequuntur rem? Iusto molestias eos nulla perspiciatis, odit unde, beatae ab similique nam earum voluptatem, ea commodi non?"
     }   
     ,
     {
-        "src": "/images/drawings/14.jpg"
+        "src": "/images/drawings/14.jpg",
+        "alt": "colorful hair",
+        "description": " Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit minima fugit delectus consequuntur rem? Iusto molestias eos nulla perspiciatis, odit unde, beatae ab similique nam earum voluptatem, ea commodi non?"
     }, 
     {
-        "src": "/images/drawings/15.jpg"
+        "src": "/images/drawings/15.jpg",
+        "alt": "closeup eyes",
+        "description": " Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit minima fugit delectus consequuntur rem? Iusto molestias eos nulla perspiciatis, odit unde, beatae ab similique nam earum voluptatem, ea commodi non?"
     }, 
     {
-        "src": "/images/drawings/16.jpg"
+        "src": "/images/drawings/16.jpg",
+        "alt": "crack doll",
+        "description": " Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit minima fugit delectus consequuntur rem? Iusto molestias eos nulla perspiciatis, odit unde, beatae ab similique nam earum voluptatem, ea commodi non?"
     }, 
     {
-        "src": "/images/drawings/17.jpg"
+        "src": "/images/drawings/17.jpg",
+        "alt": "old beard",
+        "description": " Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit minima fugit delectus consequuntur rem? Iusto molestias eos nulla perspiciatis, odit unde, beatae ab similique nam earum voluptatem, ea commodi non?"
     },
     {
-        "src": "/images/drawings/18.jpg"
+        "src": "/images/drawings/18.jpg",
+        "alt": "fox warrior",
+        "description": " Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit minima fugit delectus consequuntur rem? Iusto molestias eos nulla perspiciatis, odit unde, beatae ab similique nam earum voluptatem, ea commodi non?"
     }, 
     {
-        "src": "/images/drawings/19.jpg"
+        "src": "/images/drawings/19.jpg",
+        "alt": "Hmm you looking at me",
+        "description": " Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit minima fugit delectus consequuntur rem? Iusto molestias eos nulla perspiciatis, odit unde, beatae ab similique nam earum voluptatem, ea commodi non?"
     },
     {
-        "src": "/images/drawings/20.jpg"
+        "src": "/images/drawings/20.jpg",
+        "alt": "I know I look pretty",
+        "description": " Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit minima fugit delectus consequuntur rem? Iusto molestias eos nulla perspiciatis, odit unde, beatae ab similique nam earum voluptatem, ea commodi non?"
     },
     {
-        "src": "/images/drawings/21.jpg"
+        "src": "/images/drawings/21.jpg",
+        "alt": "old man with mustache",
+        "description": " Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit minima fugit delectus consequuntur rem? Iusto molestias eos nulla perspiciatis, odit unde, beatae ab similique nam earum voluptatem, ea commodi non?"
     },
     {
-        "src": "/images/drawings/22.jpg"
+        "src": "/images/drawings/22.jpg",
+        "alt": "running kitty or cat",
+        "description": " Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit minima fugit delectus consequuntur rem? Iusto molestias eos nulla perspiciatis, odit unde, beatae ab similique nam earum voluptatem, ea commodi non?"
     }
 
 ]
