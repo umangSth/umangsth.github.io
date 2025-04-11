@@ -125,7 +125,7 @@ export const About = () => {
                     </div>
                 </div>
                 <div
-                    className="flex flex-col gap-1 items-left p-6  bg-[var(--secondary)] rounded-b-2xl shadow-md hover:shadow-neutral-900">
+                    className="flex flex-col gap-1 items-left p-6  bg-[var(--secondary1)] rounded-b-2xl shadow-md hover:shadow-neutral-900">
                     <h2 className="text-sm lg:text-sm xl:text-lg font-semibold mb-2 text-gray-800">ABOUT ME:</h2>
                     <div className="text-sm lg:text-sm xl:text-lg overflow-hidden transition-all duration-500 ease-in-out" style={{ height: textHeight }}>
                         <p ref={textRef} className="text-gray-700 leading-relaxed">
@@ -152,7 +152,7 @@ export const About = () => {
                         return (
                             <div key={category} className="bg-white p-5 rounded-xl shadow-md hover:shadow-lg transition-all duration-300">
                                 <h3 className="text-sm lg:text-sm xl:text-lg font-semibold mb-3 text-gray-800 flex items-center">
-                                    <span className="w-8 h-8  bg-[var(--secondary)] text-black-400  rounded-full flex items-center justify-center mr-2">
+                                    <span className="w-8 h-8  bg-[var(--secondary1)] text-black-400  rounded-full flex items-center justify-center mr-2">
                                         <span className="text-xs">
                                             <Icon className="w-4 h-4" />
                                         </span>
@@ -164,7 +164,7 @@ export const About = () => {
                                 <div className="text-sm lg:text-sm xl:text-lg flex flex-wrap gap-2 mt-4">
                                     {skillsData[category].platform?.map((item: string) => (
                                         !item ? null :
-                                            <span key={item} className="px-2 py-1 bg-[var(--secondary)] text-xs text-black-500 rounded-full hover:scale-130 cursor-pointer">{item}</span>
+                                            <span key={item} className="px-2 py-1 bg-[var(--secondary1)] text-xs text-black-500 rounded-full hover:scale-130 cursor-pointer">{item}</span>
                                     ))}
                                 </div>
                             </div>

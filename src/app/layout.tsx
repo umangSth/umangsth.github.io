@@ -23,6 +23,9 @@ const pageTitle = "Umanga Shrestha | Full Stack Developer Resume";
 export const metadata: Metadata = {
   metadataBase: new URL(siteBaseUrl),
   title: pageTitle,
+  icons: {
+    icon: '/favicon.ico',
+  },
   description: pageDescription,
   keywords: [
     "Umanga Shrestha",

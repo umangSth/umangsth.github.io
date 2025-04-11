@@ -20,7 +20,7 @@ export default function Resume() {
             <TimeLine />
             <Projects />
           </div>
-        <ContactSection />
+          <ContactSection />
         </>
     )
 }

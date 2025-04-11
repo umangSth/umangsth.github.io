@@ -100,7 +100,8 @@ export const Header = (props: React.PropsWithChildren) => {
                           ${isScrolled ? 'lg:flex pointer' : ''}
                           ${isScrolled && !isNavOpen ? 'opacity-100' : 'opacity-0 lg:opacity-0'}
                           shadow-lg shadow-gray-400/50 hover:shadow-xl
-                          group-hover:opacity-100`}
+                          group-hover:opacity-100
+                          `}
                         onMouseEnter={() => { toggleNavState('hamIcon-case'); }}
                         onMouseLeave={() => { setIsNavOpen(false); }}
                         onClick={() => setIsNavOpen(!isNavOpen)}
