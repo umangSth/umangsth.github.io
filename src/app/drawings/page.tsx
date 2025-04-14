@@ -73,7 +73,7 @@ export default function Drawings() {
 
   return (
     <div className="flex flex-col min-h-screen bg-[var(--background)]">
-      <div className="flex-grow flex items-center justify-center p-4 overflow-hidden">
+      <div className="flex-grow flex items-center justify-center p-2 overflow-hidden">
         <div
           id="description"
           className={`
@@ -81,7 +81,8 @@ export default function Drawings() {
               w-18vm sm:w-[18vw] lg:w-[20vw] xl:w-[25vw]
               h-auto min-h-[15vh] 
               z-10
-              p-3 sm:p-4 lg:p-6 pt-6 sm:pt-8
+              mt-10
+              p-2 sm:p-2 lg:p-6 pt-6 sm:pt-8
               bg-yellow-50
               rounded-sm
               shadow-lg
