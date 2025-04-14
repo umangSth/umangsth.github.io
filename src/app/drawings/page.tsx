@@ -78,7 +78,7 @@ export default function Drawings() {
           id="description"
           className={`
               absolute top-5 left-5 sm:top-12 sm:left-12 lg:top-16 lg:left-16
-              w-18vm sm:w-[18vw] lg:w-[25vw] xl:w-[28vw]
+              w-18vm sm:w-[18vw] lg:w-[20vw] xl:w-[25vw]
               h-auto min-h-[15vh] 
               z-10
               p-3 sm:p-4 lg:p-6 pt-6 sm:pt-8
@@ -102,7 +102,7 @@ export default function Drawings() {
           {currentDrawing.description || "No description available"}
         </div>
 
-        <div className="relative w-full max-w-xs sm:max-w-sm  lg:max-w-lg xl:max-w-2xl h-[50vh] sm:h-[60vh] lg:h-[70vh]">
+        <div className="relative w-lg max-w-xs sm:max-w-sm lg:max-w-lg xl:max-w-2xl h-[50vh] sm:h-[60vh] lg:h-[70vh]">
           {isLoading && <LoadingSpinner />}
 
           {/* Deck Container */}
@@ -149,7 +149,7 @@ export default function Drawings() {
                       alt={drawing.alt || 'Drawing'}
                       fill
                       sizes="(max-width: 640px) 100vw, (max-width: 768px) 80vw, (max-width: 1024px) 60vw, (max-width: 1280px) 50vw, 672px"
-                      className="object-contain shadow-lg rounded-lg border-2 border-gray-300"
+                      className="object-contain shadow-lg rounded-lg border-2 border-gray-300 mt-10"
                       priority={isActive}
                       onLoad={() => handleImageLoad(index)}
                       loading={isActive ? "eager" : "lazy"}
@@ -164,7 +164,7 @@ export default function Drawings() {
             className="absolute left-[-12px] sm:left-[-16px]  lg:left-[-32px] xl:left-[-40px] 
                       top-1/2 -translate-y-1/2 z-[110] 
                       bg-black/50 text-white 
-                      p-2 sm:p-3 
+                      p-2
                       rounded-full hover:bg-black/80 transition-colors 
                       disabled:opacity-50 cursor-pointer"
             aria-label="Previous Image"
@@ -177,7 +177,7 @@ export default function Drawings() {
             className="absolute right-[-12px] sm:right-[-16px]  lg:right-[-32px] xl:right-[-40px] 
                       top-1/2 -translate-y-1/2 z-[110] 
                       bg-black/50 text-white 
-                      p-2 sm:p-3 
+                      p-2 
                       rounded-full hover:bg-black/80 transition-colors 
                       disabled:opacity-50 cursor-pointer"
             aria-label="Next Image"

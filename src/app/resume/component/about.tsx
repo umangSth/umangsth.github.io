@@ -33,10 +33,8 @@ export const About = () => {
 
     // Handle expanding animation
     useEffect(()=> {
-        console.log('is expanding', isExpanding)
         if (!isExpanding)  return;
 
-        console.log('is expanding')
         let currentIndex = characterLimit;
         const truncatedText = FullText.slice(0, characterLimit);
 
@@ -121,7 +119,7 @@ export const About = () => {
                     />
                     <div className="flex flex-col justify-center">
                         <h1 className="text-lg sm:text-lg lg:text-xl xl:text-2xl font-bold text-gray-900 mb-1">Umanga Shrestha</h1>
-                        <p className=" text-sm lg:text-sm xl:text-xl text-gray-600">Web Developer | Game Enthusiast | Amateur Artist</p>
+                        <p className=" text-sm lg:text-sm xl:text-lg text-gray-600">Web Developer | Game Enthusiast | Amateur Artist</p>
                     </div>
                 </div>
                 <div
