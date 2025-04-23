@@ -1,0 +1,22 @@
+
+command:  wasm-pack build --target web
+
+2025-04-16
+Beginning of the games implementation, with wasm support
+
+started with the hello-wasm, which is a simple reverse function
+main dependencies: wasm-bindgen and lib crate-type
+complied with wasm-pack build --target web
+
+no errors, so far!
+
+
+2025-04-17
+
+changing the hello-wasm to use canvas to draw a simple circle or Rectangle
+where we use the wasm_bindgen to bridge rust and js, and web_sys to interact with the DOM and canvas APIs.
+the get_context function is used to get the 2d context of the canvas, and 
+the draw_circle and draw_rect functions are used to draw a circle or rectangle on the canvas.
+and the lib crate-type to compile the wasm file, which is then imported in the next.js project.
+
+
