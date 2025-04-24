@@ -31,6 +31,21 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Setup Rust toolchain
+        uses: actions-rs/toolchain@v1
+        with: 
+          toolchain: stable
+          target: wasm32-unknown-unknown
+          override: true
+
+      - name: Install wasm-pack
+        run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+
+      - name: Build wasm
+        run: cd src/app/games/hello-wasm && wasm-pack build --target web
+
+  
       - name: Detect package manager
         id: detect-package-manager
         run: |
