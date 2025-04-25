@@ -6,9 +6,11 @@ use rand::Rng;
 use wasm_bindgen_futures::JsFuture;
 use js_sys::{Promise as JsPromise, Function};
 
+mod pathfinding;
+use pathfinding::bfs::BfsSolver;
 
 
-const BLOCK_SIZE: f64 = 10.0;
+
 
 #[derive(Clone, Copy, PartialEq, Debug)]
 enum CellType {
@@ -25,6 +27,16 @@ enum PlayerType {
     Target,
 }
 
+#[derive(Clone, Copy, Debug, PartialEq)]
+enum Algorithm {
+    BFS,
+    DFS,
+    BEST_FIRST,
+    A_STAR,
+    DIJKSTRA,
+}
+
+
 #[wasm_bindgen]
 pub struct MazeState{
     maze_grid: Vec<Vec<CellType>>,
@@ -32,7 +44,10 @@ pub struct MazeState{
     target: (usize, usize),
     human_player: (usize, usize),
     canvas_context: CanvasRenderingContext2d,
+    block_size: f64,
 }
+
+
 
 
 
@@ -67,7 +82,7 @@ async fn sleep(ms: i32) -> Result<(), JsValue> {
 #[wasm_bindgen]
 impl MazeState {
 
-    pub fn new(canvas_id: &str, maze_data: &str) -> Result<MazeState, JsValue>{
+    pub fn new(canvas_id: &str, maze_data: &str, block_size: f64) -> Result<MazeState, JsValue>{
        let canvas_context = get_context(canvas_id)?;
        let maze_grid = parse_maze(maze_data)?;
 
@@ -77,8 +92,8 @@ impl MazeState {
            target: (0, 0),
            human_player: (0, 0),
            canvas_context,
+           block_size,
        };
-
        state.draw_maze()?;
        let target_pos = state.generate_random_target()?;
        state.draw_player(target_pos[0], target_pos[1], PlayerType::Target);
@@ -86,6 +101,21 @@ impl MazeState {
        state.draw_player(com_pos[0], com_pos[1], PlayerType::Computer);
 
        Ok(state)
+    }
+
+
+    pub fn reset(&mut self)-> Result<(), JsValue> {
+        self.computer_player = (0, 0);
+        self.target = (0, 0);
+        self.human_player = (0, 0);
+        self.canvas_context.set_fill_style(&"black".into());
+        self.clear_canvas();
+        self.draw_maze();
+        let target_pos = self.generate_random_target()?;
+        self.draw_player(target_pos[0], target_pos[1], PlayerType::Target);
+        let com_pos = self.generate_random_target()?;
+        self.draw_player(com_pos[0], com_pos[1], PlayerType::Computer);
+        Ok(())
     }
 
 
@@ -97,10 +127,10 @@ impl MazeState {
             for (x, &cell_type) in row.iter().enumerate() {
                 if cell_type == CellType::Wall {
                     self.canvas_context.fill_rect(
-                        x as f64 * BLOCK_SIZE, 
-                        y as f64 * BLOCK_SIZE, 
-                        BLOCK_SIZE, 
-                        BLOCK_SIZE,
+                        x as f64 * self.block_size,
+                        y as f64 * self.block_size, 
+                        self.block_size, 
+                        self.block_size,
                     );
                 }
             }
@@ -137,87 +167,45 @@ impl MazeState {
                 self.computer_player = (x, y);
                 self.canvas_context.set_fill_style(&"red".into());
                 self.canvas_context.fill_rect(
-                    x as f64 * BLOCK_SIZE, 
-                    y as f64 * BLOCK_SIZE, 
-                    BLOCK_SIZE, 
-                    BLOCK_SIZE,
+                    x as f64 * self.block_size, 
+                    y as f64 * self.block_size, 
+                    self.block_size, 
+                    self.block_size,
                 );
             },
             PlayerType::Human => {
                 self.human_player = (x, y);
                 self.canvas_context.set_fill_style(&"blue".into());
                 self.canvas_context.fill_rect(
-                    x as f64 * BLOCK_SIZE, 
-                    y as f64 * BLOCK_SIZE, 
-                    BLOCK_SIZE, 
-                    BLOCK_SIZE,
+                    x as f64 * self.block_size, 
+                    y as f64 * self.block_size, 
+                    self.block_size, 
+                    self.block_size,
                 );
             },
             PlayerType::Target => {
                 self.target =(x, y);
                 self.canvas_context.set_fill_style(&"yellow".into());
                 self.canvas_context.fill_rect(
-                    x as f64 * BLOCK_SIZE, 
-                    y as f64 * BLOCK_SIZE, 
-                    BLOCK_SIZE, 
-                    BLOCK_SIZE,
+                    x as f64 * self.block_size, 
+                    y as f64 * self.block_size, 
+                    self.block_size, 
+                    self.block_size,
                 );
             },  
         }
     }
 
-    pub async fn find_path_with_bfs(&mut self, delay_ms: i32) -> Result<JsValue, JsValue> {
-        let start =  self.computer_player;
-        let target = self.target;
-        let rows = self.maze_grid.len();
-        let cols = self.maze_grid[0].len();
-
-        // Initialize the queueand visited set
-        let mut queue = std::collections::VecDeque::new(); // queue for the BFS
-        let mut visited = vec![vec![false; cols]; rows]; // visited set for the BFS
-        let mut parent = vec![vec![None; cols]; rows]; // parent set for the BFS
-
-
-        // Add the start node to the queue
-        queue.push_back(start);
-        visited[start.1][start.0] = true;
-
-        // define the possible moves (up, down, left, right)
-        let moves: [(i32, i32); 4] = [(0, -1), (0, 1), (-1, 0), (1, 0)];
-
-        // loop through the queue and check if the current node is the target
-        while let Some(current) = queue.pop_front() {
-
-            if current == target {
-                // target found, now backtrack to find the path
-                self.reconstruct_path(parent, target)?;
-                return Ok(JsValue::from_str(&format!("Path found! --> current=>{:?}  target=> {:?} ", current, target)));
-            }
-
-            let (cx, cy) = current;
-            for &(dx, dy) in moves.iter() {
-                let new_x = cx as i32 + dx;
-                let new_y = cy as i32 + dy;
-
-                if new_x >= 0 && new_x < cols as i32 && 
-                   new_y >= 0 && new_y < rows  as i32 
-                {
-                    let (nx_usize, ny_usize) = (new_x as usize, new_y as usize);
-
-                    if self.maze_grid[ny_usize][nx_usize]== CellType::Path  && !visited[ny_usize][nx_usize] {
-                        visited[ny_usize][nx_usize] = true;
-                        parent[ny_usize][nx_usize] = Some(current);
-                        queue.push_back((nx_usize, ny_usize));
-
-                        // color each cell as we visit it and add delay
-                        self.color_cell(nx_usize, ny_usize, "lightcoral".to_string());
-                        sleep(delay_ms).await?;
-                    }
-                }
+   pub async fn find_path(&mut self, algorithm: &str, delay_ms: i32) -> Result<JsValue, JsValue> {
+       match algorithm {
+            "BFS" => {
+                 let mut bfs_solver = BfsSolver;
+                 bfs_solver.find_path(self, delay_ms).await
+            },
+            _ => {
+                Err(JsValue::from_str("Invalid algorithm name!"))
             }
         }
-        let col_row_value = format!("Target not reachable! --> {:?}  {:?} start: {:?}", rows, cols, start);
-        Ok(JsValue::from_str(&col_row_value))
     }
 
 
@@ -243,20 +231,15 @@ impl MazeState {
             CellType::Path => {
                 self.canvas_context.set_fill_style(&color.into());
                 self.canvas_context.fill_rect(
-                    x as f64 * BLOCK_SIZE, 
-                    y as f64 * BLOCK_SIZE, 
-                    BLOCK_SIZE, 
-                    BLOCK_SIZE,
+                    x as f64 * self.block_size, 
+                    y as f64 * self.block_size, 
+                    self.block_size, 
+                    self.block_size,
                 );
             },
             _ => {}
         }
     }
-
-
-
-
-
 }
 
 
