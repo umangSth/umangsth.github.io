@@ -11,6 +11,7 @@ const MAZE_HEIGHT = 60 * MAZE_BLOCK_SIZE;
 export default function Games() {
   const [mazeLoaded, setMazeLoaded] = useState(false);
   const mazeStateRef = useRef<MazeState | null>(null);
+  const [timeTaken, setTimeTaken] = useState(0);
   const [delay, setDelay] = useState(0);
   const [mainBtnState, setMainBtnState] = useState<'start' | 'reset' | 'loading'>('start');
   const [algorithm, setAlgorithm] = useState('BFS');
@@ -42,12 +43,15 @@ export default function Games() {
   const startSearch = async () => {
     if (mazeStateRef.current) {
       setMainBtnState('loading');
+      const startTime = performance.now();
+
       await mazeStateRef.current
         .find_path(algorithm, delay)
         .then((value) => {
           if (value.includes('Path found!')) {
             setMainBtnState('reset');
             console.log('Path finding complete!')
+            setTimeTaken(performance.now() - startTime);
           }
         })
         .catch((err) => console.error('Error:', err));
@@ -118,8 +122,8 @@ export default function Games() {
               <option value="0">Select Algorithm</option>
               <option value="BFS">Breath First Search</option>
               <option value="DFS">Depth First Search</option>
-              <option value="BEST_FIRST">Best First Search</option>
-              <option value="A_STAR">A*</option>
+              <option value="BestFirst">Best First Search</option>
+              <option value="AStar">A*</option>
               <option value="DIJKSTRA">Dijkstra</option>
             </select>
             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-white">
@@ -131,6 +135,9 @@ export default function Games() {
                   />
                 </svg>
             </div>
+          </div>
+          <div className="relative">
+            <span className="text-gray-700 text-sm lg:text-sm xl:text-lg">Time taken: {timeTaken} ms</span>
           </div>
         </div>
       </div>

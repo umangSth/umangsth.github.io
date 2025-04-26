@@ -5,9 +5,10 @@ use web_sys::{CanvasRenderingContext2d, HtmlCanvasElement};
 use rand::Rng;
 use wasm_bindgen_futures::JsFuture;
 use js_sys::{Promise as JsPromise, Function};
+use std::collections::HashMap;
 
 mod pathfinding;
-use pathfinding::bfs::BfsSolver;
+use pathfinding::{bfs::BfsSolver, dfs::DfsSolver, astar::AstarSolver};
 
 
 
@@ -31,8 +32,8 @@ enum PlayerType {
 enum Algorithm {
     BFS,
     DFS,
-    BEST_FIRST,
-    A_STAR,
+    BestFirst,
+    AStar,
     DIJKSTRA,
 }
 
@@ -202,6 +203,14 @@ impl MazeState {
                  let mut bfs_solver = BfsSolver;
                  bfs_solver.find_path(self, delay_ms).await
             },
+            "DFS" => {
+                 let mut dfs_solver = DfsSolver;
+                 dfs_solver.find_path(self, delay_ms).await
+            },
+            "AStar" => {
+                let mut a_star_solver = AstarSolver;
+                a_star_solver.find_path(self, delay_ms).await
+            }
             _ => {
                 Err(JsValue::from_str("Invalid algorithm name!"))
             }
@@ -223,6 +232,30 @@ impl MazeState {
         path.reverse();
         Ok(path)
     }
+
+    // helper function to reconstruct the path from the parent set
+    //  for the A* algorithm as it uses hashmaps
+    fn reconstruct_path_astar(
+        &mut self,
+        parent: HashMap<(usize, usize), Option<(usize, usize)>>,
+        target: (usize, usize),
+    ) -> Result<Vec<(usize, usize)>, JsValue> {
+        let mut path = Vec::new();
+        let mut current = target;
+
+        while let Some(&Some(prev)) = parent.get(&current) {
+            path.push(current);
+            current = prev;
+            self.color_cell(current.0, current.1, "red".to_string());
+        }
+        path.push(current);
+        path.reverse();
+        Ok(path)
+    }
+
+
+
+
 
     // helper function to color a cell
     fn color_cell(&mut self, x: usize, y: usize, color: String) {
