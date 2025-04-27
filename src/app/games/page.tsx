@@ -124,7 +124,6 @@ export default function Games() {
               <option value="DFS">Depth First Search</option>
               <option value="BestFirst">Best First Search</option>
               <option value="AStar">A*</option>
-              <option value="DIJKSTRA">Dijkstra</option>
             </select>
             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-white">
               <svg className="fill-current h-4 w-4" viewBox="0 0 20 20">
@@ -182,17 +181,10 @@ export default function Games() {
               the cost to reach a node and a heuristic estimate of the cost to
               the goal. It is widely used for finding the shortest path efficiently.
             </li>
-            <li>
-              <span className="text-black-500 font-semibold">Dijkstra's Algorithm:</span> Another algorithm that guarantees the
-              shortest path in weighted graphs. It explores nodes in order of
-              their current shortest distance from the start node.
-            </li>
           </ul>
-         
         </div>
       </div>
     </div>
 
   );
 }
-
