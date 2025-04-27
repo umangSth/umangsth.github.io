@@ -8,7 +8,7 @@ use js_sys::{Promise as JsPromise, Function};
 use std::collections::HashMap;
 
 mod pathfinding;
-use pathfinding::{bfs::BfsSolver, dfs::DfsSolver, astar::AstarSolver};
+use pathfinding::{bfs::BfsSolver, dfs::DfsSolver, astar::AstarSolver, best_first::BestFirstSolver};
 
 
 
@@ -46,6 +46,7 @@ pub struct MazeState{
     human_player: (usize, usize),
     canvas_context: CanvasRenderingContext2d,
     block_size: f64,
+    original_maze_grid: Vec<Vec<CellType>>,
 }
 
 
@@ -86,6 +87,7 @@ impl MazeState {
     pub fn new(canvas_id: &str, maze_data: &str, block_size: f64) -> Result<MazeState, JsValue>{
        let canvas_context = get_context(canvas_id)?;
        let maze_grid = parse_maze(maze_data)?;
+       let original_maze_grid = maze_grid.clone();
 
        let mut state = MazeState{
            maze_grid,
@@ -94,6 +96,7 @@ impl MazeState {
            human_player: (0, 0),
            canvas_context,
            block_size,
+           original_maze_grid,
        };
        state.draw_maze()?;
        let target_pos = state.generate_random_target()?;
@@ -118,6 +121,17 @@ impl MazeState {
         self.draw_player(com_pos[0], com_pos[1], PlayerType::Computer);
         Ok(())
     }
+
+
+
+    pub fn clear_visualization(&mut self)-> Result<(), JsValue> {
+        self.maze_grid = self.original_maze_grid.clone();
+        self.draw_maze()?;
+        self.draw_player(self.computer_player.0, self.computer_player.1, PlayerType::Computer);
+        self.draw_player(self.target.0, self.target.1, PlayerType::Target);
+        Ok(())
+    }
+
 
 
     pub fn draw_maze(&mut self)-> Result<(), JsValue> {
@@ -210,6 +224,10 @@ impl MazeState {
             "AStar" => {
                 let mut a_star_solver = AstarSolver;
                 a_star_solver.find_path(self, delay_ms).await
+            }
+            "BestFirst" => {
+                let mut best_first_solver = BestFirstSolver;
+                best_first_solver.find_path(self, delay_ms).await
             }
             _ => {
                 Err(JsValue::from_str("Invalid algorithm name!"))

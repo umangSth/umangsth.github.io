@@ -41,16 +41,20 @@ export default function Games() {
   };
 
   const startSearch = async () => {
+    if (mainBtnState === 'reset' && mazeStateRef.current) {
+      await mazeStateRef.current.reset();
+      setMainBtnState('start');
+      return;
+    }
     if (mazeStateRef.current) {
       setMainBtnState('loading');
       const startTime = performance.now();
-
       await mazeStateRef.current
         .find_path(algorithm, delay)
         .then((value) => {
           if (value.includes('Path found!')) {
             setMainBtnState('reset');
-            console.log('Path finding complete!')
+            console.log('Path finding complete!', value)
             setTimeTaken(performance.now() - startTime);
           }
         })
@@ -60,6 +64,14 @@ export default function Games() {
      
     }else { 
       console.log('maze not loaded or in loading state');
+    }
+  };
+
+
+  const clearVisualization = async () => {
+    if (mazeStateRef.current) {
+      await mazeStateRef.current.clear_visualization();
+      setMainBtnState('start');
     }
   };
 
@@ -89,6 +101,14 @@ export default function Games() {
           >
             {mainBtnState === 'start' ? "Start the search" : mainBtnState === 'loading' ? "Searching..." : "Reset"}
           </button>
+          {
+            mainBtnState === 'reset' && <button
+                    className="bg-red-400 hover:bg-red-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline  cursor-pointer"
+                    onClick={clearVisualization}
+                  >
+                    Clear Visualization
+                    </button>
+          }
           
           
           <div className="relative">
@@ -98,9 +118,9 @@ export default function Games() {
                   setDelay(parseInt(e.target.value))
                 }>
                  <option value="0">Select render delay</option>
-                 <option value="10"> 10ms delay </option>
-                 <option value="40"> 40ms delay </option> 
-                 <option value="80"> 80ms delay </option>
+                 <option value="10"> 5ms delay </option>
+                 <option value="40"> 10ms delay </option> 
+                 <option value="80"> 20ms delay </option>
             </select>
             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2  text-white">
               <svg className="fill-current h-4 w-4" viewBox="0 0 20 20">
@@ -136,7 +156,7 @@ export default function Games() {
             </div>
           </div>
           <div className="relative">
-            <span className="text-gray-700 text-sm lg:text-sm xl:text-lg">Time taken: {timeTaken} ms</span>
+            <span className="text-gray-700 text-sm lg:text-sm xl:text-lg">Time taken: {timeTaken.toFixed(2)} ms</span>
           </div>
         </div>
       </div>

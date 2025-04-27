@@ -33,7 +33,7 @@ impl DfsSolver {
             if current == target {
                 // target found, now backtrack to find the path
                 match_state.reconstruct_path(parent, target)?;
-                return Ok(JsValue::from_str(&format!("Path found! --> current=>{:?}  target=> {:?} ", current, target)));
+                return Ok(JsValue::from_str(&format!("Path found! --> {:?} ", delay_ms)));
             }
 
             let (cx, cy) = current;
@@ -53,7 +53,9 @@ impl DfsSolver {
 
                         // color each cell as we visit it and add delay
                         match_state.color_cell(nx_usize, ny_usize, "lightcoral".to_string());
-                        crate::sleep(delay_ms).await?;
+                        if delay_ms > 0 {
+                            crate::sleep(delay_ms).await?;
+                        }
                    }
                 }
             }

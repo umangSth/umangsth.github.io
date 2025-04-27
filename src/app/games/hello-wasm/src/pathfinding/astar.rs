@@ -4,8 +4,7 @@ use std::collections::BinaryHeap;
 use std::collections::HashMap;
 use std::cmp::Reverse;
 use crate::MazeState;
-
-
+use super::heuristic;
 
 
 pub struct AstarSolver ;
@@ -25,7 +24,7 @@ impl AstarSolver {
 
         // initialize the priority queue and visited set
         let mut pq = BinaryHeap::new(); // priority queue for the A*
-        pq.push(Reverse((self.heuristic(&start, &target) as i64, start)));
+        pq.push(Reverse((heuristic(&start, &target) as i64, start)));
 
         let mut g_score: HashMap<(usize, usize), f64> = HashMap::new(); // g_score for the A*
         g_score.insert(start, 0.0);
@@ -39,7 +38,7 @@ impl AstarSolver {
             if current == target {
                 // target found, now backtrack to find the path
                 let path = match_state.reconstruct_path_astar(parent, target)?;
-                return Ok(JsValue::from_str(&format!("Path found! --> current=>{:?}  target=> {:?} ", current, target)));
+                return Ok(JsValue::from_str(&format!("Path found! --> {:?} ", delay_ms)));
             }
 
             let (cx, cy) = current;
@@ -57,11 +56,13 @@ impl AstarSolver {
                         if tentative_g_score < *g_score.get(&neighbor).unwrap_or(&f64::INFINITY) {
                             parent.insert(neighbor, Some(current));
                             g_score.insert(neighbor, tentative_g_score);
-                            let f_score = tentative_g_score + self.heuristic(&neighbor, &target);
+                            let f_score = tentative_g_score + heuristic(&neighbor, &target);
                             pq.push(Reverse((f_score as i64, neighbor)));
 
                             match_state.color_cell(neighbor.0, neighbor.1, "lightcoral".to_string());
-                            crate::sleep(delay_ms).await?;
+                            if delay_ms > 0 {
+                                crate::sleep(delay_ms).await?;
+                            }
                         }
                     }
                 }
@@ -71,11 +72,6 @@ impl AstarSolver {
         Err(JsValue::from_str("Target not reachable!"))
         
     }
-
-    fn heuristic(&self, node: &(usize, usize), target: &(usize, usize)) -> f64 {
-        // Manhattan distance is commonly used for 2D grids
-        let (x1, y1) = *node; // dereference the tuple
-        let (x2, y2) = *target;  // dereference the tuple
-        ((x2 as i32 - x1 as i32).abs() + (y2 as i32 - y1 as i32).abs()) as f64
-    }
 }
+
+
