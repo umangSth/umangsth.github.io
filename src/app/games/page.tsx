@@ -91,6 +91,8 @@ export default function Games() {
     if (mainBtnState === 'reset' && mazeStateRef.current) {
       await mazeStateRef.current.reset();
       setMainBtnState('start');
+      setTimeTaken(0);
+      setTimeTakenTS(0);
       return;
     }
     const startTime = performance.now();
