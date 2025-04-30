@@ -48,8 +48,7 @@ impl BfsSolver {
                    new_y >= 0 && new_y < rows  as i32 
                 {
                     let (nx_usize, ny_usize) = (new_x as usize, new_y as usize);
-
-                    if match_state.maze_grid[ny_usize][nx_usize]== CellType::Path  && !visited[ny_usize][nx_usize] {
+                    if (match_state.maze_grid[ny_usize][nx_usize]== CellType::Path) && !visited[ny_usize][nx_usize]  {
                         visited[ny_usize][nx_usize] = true;
                         parent[ny_usize][nx_usize] = Some(current);
                         queue.push_back((nx_usize, ny_usize));
