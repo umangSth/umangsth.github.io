@@ -163,7 +163,7 @@ export default function Games() {
             </span>
             <button
               onClick={toggleImplementation}
-              className={`relative inline-flex h-6 w-12 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 ${useWasm ? 'bg-indigo-600' : 'bg-gray-300'
+              className={`z-9999 relative inline-flex h-6 w-12 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 ${useWasm ? 'bg-indigo-600' : 'bg-gray-300'
                 }`}
               role="switch"
               aria-checked={useWasm}
@@ -258,7 +258,7 @@ export default function Games() {
         <h2 className="text-lg lg:text-xl xl:text-2xl font-semibold text-gray-800">Explanation:</h2>
         <div className="text-sm lg:text-sm xl:text-lg m-6 mb-2 overflow-hidden transition-all duration-500 ease-in-out">
           <div className=" leading-relaxed text-amber-800 font-stretch-75% text-xl mb-10 bg-amber-50 p-4 rounded-2xl flex flex-col gap-4">
-            <p>
+            <p> 
                 Here you can play with the algorithms and see the difference in performance.
                 I have used two implementations of the algorithms, one in TypeScript and another in Rust(Wasm).
                 To see the difference in performance there&apos;s a timers at the bottom right corner of the page. As you can see the 
