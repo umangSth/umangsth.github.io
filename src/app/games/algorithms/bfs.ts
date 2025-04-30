@@ -19,7 +19,7 @@ export async function bfs_algorithm(args : TsImplementationProps):  Promise<Map<
     const directions = [[0, 1], [0, -1], [1, 0], [-1, 0]];
 
     while (queue.length > 0) {
-        const current = queue.shift(); // dequeue the first element
+       const current = queue.shift(); // dequeue the first element
        const [cx, cy] = current ? current : [null, null];
 
        if(cx !== null && cy !== null) {

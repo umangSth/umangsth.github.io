@@ -4,7 +4,7 @@
 import { ts_implementation } from './algorithms/find-path';
 import { from_string_to_game_state, MazeInfo, string_to_maze_grid } from './algorithms/helper/helper_function';
 import init, { MazeState } from './hello-wasm/pkg/hello_wasm';
-import React, { use, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 const MAZE_BLOCK_SIZE = 8.0;
 const MAZE_WIDTH = 120 * MAZE_BLOCK_SIZE;
@@ -175,9 +175,6 @@ export default function Games() {
                   }`}
               />
             </button>
-            <div className="text-xs font-medium text-gray-500">
-              {useWasm ? 'High Performance' : 'Standard'}
-            </div>
           </div>
         </div>
         <canvas
@@ -212,9 +209,9 @@ export default function Games() {
                   setDelay(parseInt(e.target.value))
                 }>
                 <option value="0">Select render delay</option>
+                <option value="1"> 1ms delay </option>
                 <option value="10"> 5ms delay </option>
                 <option value="40"> 10ms delay </option>
-                <option value="80"> 20ms delay </option>
               </select>
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2  text-white">
                 <svg className="fill-current h-4 w-4" viewBox="0 0 20 20">
@@ -264,14 +261,14 @@ export default function Games() {
             <p>
                 Here you can play with the algorithms and see the difference in performance.
                 I have used two implementations of the algorithms, one in TypeScript and another in Rust(Wasm).
-                To see the difference in performance there's a timers at the bottom right corner of the page. As you can see the 
+                To see the difference in performance there&apos;s a timers at the bottom right corner of the page. As you can see the 
                 default setting is bfs with zero delay with wasm. once the search is complete, you can see a button reset the visualization, 
                 so you can play with different algorithms and different delays, also the two implementations, 
                 TypeScript and Wasm (Rust) in same target see the performance difference.
            </p>
            <p>
-                As this app is a learning project and haven't run that much testing, I have seen some mixes results, which is not expected.
-                As i was expecting that the WASM would out perform the TypeScript in every case, but it didn't. I think there is still improvements to be made,
+                As this app is a learning project and haven&apos;t done any performance optimizations,
+                As i was expecting that the WASM would out perform the TypeScript in every case, but it didn&apos;t. I think there is still improvements to be made,
                 one primary improvement I stumbled upon, is that when I am coloring the cells, I am calling the context of the canvas,
                 which is a operation that i think is expensive, causing this performance issue. I will try to optimize this in the future, with other improvements, with 
                 different Test environments.

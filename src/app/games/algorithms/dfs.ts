@@ -16,7 +16,7 @@ export async function dfs_algorithm(args : TsImplementationProps):  Promise<Map<
 
     visited.add(`${start[0]},${start[1]}`);
     
-    let moves = [[0, 1], [0, -1], [1, 0], [-1, 0]];
+    const moves = [[0, 1], [0, -1], [1, 0], [-1, 0]];
 
     while (queue.length > 0) {
         const current = queue.pop();

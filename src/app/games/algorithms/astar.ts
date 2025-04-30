@@ -13,15 +13,15 @@ export async function a_star_algorithm(args : TsImplementationProps): Promise<Ma
     const pq = new PriorityQueue<[number, number]>();
     pq.enqueue(start, heuristic(start, target));
 
-    let g_score = new Map<string, number>();
+    const g_score = new Map<string, number>();
     g_score.set(`${start[0]},${start[1]}`, 0);
 
 
-    let parent = new Map<string, [number, number]>();
-    let visited = new Set<string>();
+    const parent = new Map<string, [number, number]>();
+    const visited = new Set<string>();
     visited.add(`${start[0]},${start[1]}`);
 
-    let moves = [[0, 1], [0, -1], [1, 0], [-1, 0]];
+    const moves = [[0, 1], [0, -1], [1, 0], [-1, 0]];
 
     while (!pq.isEmpty()) {
         const current = pq.dequeue();
@@ -44,10 +44,10 @@ export async function a_star_algorithm(args : TsImplementationProps): Promise<Ma
                     args.maze_grid[new_y][new_x] === ' ' &&
                     !visited.has(`${new_x},${new_y}`)
                 ) {
-                    let tentative_g_score = g_score.get(`${cx},${cy}`)! + 1;
+                    const tentative_g_score = g_score.get(`${cx},${cy}`)! + 1;
                     if(!g_score.has(`${new_x},${new_y}`) || tentative_g_score < g_score.get(`${new_x},${new_y}`)!) {
                         g_score.set(`${new_x},${new_y}`, tentative_g_score);
-                        let f_score = g_score.get(`${new_x},${new_y}`)! + heuristic([new_x, new_y], target);
+                        const f_score = g_score.get(`${new_x},${new_y}`)! + heuristic([new_x, new_y], target);
                         pq.enqueue([new_x, new_y], f_score);
                         parent.set(`${new_x},${new_y}`, [cx, cy]);
                         visited.add(`${new_x},${new_y}`);

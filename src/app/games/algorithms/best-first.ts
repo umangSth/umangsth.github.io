@@ -14,11 +14,12 @@ export async function best_first_algorithm(args : TsImplementationProps):Promise
 
    pq.enqueue(start,heuristic(start, target));
 
-   let visited = new Set<string>();
-   let parent = new Map<string, [number, number]>();
+   const visited = new Set<string>();
+   const parent = new Map<string, [number, number]>();
    visited.add(`${start[0]},${start[1]}`);
 
-   let moves = [[0, 1], [0, -1], [1, 0], [-1, 0]];
+   const moves = [[0, 1], [0, -1], [1, 0], [-1, 0]];
+   
    while (!pq.isEmpty()) {
        const current = pq.dequeue();
        if (current) {
