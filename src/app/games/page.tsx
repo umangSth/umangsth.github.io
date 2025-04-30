@@ -152,9 +152,9 @@ export default function Games() {
         <div id='header' className='flex flex-row justify-between items-center mb-4'>
           <div>
             <h2 className="font-bold text-3xl text-gray-700  mb-1">
-              Maze Solver
+              Maze Solver 
             </h2>
-            <p >Note: Default setting is bfs with Zero delay with wasm</p>
+            <span className="text-xl">(with WebAssembly & native Typescript)</span>
           </div>
          
           <div className="flex items-center space-x-3 bg-gray-100 px-3 py-2 rounded-lg mt-3">
@@ -255,6 +255,7 @@ export default function Games() {
             <span className="text-gray-700 text-sm lg:text-sm xl:text-lg">TypeScript Time: <span className="font-bold">{timeTakenTS.toFixed(2)} ms</span></span>
           </div>
         </div>
+        <p >Note: Default setting is bfs with zero delay with wasm</p>
       </div>
       <div id='description' className="flex flex-col gap-1 items-left p-6  bg-[var(--secondary1)] rounded-b-2xl shadow-md hover:shadow-neutral-900" style={{ width: `${MAZE_WIDTH + 48}px` }}>
         <h2 className="text-lg lg:text-xl xl:text-2xl font-semibold text-gray-800">Explanation:</h2>
