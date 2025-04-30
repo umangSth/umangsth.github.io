@@ -1,38 +1,83 @@
 // Next.js page
 'use client';
 
+import { ts_implementation } from './algorithms/find-path';
+import { from_string_to_game_state, MazeInfo, string_to_maze_grid } from './algorithms/helper/helper_function';
 import init, { MazeState } from './hello-wasm/pkg/hello_wasm';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { use, useEffect, useRef, useState } from 'react';
 
 const MAZE_BLOCK_SIZE = 8.0;
 const MAZE_WIDTH = 120 * MAZE_BLOCK_SIZE;
 const MAZE_HEIGHT = 60 * MAZE_BLOCK_SIZE;
 
+
 export default function Games() {
   const [mazeLoaded, setMazeLoaded] = useState(false);
   const mazeStateRef = useRef<MazeState | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [timeTaken, setTimeTaken] = useState(0);
+  const [timeTakenTS, setTimeTakenTS] = useState(0);
   const [delay, setDelay] = useState(0);
   const [mainBtnState, setMainBtnState] = useState<'start' | 'reset' | 'loading'>('start');
   const [algorithm, setAlgorithm] = useState('BFS');
+  const [useWasm, setUseWasm] = useState(true);
+  const [gameState, setGameState] = useState<MazeInfo | null>(null);
+  const [mazeGrid, setMazeGrid] = useState<string[][]>([]);
 
   useEffect(() => {
     const initializeWasm = async () => {
       await init();
-      const mazeInstance = await loadAndDrawMaze();
-      mazeStateRef.current = mazeInstance;
+      if (canvasRef.current) {
+        const ctx = canvasRef.current.getContext('2d');
+        if (ctx) {
+          // wasm loading
+          const mazeInstance = await loadAndDrawMaze();
+          mazeStateRef.current = mazeInstance;
+          setMazeLoaded(true);
+        }
+      }
     };
     initializeWasm();
   }, []);
 
+
+  const Ts_implementation = useRef<ts_implementation | null>(null);
+
+
+  // TypeScript side
+  useEffect(() => {
+    if (gameState && canvasRef.current) {
+      const target = gameState.target;
+      const computer_player = gameState.computer_player;
+      Ts_implementation.current = new ts_implementation({
+        maze_grid: mazeGrid,
+        canvas: canvasRef.current,
+        start: computer_player,
+        target: target,
+      });
+
+
+    }
+
+  }, [mazeGrid, gameState, canvasRef])
+
+
+
+
+  // wasm loading and drawing of the maze
   const loadAndDrawMaze = async () => {
     try {
       const response = await fetch('/game/maze_1.txt');
       if (!response.ok) throw new Error('Failed to fetch maze data');
       const mazeData = await response.text();
-
+      setMazeGrid(string_to_maze_grid(mazeData));  // for the TypeScript side
       const mazeState = await MazeState.new('demoCanvas', mazeData, 8.0);
+      console.log('maze state', mazeState);
       setMazeLoaded(true);
+      if (!gameState) {
+        const mazeInfo = await mazeState.get_maze_info();
+        setGameState(from_string_to_game_state(mazeInfo));
+      }
       return mazeState;
     } catch (error) {
       console.error('Failed to load maze data:', error);
@@ -40,15 +85,17 @@ export default function Games() {
     }
   };
 
+
+
   const startSearch = async () => {
     if (mainBtnState === 'reset' && mazeStateRef.current) {
       await mazeStateRef.current.reset();
       setMainBtnState('start');
       return;
     }
-    if (mazeStateRef.current) {
+    const startTime = performance.now();
+    if (mazeStateRef.current && useWasm) {
       setMainBtnState('loading');
-      const startTime = performance.now();
       await mazeStateRef.current
         .find_path(algorithm, delay)
         .then((value) => {
@@ -59,10 +106,18 @@ export default function Games() {
           }
         })
         .catch((err) => console.error('Error:', err));
+    } else if (Ts_implementation.current && !useWasm) {
+      await Ts_implementation.current.find_path(delay, algorithm).then((value) => {
+        if (value) {
+          setMainBtnState('reset');
+          console.log('Path finding complete!', value)
+          setTimeTakenTS(performance.now() - startTime);
+        }
+      });
     } else if (mainBtnState === 'reset') {
       setMainBtnState('start');
-     
-    }else { 
+
+    } else {
       console.log('maze not loaded or in loading state');
     }
   };
@@ -75,8 +130,14 @@ export default function Games() {
     }
   };
 
+  const toggleImplementation = () => {
+    setUseWasm(!useWasm);
+    setMainBtnState('start');
+    clearVisualization();
+  };
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4 pt-30">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4 pt-35">
       <p className="font-bold text-lg text-gray-700 underline mb-4">
         Note: Not Yet Supported for mobile view.
       </p>
@@ -86,92 +147,134 @@ export default function Games() {
             Loading maze...
           </div>
         )}
+        <div id='header' className='flex flex-row justify-between items-center mb-4'>
+          <div>
+            <h2 className="font-bold text-3xl text-gray-700  mb-1">
+              Maze Solver
+            </h2>
+            <p >Note: Default setting is bfs with Zero delay with wasm</p>
+          </div>
+         
+          <div className="flex items-center space-x-3 bg-gray-100 px-3 py-2 rounded-lg mt-3">
+            <span className="text-sm font-medium text-gray-700">
+              {useWasm ? 'WebAssembly' : 'TypeScript'}
+            </span>
+            <button
+              onClick={toggleImplementation}
+              className={`relative inline-flex h-6 w-12 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 ${useWasm ? 'bg-indigo-600' : 'bg-gray-300'
+                }`}
+              role="switch"
+              aria-checked={useWasm}
+            >
+              <span className="sr-only">Use WASM implementation</span>
+              <span
+                aria-hidden="true"
+                className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${useWasm ? 'translate-x-6' : 'translate-x-0'
+                  }`}
+              />
+            </button>
+            <div className="text-xs font-medium text-gray-500">
+              {useWasm ? 'High Performance' : 'Standard'}
+            </div>
+          </div>
+        </div>
         <canvas
           id="demoCanvas"
+          ref={canvasRef}
           width={MAZE_WIDTH}
           height={MAZE_HEIGHT}
           className="border-2 border-gray-400 rounded-md"
         ></canvas>
-        <div className="flex gap-4 mt-4 justify-start">
+        <div className="flex gap-4 mt-4 w-full justify-between flex-row">
+          <div className="flex items-center flex-row gap-4">
+            <button
+              className="bg-green-400 hover:bg-green-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline  cursor-pointer"
+              onClick={startSearch}
+              disabled={!mazeLoaded || mainBtnState === 'loading'}
+            >
+              {mainBtnState === 'start' ? "Start the search" : mainBtnState === 'loading' ? "Searching..." : "Reset"}
+            </button>
+            {
+              mainBtnState === 'reset' && <button
+                className="bg-red-400 hover:bg-red-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline  cursor-pointer"
+                onClick={clearVisualization}
+              >
+                Clear Visualization
+              </button>
+            }
 
-         <button
-            className="bg-green-400 hover:bg-green-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline  cursor-pointer"
-            onClick={startSearch}
-            disabled={!mazeLoaded || mainBtnState === 'loading'}
-          >
-            {mainBtnState === 'start' ? "Start the search" : mainBtnState === 'loading' ? "Searching..." : "Reset"}
-          </button>
-          {
-            mainBtnState === 'reset' && <button
-                    className="bg-red-400 hover:bg-red-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline  cursor-pointer"
-                    onClick={clearVisualization}
-                  >
-                    Clear Visualization
-                    </button>
-          }
-          
-          
-          <div className="relative">
-            <select
-              className=" cursor-pointer block appearance-none w-full bg-blue-500 border border-blue-500 hover:border-blue-700 text-white py-2 px-4 pr-8 rounded leading-tight focus:outline-none focus:shadow-outline"             
+            <div className="relative">
+              <select
+                className=" cursor-pointer block appearance-none w-full bg-blue-500 border border-blue-500 hover:border-blue-700 text-white py-2 px-4 pr-8 rounded leading-tight focus:outline-none focus:shadow-outline"
                 onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
                   setDelay(parseInt(e.target.value))
                 }>
-                 <option value="0">Select render delay</option>
-                 <option value="10"> 5ms delay </option>
-                 <option value="40"> 10ms delay </option> 
-                 <option value="80"> 20ms delay </option>
-            </select>
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2  text-white">
-              <svg className="fill-current h-4 w-4" viewBox="0 0 20 20">
+                <option value="0">Select render delay</option>
+                <option value="10"> 5ms delay </option>
+                <option value="40"> 10ms delay </option>
+                <option value="80"> 20ms delay </option>
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2  text-white">
+                <svg className="fill-current h-4 w-4" viewBox="0 0 20 20">
                   <path
                     fillRule="evenodd"
                     d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
                     clipRule="evenodd"
                   />
                 </svg>
+              </div>
             </div>
-          </div>
-          <div className="relative">
-            <select
-              className=" cursor-pointer block appearance-none w-full bg-blue-500 border border-blue-500 hover:border-blue-700 text-white py-2 px-4 rounded leading-tight focus:outline-none focus:shadow-outline"
-              onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                setAlgorithm(e.target.value)
-              }
-            >
-              <option value="0">Select Algorithm</option>
-              <option value="BFS">Breath First Search</option>
-              <option value="DFS">Depth First Search</option>
-              <option value="BestFirst">Best First Search</option>
-              <option value="AStar">A*</option>
-            </select>
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-white">
-              <svg className="fill-current h-4 w-4" viewBox="0 0 20 20">
+            <div className="relative">
+              <select
+                className=" cursor-pointer block appearance-none w-full bg-blue-500 border border-blue-500 hover:border-blue-700 text-white py-2 px-4  pr-8 rounded leading-tight focus:outline-none focus:shadow-outline"
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                  setAlgorithm(e.target.value)
+                }
+              >
+                <option value="0">Select Algorithm</option>
+                <option value="BFS">Breath First Search</option>
+                <option value="DFS">Depth First Search</option>
+                <option value="BestFirst">Best First Search</option>
+                <option value="AStar">A*</option>
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-white">
+                <svg className="fill-current h-4 w-4" viewBox="0 0 20 20">
                   <path
                     fillRule="evenodd"
                     d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
                     clipRule="evenodd"
                   />
                 </svg>
+              </div>
             </div>
           </div>
-          <div className="relative">
-            <span className="text-gray-700 text-sm lg:text-sm xl:text-lg">Time taken: {timeTaken.toFixed(2)} ms</span>
+          <div className="relative flex items-center flex-col">
+            <span className="text-gray-700 text-sm lg:text-sm xl:text-lg">Wasm Time: <span className="font-bold">{timeTaken.toFixed(2)} ms</span></span>
+            <span className="text-gray-700 text-sm lg:text-sm xl:text-lg">TypeScript Time: <span className="font-bold">{timeTakenTS.toFixed(2)} ms</span></span>
           </div>
         </div>
       </div>
       <div id='description' className="flex flex-col gap-1 items-left p-6  bg-[var(--secondary1)] rounded-b-2xl shadow-md hover:shadow-neutral-900" style={{ width: `${MAZE_WIDTH + 48}px` }}>
-        <h2 className="text-sm lg:text-sm xl:text-lg font-semibold mb-2 text-gray-800">About this maze search:</h2>
+        <h2 className="text-lg lg:text-xl xl:text-2xl font-semibold text-gray-800">Explanation:</h2>
         <div className="text-sm lg:text-sm xl:text-lg m-6 mb-2 overflow-hidden transition-all duration-500 ease-in-out">
-          <p className=" leading-relaxed">
-            By leveraging the computational prowess of Rust and its near-native
-            performance in the browser through Wasm, we can witness these
-            algorithms in action with remarkable speed. Adjust the delay to
-            visualize the step-by-step process or set it to zero to see the
-            results almost instantly. This project demonstrates the potential of
-            using modern web technologies and efficient backend languages to
-            create engaging and high-performance interactive experiences.
-          </p>
+          <div className=" leading-relaxed text-amber-800 font-stretch-75% text-xl mb-10 bg-amber-50 p-4 rounded-2xl flex flex-col gap-4">
+            <p>
+                Here you can play with the algorithms and see the difference in performance.
+                I have used two implementations of the algorithms, one in TypeScript and another in Rust(Wasm).
+                To see the difference in performance there's a timers at the bottom right corner of the page. As you can see the 
+                default setting is bfs with zero delay with wasm. once the search is complete, you can see a button reset the visualization, 
+                so you can play with different algorithms and different delays, also the two implementations, 
+                TypeScript and Wasm (Rust) in same target see the performance difference.
+           </p>
+           <p>
+                As this app is a learning project and haven't run that much testing, I have seen some mixes results, which is not expected.
+                As i was expecting that the WASM would out perform the TypeScript in every case, but it didn't. I think there is still improvements to be made,
+                one primary improvement I stumbled upon, is that when I am coloring the cells, I am calling the context of the canvas,
+                which is a operation that i think is expensive, causing this performance issue. I will try to optimize this in the future, with other improvements, with 
+                different Test environments.
+           </p>
+          </div>
+         
           <h3 className="text-md lg:text-md xl:text-md font-semibold mt-4 text-gray-800">
             Explore Different Pathfinding Strategies:
           </h3>
