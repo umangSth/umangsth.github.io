@@ -1,13 +1,5 @@
 [
-    {
-        "src": "/images/drawings/1.jpg",
-        "alt": "Lion",
-        "description": "Didn't found any eye catching while search, just draw this one on wimp, quick sketch for practice."
-    },{
-        "src": "/images/drawings/2.jpg",
-        "alt": "Horsie",
-        "description": "Same as Lion, quick sketch for practice."
-    },
+ 
     {
         "src": "/images/drawings/3.jpg",
         "alt": "colorful girl",
@@ -88,7 +80,7 @@
         "description": "my first drawing in the my new sketch notebook. you can see the traces of the pain drawing in the back, should have taken picture before drawing other."
     },
     {
-        "src": "/images/drawings/18.jpg",
+        "src": "/images/drawings/1.jpg",
         "alt": "fox warrior",
         "description": "my longest drawing, as I mention i liked drawing intricate details, but was too lazy and regarding while drawing this fantasy fox."
     }, 
@@ -143,7 +135,7 @@
         "description": " quick sketch as well, she has long neck, hahaha"
     },
     {
-        "src": "/images/drawings/29.jpg",
+        "src": "/images/drawings/2.jpg",
         "alt": "two tiger",
         "description": "once in a while, my eye catches something other then girls 😅. two tigers on shoulder, imagination of the geniue artist, whereas mine is dead."
     },
@@ -151,6 +143,11 @@
         "src": "/images/drawings/30.jpg",
         "alt": "smudge",
         "description": "quick sketch for practice, tried some bending, but ahhh.... happy acident."
+    },
+    {
+        "src": "/images/drawings/18.jpg",
+        "alt": "Horsie",
+        "description": "Same as Lion, quick sketch for practice."
     },
     {
         "src": "/images/drawings/31.jpg",
@@ -201,6 +198,11 @@
         "src": "/images/drawings/40.jpg",
         "alt": "smile on face",
         "description": "this one is also my favorite proud one, no eraser, one go, happy with the way i was able to draw her."
+    },
+    {
+        "src": "/images/drawings/29.jpg",
+        "alt": "Lion",
+        "description": "Didn't found any eye catching while search, just draw this one on wimp, quick sketch for practice."
     },
     {
         "src": "/images/drawings/41.jpg",
@@ -271,6 +273,16 @@
         "src": "/images/drawings/54.jpg",
         "alt": "taking photo",
         "description": "liked her innocent face, with her cozy pose, i like this one..."
+    },
+    {
+        "src": "/images/drawings/55.jpg",
+        "alt": "Apple and mice",
+        "description": "cute mouse or mice, chopping on the apple, when you don't care much result is much better "
+    },
+    {
+        "src": "/images/drawings/56.jpg",
+        "alt": "focus",
+        "description": "I messup the proportion of his body, damn it!, his leg is shorter. when you care too much you F*** things up."
     }
 
 ]
