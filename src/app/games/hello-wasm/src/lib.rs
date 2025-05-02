@@ -203,7 +203,7 @@
                 },
                 PlayerType::Target => {
                     self.target =(x, y);
-                    self.canvas_context.set_fill_style(&"yellow".into());
+                    self.canvas_context.set_fill_style(&"lime".into());
                     self.canvas_context.fill_rect(
                         x as f64 * self.block_size, 
                         y as f64 * self.block_size, 
@@ -239,6 +239,12 @@
         }
 
 
+        pub fn set_target(&mut self, x: usize, y: usize) {
+           if self.computer_player != (x, y) && self.maze_grid[y][x] != CellType::Wall {
+                    self.target = (x, y);
+                    self.clear_visualization();
+                }
+        }
 
         // helper function to reconstruct the path from the parent set
         fn reconstruct_path(&mut self, parent: Vec<Vec<Option<(usize, usize)>>>, target: (usize, usize)) -> Result<Vec<(usize, usize)>, JsValue> {
