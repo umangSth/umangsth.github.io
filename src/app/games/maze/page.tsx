@@ -98,7 +98,9 @@ export default function Games() {
         const gridX = Math.floor(x / MAZE_BLOCK_SIZE);
         const gridY = Math.floor(y / MAZE_BLOCK_SIZE);
 
-        if (gridX >= 0 && gridX < mazeGrid.length && gridY >= 0 && gridY < mazeGrid[0].length) {
+
+        if (gridY >= 0 && gridY < mazeGrid.length && gridX >= 0 && gridX < mazeGrid[0].length) {
+
           mazeStateRef.current.set_target(gridX, gridY);
           const mazeInfo = await mazeStateRef.current.get_maze_info();
           setGameState(from_string_to_game_state(mazeInfo));

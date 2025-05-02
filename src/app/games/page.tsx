@@ -9,7 +9,7 @@ interface Game {
 }
 
 const GameCard: React.FC<Game> = ({ title, summary, imagePath, link }) => (
-  <div className="border rounded-md shadow-md p-4 flex flex-col bg-[var(--secondary1)]">
+  <div className="border rounded-md w-full shadow-md p-4 flex flex-col bg-[var(--secondary1)]">
     <h3 className="text-xl font-semibold mb-2">{title}</h3>
     <div className="relative w-full h-60 mb-2 rounded-md overflow-hidden">
       <Image
@@ -55,8 +55,8 @@ const GamesPage = () => {
         lg:px-20 lg:py-32 lg:pb-15 // Adjusted lg bottom padding
       ">
     <div className="container mx-auto py-10">
-      <h1 className="text-3xl font-bold mb-6">Our Games</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <h1 className="text-3xl font-bold mb-6">Listing of Games</h1>
+      <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-6">
         {games.map((game) => (
           <GameCard key={game.title} {...game} />
         ))}
