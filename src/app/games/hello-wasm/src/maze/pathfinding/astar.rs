@@ -1,9 +1,9 @@
-use crate::CellType;
+use crate::maze::CellType;
 use wasm_bindgen::prelude::*;
 use std::collections::BinaryHeap;
 use std::collections::HashMap;
 use std::cmp::Reverse;
-use crate::MazeState;
+use crate::maze::MazeState;
 use super::heuristic;
 
 
@@ -61,7 +61,7 @@ impl AstarSolver {
 
                             match_state.color_cell(neighbor.0, neighbor.1, "lightcoral".to_string());
                             if delay_ms > 0 {
-                                crate::sleep(delay_ms).await?;
+                                crate::maze::sleep(delay_ms).await?;
                             }
                         }
                     }

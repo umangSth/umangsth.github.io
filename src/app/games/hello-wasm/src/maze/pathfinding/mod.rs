@@ -1,4 +1,4 @@
-use crate::CellType;
+use crate::maze::CellType;
 use wasm_bindgen::prelude::JsValue;
 
 pub mod bfs;
@@ -9,7 +9,7 @@ pub mod astar;
 pub trait PathFindingAlgorithm {
     fn find_path(
         &mut self,
-        maze_state: &mut crate::MazeState,
+        maze_state: &mut crate::maze::MazeState,
         start: (usize, usize),
         end: (usize, usize),
         grid: &Vec<Vec<CellType>>,

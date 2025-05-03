@@ -3,7 +3,8 @@
 
 import { ts_implementation } from '../algorithms/find-path';
 import { from_string_to_game_state, MazeInfo, string_to_maze_grid } from '../algorithms/helper/helper_function';
-import init, { MazeState } from '../hello-wasm/pkg/hello_wasm';
+// import init, { MazeState } from '../hello-wasm/pkg/hello_wasm';
+import init, * as wasm from '../hello-wasm/pkg/hello_wasm';
 import React, { useEffect, useRef, useState } from 'react';
 
 const MAZE_BLOCK_SIZE = 8.0;
@@ -13,7 +14,7 @@ const MAZE_HEIGHT = 60 * MAZE_BLOCK_SIZE;
 
 export default function Games() {
   const [mazeLoaded, setMazeLoaded] = useState(false);
-  const mazeStateRef = useRef<MazeState | null>(null);
+  const mazeStateRef = useRef<wasm.MazeState | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [timeTaken, setTimeTaken] = useState(0);
   const [timeTakenTS, setTimeTakenTS] = useState(0);
@@ -72,7 +73,7 @@ export default function Games() {
       if (!response.ok) throw new Error('Failed to fetch maze data');
       const mazeData = await response.text();
       setMazeGrid(string_to_maze_grid(mazeData));  // for the TypeScript side
-      const mazeState = await MazeState.new('demoCanvas', mazeData, 8.0);
+      const mazeState = await wasm.MazeState.new('demoCanvas', mazeData, 8.0);
       console.log('maze state', mazeState);
       setMazeLoaded(true);
       if (!gameState) {

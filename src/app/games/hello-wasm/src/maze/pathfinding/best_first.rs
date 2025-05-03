@@ -1,8 +1,8 @@
 
 use std::collections::BinaryHeap;
 use wasm_bindgen::prelude::*;
-use crate::MazeState;
-use crate::CellType;
+use crate::maze::MazeState;
+use crate::maze::CellType;
 use std::cmp::Reverse;
 use std::collections::HashMap;
 use super::heuristic;
@@ -60,7 +60,7 @@ impl BestFirstSolver {
                         
                         match_state.color_cell(neighbor.0, neighbor.1, "lightcoral".to_string());
                         if delay_ms > 0 {
-                            crate::sleep(delay_ms).await?;
+                            crate::maze::sleep(delay_ms).await?;
                         }
                     }
                 }
