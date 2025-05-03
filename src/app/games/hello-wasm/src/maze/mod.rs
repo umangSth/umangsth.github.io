@@ -6,8 +6,8 @@
     use wasm_bindgen_futures::JsFuture;
     use js_sys::{Promise as JsPromise, Function};
     use std::collections::HashMap;
-    use std::thread;
-    use std::time::Duration;
+    // use std::thread;
+    // use std::time::Duration;
 
     mod pathfinding;
     use pathfinding::{bfs::BfsSolver, dfs::DfsSolver, astar::AstarSolver, best_first::BestFirstSolver};
@@ -67,17 +67,17 @@
 
 
     async fn sleep(ms: i32) -> Result<(), JsValue> {
-        // let promise = js_sys::Promise::new(&mut |resolve, _| {
-        //     let window = web_sys::window().unwrap();
-        //     window.set_timeout_with_callback_and_timeout_and_arguments_0(
-        //         &resolve,
-        //         ms,
-        //     ).unwrap();
-        // });
-        // JsFuture::from(promise).await?;
-        // Ok(())
-        thread::sleep(Duration::from_millis(ms as u64));
+        let promise = js_sys::Promise::new(&mut |resolve, _| {
+            let window = web_sys::window().unwrap();
+            window.set_timeout_with_callback_and_timeout_and_arguments_0(
+                &resolve,
+                ms,
+            ).unwrap();
+        });
+        JsFuture::from(promise).await?;
         Ok(())
+        // thread::sleep(Duration::from_millis(ms as u64));
+        // Ok(())
     }
 
 
