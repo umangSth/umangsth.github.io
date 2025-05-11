@@ -371,7 +371,7 @@ const togglePlay = () => {
       </div>
       <div id='description' className="flex flex-col gap-1 items-left p-6 bg-[var(--secondary1)] rounded-b-2xl shadow-md hover:shadow-neutral-900">
         <div className="text-sm lg:text-sm xl:text-lg m-6 mb-2 overflow-hidden transition-all duration-500 ease-in-out">
-          <p>Conway's Game of Life is a cellular automaton where cells live or die based on simple rules.
+          <p>Conwan&apos;s Game of Life is a cellular automaton where cells live or die based on simple rules.
             Click on cells to toggle them between alive and dead states.  </p>
         </div>
       </div>

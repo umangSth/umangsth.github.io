@@ -43,9 +43,9 @@ const GamesPage = () => {
       link: '/games/maze',
     },
     {
-      title: 'Conway\'s Game of Life',
+      title: 'Conway&apos;s Game of Life',
       summary:
-        'Implement Conway\'s Game of Life using Rust and WebAssembly. This simple cellular automaton simulates the life cycle of cells on a grid. Click on cells to toggle their state between alive and dead. Experiment with different speeds and reset the game to start over.',
+        'Implement Conway&apos;s Game of Life using Rust and WebAssembly. This simple cellular automaton simulates the life cycle of cells on a grid. Click on cells to toggle their state between alive and dead. Experiment with different speeds and reset the game to start over.',
       imagePath: '/game/conway.png',
       link: '/games/conway',
     }
