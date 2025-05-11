@@ -6,11 +6,22 @@ edition = "2024"
 [dependencies]
 wasm-bindgen = "0.2"
 wasm-bindgen-futures = "0.4"
+wee_alloc = { version = "0.4.5", default-features = false }
 js-sys = "0.3"
-web-sys = { version = "0.3", features = ["CanvasRenderingContext2d", "HtmlCanvasElement", "Document", "Window"] }
+web-sys = { version = "0.3", features = [
+        "CanvasRenderingContext2d", 
+        "HtmlCanvasElement", 
+        "Document",
+        "Window",
+        "console",
+        "Performance",
+        ] }
 rand = "0.8.5"
 getrandom = { version = "0.2", features = ["js"] }
 
+
+[dev-dependencies]
+wasm-bindgen-test = "0.3"
 
 
 [lib]
