@@ -338,7 +338,7 @@ const togglePlay = () => {
       </p>
 
       <div id='header' className='flex flex-row justify-between items-center mb-4'>
-        <h1>Conway's Game of Life</h1>
+        <h1>Conway&apos;s Game of Life</h1>
         <p className="text-xl">Implemented with Rust and WebAssembly</p>
       </div>
 
