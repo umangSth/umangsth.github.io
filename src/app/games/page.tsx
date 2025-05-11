@@ -42,6 +42,13 @@ const GamesPage = () => {
       imagePath: '/game/maze.png',
       link: '/games/maze',
     },
+    {
+      title: 'Conway\'s Game of Life',
+      summary:
+        'Implement Conway\'s Game of Life using Rust and WebAssembly. This simple cellular automaton simulates the life cycle of cells on a grid. Click on cells to toggle their state between alive and dead. Experiment with different speeds and reset the game to start over.',
+      imagePath: '/game/conway.png',
+      link: '/games/conway',
+    }
     // Add more games with their summaries here
   ];
 
@@ -54,9 +61,9 @@ const GamesPage = () => {
         sm:py-15 sm:px-35 sm:pb-10 // Adjusted sm bottom padding
         lg:px-20 lg:py-32 lg:pb-15 // Adjusted lg bottom padding
       ">
-    <div className="container mx-auto py-10">
+    <div className="container mx-auto py-6">
       <h1 className="text-3xl font-bold mb-6">Listing of Games</h1>
-      <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-15">
         {games.map((game) => (
           <GameCard key={game.title} {...game} />
         ))}
