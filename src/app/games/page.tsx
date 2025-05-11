@@ -47,7 +47,7 @@ const GamesPage = () => {
       summary:
         'Implement Conway&apos;s Game of Life using Rust and WebAssembly. This simple cellular automaton simulates the life cycle of cells on a grid. Click on cells to toggle their state between alive and dead. Experiment with different speeds and reset the game to start over.',
       imagePath: '/game/conway.png',
-      link: '/games/conway',
+      link: '/games/conway-gol',
     }
     // Add more games with their summaries here
   ];
@@ -56,7 +56,7 @@ const GamesPage = () => {
     <div 
     id="main"
     className="min-h-screen py-15 gap-16 font-[family-name:var(--font-geist-sans)]
-        2xl:px-40 2xl:pt-40 2xl:pb-20 // Adjusted 2xl bottom padding
+        2xl:px-40 2xl:pb-20 // Adjusted 2xl bottom padding
         xl:py-30 xl:px-30 xl:pb-20 // Adjusted xl bottom padding
         sm:py-15 sm:px-35 sm:pb-10 // Adjusted sm bottom padding
         lg:px-20 lg:py-32 lg:pb-15 // Adjusted lg bottom padding
