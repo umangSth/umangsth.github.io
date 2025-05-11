@@ -20,3 +20,41 @@ the draw_circle and draw_rect functions are used to draw a circle or rectangle o
 and the lib crate-type to compile the wasm file, which is then imported in the next.js project.
 
 
+2025-05-08
+damn, should have added logs on the way, had alot of errors and what not, but now it works,
+i have implementated both wasm(rust) and typescript search algorrithms and they work,
+
+one interesting error 
+now i need to implement the conway-game-of-life, which is a cellular automaton,
+where i needed to search the wasm memory, all the GPT chatbots were saying to import the memory 
+from the wasm js clue code, 
+like this: 
+import init, {memory} from '../hello-wasm/pkg/hello_wasm';
+
+but this gave me error something something webpack 5 needs to  'experiments.asyncWebAssembly: true' 
+in the next.config.js and add some path rule, but after that i got another error,
+wgb import errors in wasm gule file, 
+and what not tried bunch of things but nothing worked,
+then some other chatbots suggested to export the memory from the wasm file,
+
+#[wasm_bindgen]
+pub fn get_memory() -> JsValue {
+    wasm_bindgen::memory()
+}
+
+which worked but again it say not to use this way as the memory is automatically exported,
+
+now apparently the memory is access like this:
+const wasmInit = await init();
+setWasmMemory(wasmInit.memory);
+
+apparently when you init() your wasm, it returns a struct with the memory,
+so i can use it like this, and it works,
+i didn't had to update next.config.js, no need to add any path rules, or turn on asyncWebAssembly.experiments
+remove .next/cache or modulecache and rebuild the project. not thing else.
+
+bloody hell, why why one error, gone now there's another error, i meant there is another error,
+which i don't want to write, as i am lazy and lazy.
+
+
+

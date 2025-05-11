@@ -1,0 +1,52 @@
+Error: ./src/app/games/hello-wasm/pkg/hello_wasm_bg.wasm
+[31m[1mModule not found[22m[39m: Can't resolve '[32mwbg[39m'
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./src/app/games/hello-wasm/pkg/hello_wasm.js
+./src/app/games/maze/page.tsx
+    at BuildError (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/ui/container/build-error.js:43:41)
+    at react-stack-bottom-frame (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:23871:20)
+    at renderWithHooksAgain (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:5179:20)
+    at renderWithHooks (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:5091:22)
+    at updateFunctionComponent (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:8328:19)
+    at beginWork (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:9945:18)
+    at runWithFiberInDEV (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:1511:30)
+    at performUnitOfWork (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:15116:22)
+    at workLoopSync (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:14940:41)
+    at renderRootSync (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:14920:11)
+    at performWorkOnRoot (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:14407:13)
+    at performWorkOnRootViaSchedulerTask (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:16200:7)
+    at MessagePort.performWorkUntilDeadline (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/scheduler/cjs/scheduler.development.js:45:48)
+
+
+
+
+
+
+
+Error: ./src/app/games/hello-wasm/pkg/hello_wasm_bg.wasm
+Module parse failed: Unexpected character '
+
+Module parse failed: Unexpected character '' (1:0)
+The module seem to be a WebAssembly module, but module is not flagged as WebAssembly module for webpack.
+BREAKING CHANGE: Since webpack 5 WebAssembly is not enabled by default and flagged as experimental feature.
+You need to enable one of the WebAssembly experiments via 'experiments.asyncWebAssembly: true' (based on async modules) or 'experiments.syncWebAssembly: true' (like webpack 4, deprecated).
+For files that transpile to WebAssembly, make sure to set the module type in the 'module.rules' section of the config (e. g. 'type: "webassembly/async"').
+(Source code omitted for this binary file)
+
+
+
+
+Error: recursive use of an object detected which would lead to unsafe aliasing in rust
+    at imports.wbg.__wbindgen_throw (webpack-internal:///(app-pages-browser)/./src/app/games/hello-wasm/pkg/hello_wasm.js:669:15)
+    at http://localhost:3000/_next/static/media/hello_wasm_bg.c282af6e.wasm:wasm-function[276]:0x15dfe
+    at http://localhost:3000/_next/static/media/hello_wasm_bg.c282af6e.wasm:wasm-function[278]:0x15e1a
+    at http://localhost:3000/_next/static/media/hello_wasm_bg.c282af6e.wasm:wasm-function[55]:0x7799
+    at http://localhost:3000/_next/static/media/hello_wasm_bg.c282af6e.wasm:wasm-function[83]:0xd54b
+    at http://localhost:3000/_next/static/media/hello_wasm_bg.c282af6e.wasm:wasm-function[228]:0x14ab7
+    at http://localhost:3000/_next/static/media/hello_wasm_bg.c282af6e.wasm:wasm-function[227]:0x14aa9
+    at http://localhost:3000/_next/static/media/hello_wasm_bg.c282af6e.wasm:wasm-function[245]:0x15088
+    at __wbg_adapter_26 (webpack-internal:///(app-pages-browser)/./src/app/games/hello-wasm/pkg/hello_wasm.js:218:10)
+    at real (webpack-internal:///(app-pages-browser)/./src/app/games/hello-wasm/pkg/hello_wasm.js:74:20)
