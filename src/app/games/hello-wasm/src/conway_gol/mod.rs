@@ -2,6 +2,21 @@ use wasm_bindgen::prelude::*;
 use js_sys::Math;
 use std::collections::HashSet;
 
+
+
+// for logging from Rust to browser console
+#[wasm_bindgen]
+extern "C" {
+    // Use `web_sys`'s global `window` function to get access to the window object
+    #[wasm_bindgen(js_namespace = console)]
+    fn log(s: &str);
+}
+
+macro_rules! console_log {
+    ($($t:tt)*) => (log(&format!($($t)*)))
+}
+
+
 // When the `wee_alloc` feature is enabled, use `wee_alloc` as the global allocator
 #[cfg(feature = "wee_alloc")]
 #[global_allocator]
@@ -67,7 +82,7 @@ impl Universe {
         let size = width * height;
         let cells = (0..size).
             map(|_| {
-                if Math::random() > 0.5 {
+                if Math::random() > 0.75 {
                     Cell::Alive
                 } else {
                     Cell::Dead
@@ -199,19 +214,47 @@ impl Universe {
             }
         }
     }
+
+    pub fn reset_and_load_pattern(&mut self, pattern_data: Vec<usize>, start_row: usize, start_col: usize) {
+
+        // clear the universe
+        self.clear();
+
+        // load the pattern data into the cells
+        // pattern_data is a flat: [row1, col1, row2, col2, ...] relative to pattern's 0, 0
+        for i in (0..pattern_data.len()).step_by(2) {
+            if i + 1 < pattern_data.len() {
+                let p_row = pattern_data[i]
+                let p_col = pattern_data[i+1]
+
+                // calculate the absolute position of the main grid, with wrapping
+                let abs_row = (start_row + p_row) % self.height;
+                let abs_col = (start_col + p_col) % self.width;
+
+                if abs_row < self.height && abs_col < self.width { // if within bounds
+                    let idx = self.get_index(abs_row, abs_col);
+                    self.cells[idx] = Cell::Alive;
+
+                    // mark this cell and its neighbors as changed
+                    for dr_offset in [self.height - 1, 0, 1].iter().cloned() {
+                        for dc_offset in [self.width - 1, 0, 1].iter().cloned() {
+                            let neighbor_row = (abs_row + dr_offset) % self.height;
+                            let neighbor_col = (abs_col + dc_offset) % self.width;
+                            self.changed_cells.insert(
+                                Position { row: neighbor_row, column: neighbor_col }
+                            );
+                        }
+                    }
+            }
+        }
+    }
+
+
+
+
 }
 
 
-#[wasm_bindgen]
-extern "C" {
-    // Use `web_sys`'s global `window` function to get access to the window object
-    #[wasm_bindgen(js_namespace = console)]
-    fn log(s: &str);
-}
-
-macro_rules! console_log {
-    ($($t:tt)*) => (log(&format!($($t)*)))
-}
 
 
 #[wasm_bindgen]

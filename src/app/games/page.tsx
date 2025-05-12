@@ -43,14 +43,15 @@ const GamesPage = () => {
       link: '/games/maze',
     },
     {
-      title: 'Conway&apos;s Game of Life',
+      title: 'Conway\'s Game of Life',
       summary:
-        'Implement Conway&apos;s Game of Life using Rust and WebAssembly. This simple cellular automaton simulates the life cycle of cells on a grid. Click on cells to toggle their state between alive and dead. Experiment with different speeds and reset the game to start over.',
+        'I initially implemented this project as a pure React application, and I vividly recall my CPU fan working overtime/screaming! Now, I\'ve significantly improved performance by leveraging the power of WebAssembly (Wasm) with Rust. It\'s amazing how these four fundamental rules can give rise to incredibly complex and dynamic patterns.',
       imagePath: '/game/conway.png',
       link: '/games/conway-gol',
     }
     // Add more games with their summaries here
   ];
+
 
   return (
     <div 

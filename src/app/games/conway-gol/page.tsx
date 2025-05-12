@@ -21,9 +21,11 @@ const ConwayGame = () => {
 
   const animationRef = useRef<number | null>(null);
   const lastTimeRef = useRef<number>(0);
-  const speedRef = useRef<number>(100);
-  const isPlayingRef = useRef<boolean>(false);
+  const speedRef = useRef<number>(100);  // to allow renderloop to access current speed
+  const isPlayingRef = useRef<boolean>(false); // to allow renderloop to access current playing state
 
+  const [isDragging, setIsDragging] = useState(false);
+  const lastDraggedCellRef = useRef<{row: number, col: number} | null>(null);
 
   // keep the speedRef is sync with speed state
   useEffect(()=> {
@@ -60,7 +62,12 @@ const ConwayGame = () => {
 const renderLoop = (timeStamp: number) => {
 
   // Exit early if core components aren't initialized
-  if (!universe || !wasmMemory) return;
+  if (!universe || !wasmMemory || !isPlayingRef.current) {
+    if(isPlayingRef.current && (!universe || !wasmMemory)) {
+      console.warn("Render loop called but universe or wasmMemory is not ready.")
+    }
+    return;
+  }
 
   // Calculate the time elapsed since the last frame
   const elapsed = lastTimeRef.current === 0 
@@ -77,13 +84,15 @@ const renderLoop = (timeStamp: number) => {
     
     // Update the game state
     universe.tick();
+    const width = universe.width();
+    const height = universe.height();
     
     // Get the cells that changed and update the display
     const changedCellsArray = universe.changed_cells();
     
     if (changedCellsArray.length > 0) {
       // If many cells changed, redraw everything for efficiency
-      if (changedCellsArray.length > WIDTH * HEIGHT * 0.3) {
+      if (changedCellsArray.length > width * height * 0.5) {
         drawGrid();
         drawCells();
       } else {
@@ -136,10 +145,11 @@ const renderLoop = (timeStamp: number) => {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
+ 
     const width = universe.width();
     const height = universe.height();
 
-    const cellsPtr = universe.cells();
+    const cellsPtr = universe.cells();  // pointer to the start of cells data in wams memory
     const cells = new Uint8Array(wasmMemory.buffer, cellsPtr, width * height);
 
     // ctx.beginPath();
@@ -188,9 +198,10 @@ const renderLoop = (timeStamp: number) => {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const width = universe.width();
     const cellsPtr = universe.cells();
-    const cells = new Uint8Array(wasmMemory.buffer, cellsPtr, width * universe.height());
+    const width = universe.width();
+    const height = universe.height();
+    const cells = new Uint8Array(wasmMemory.buffer, cellsPtr, width * height);
 
     // Each pair of changedCellsArray represents a row and column
     for (let i = 0; i < changedCellsArray.length; i += 2) {
@@ -210,7 +221,7 @@ const renderLoop = (timeStamp: number) => {
     }
 
      // Only redraw grid lines if there aren't too many changes
-    if (changedCellsArray.length < WIDTH * HEIGHT * 0.1) {
+    if (changedCellsArray.length < width * height * 0.1) {
       // Redraw grid lines for all changed cells
       ctx.beginPath();
       ctx.strokeStyle = GRID_COLOR;
@@ -219,19 +230,8 @@ const renderLoop = (timeStamp: number) => {
         if (i + 1 >= changedCellsArray.length) break;
         const row = changedCellsArray[i];
         const col = changedCellsArray[i + 1];
-        
-        // Draw grid lines around this cell
-        ctx.moveTo(col * CELL_SIZE, row * CELL_SIZE);
-        ctx.lineTo((col + 1) * CELL_SIZE, row * CELL_SIZE);
-        
-        ctx.moveTo(col * CELL_SIZE, (row + 1) * CELL_SIZE);
-        ctx.lineTo((col + 1) * CELL_SIZE, (row + 1) * CELL_SIZE);
-        
-        ctx.moveTo(col * CELL_SIZE, row * CELL_SIZE);
-        ctx.lineTo(col * CELL_SIZE, (row + 1) * CELL_SIZE);
-        
-        ctx.moveTo((col + 1) * CELL_SIZE, row * CELL_SIZE);
-        ctx.lineTo((col + 1) * CELL_SIZE, (row + 1) * CELL_SIZE);
+        // Draw rectangle outline for the cell
+        ctx.strokeRect(col * CELL_SIZE, row*CELL_SIZE, CELL_SIZE, CELL_SIZE) 
       }
       
       ctx.stroke();
@@ -239,39 +239,65 @@ const renderLoop = (timeStamp: number) => {
       // If too many cells changed, just redraw the whole grid
       drawGrid();
     }
-    
   }
 
 
+  const toggleCellAtEvent = (event: React.MouseEvent<HTMLCanvasElement>, forceToggle = false ) => {
+        if(!universe || !canvasRef.current) return;
 
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+        const width = universe.width();
+        const height = universe.height();
+        const boundingRect = canvas.getBoundingClientRect();
+        const scaleX = canvas.width / boundingRect.width;
+        const scaleY = canvas.height / boundingRect.height;
 
-  const handleCanvasClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
-    if (!universe) return;
+        const canvasLeft = (event.clientX - boundingRect.left) * scaleX;
+        const canvasTop = (event.clientY - boundingRect.top) * scaleY;
 
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+        const row = Math.min(Math.floor(canvasTop / CELL_SIZE), height - 1);
+        const col = Math.min(Math.floor(canvasLeft / CELL_SIZE), width - 1);
 
-    const boundingRect = canvas.getBoundingClientRect();
+        if (!forceToggle && lastDraggedCellRef.current && lastDraggedCellRef.current.row === row && lastDraggedCellRef.current.col === col) {
+          return; // avoid re-toggling the same cell during a drag if mouse hasn't moved to new cell
+        }
 
-    const scaleX = canvas.width / boundingRect.width;
-    const scaleY = canvas.height / boundingRect.height;
+        universe.toggle_cell(row, col);
+        lastDraggedCellRef.current = {row, col};
 
-    const canvasLeft = (event.clientX - boundingRect.left) * scaleX;
-    const canvasTop = (event.clientY - boundingRect.top) * scaleY;
-
-    const row = Math.min(Math.floor(canvasTop / CELL_SIZE), universe.height() - 1);
-    const col = Math.min(Math.floor(canvasLeft / CELL_SIZE), universe.width() - 1);
-
-    universe.toggle_cell(row, col);
-
-   // Use requestAnimationFrame to avoid blocking the UI
-    requestAnimationFrame(() => {
-      if (!universe) return;
-      universe.toggle_cell(row, col);
-      const changedCellsArray = universe.changed_cells();
-      drawChangedCells(changedCellsArray);
-    });
+        requestAnimationFrame(()=>{
+          if (!universe) return;
+          const changedCellsArray = universe.changed_cells();
+          if (changedCellsArray.length > 0) {
+            drawChangedCells(changedCellsArray);
+          }else{ // fallback if somehow no changes reported, draw the specific cell
+            drawChangedCells([row, col]);
+          }
+        });
   };
+
+  const handleMouseDown = (event: React.MouseEvent<HTMLCanvasElement>) => {
+    if (isPlaying) return; // don't allow dragging while playing, or pause first
+    setIsDragging(true);
+    toggleCellAtEvent(event, true); // force toggle on the first click of a drag
+    event.preventDefault();
+  }
+  const handleMouseMove = (event: React.MouseEvent<HTMLCanvasElement>) => {
+    if (!isDragging || isPlaying) return;
+    toggleCellAtEvent(event);
+  }
+  const handleMouseUp = () =>{
+    setIsDragging(false);
+    lastDraggedCellRef.current = null;
+  }
+  const handleMouseLeave = () =>{ // reset dragging state on mouse leave
+    if (isDragging){
+      setIsDragging(false);
+      lastDraggedCellRef.current = null;
+    }
+  };
+
 
 
   // Function to toggle between play and pause states
@@ -279,7 +305,6 @@ const togglePlay = () => {
  const newPlayingState = !isPlayingRef.current;
     isPlayingRef.current = newPlayingState;
     setIsPlaying(newPlayingState);
-
   if (newPlayingState) {
     // Reset the timer reference when starting play
     lastTimeRef.current = 0;
@@ -309,6 +334,9 @@ const togglePlay = () => {
     const value = parseInt(e.target.value);
     setSpeed(300 - value);
   }
+
+
+
 
 
 
@@ -344,17 +372,23 @@ const togglePlay = () => {
 
         <canvas
           ref={canvasRef}
-          onClick={handleCanvasClick}
-          className="border border-gray-300"
+          // onClick={handleCanvasClick}
+           onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseLeave}
+          className="border border-gray-300 cursor-pointer shadow-lg"
         />
 
       <div className="flex gap-4 p-4  justify-between flex-row bg-white">
-        <div className="flex items-center flex-row gap-4">
-          <button id="play-pause" onClick={togglePlay}>
-            {isPlaying ? '⏸' : '▶'}
-          </button>
+        <div className="flex items-center flex-row gap-4 ">
+            <button id="play-pause" onClick={togglePlay} className="flex bg-green-500 text-white py-2 px-3.5 rounded-full hover:bg-green-600 items-center justify-center cursor-pointer">
+              {isPlaying ? <span className="text-xl w-5 h-7 ml-0.5">⏸</span> : <span className="text-xl w-5 h-7 ml-0.5">▶</span>}
+            </button>
           {/* <button id="step" onClick={handleStep}>Step</button> */}
-          <button id="reset" onClick={() => resetGame()}>Reset</button>
+          <button id="reset" 
+              className="flex bg-red-400 text-white py-2 px-3.5 rounded-full hover:bg-red-500 items-center justify-center cursor-pointer"
+              onClick={() => resetGame()}>Reset</button>
         </div>
         <div className="flex items-center gap-2">
           <span>{speed < 50 ? 'Fast' : speed < 150 ? 'Medium' : 'Slow'}</span>
@@ -370,9 +404,23 @@ const togglePlay = () => {
         </div>
       </div>
       <div id='description' className="flex flex-col gap-1 items-left p-6 bg-[var(--secondary1)] rounded-b-2xl shadow-md hover:shadow-neutral-900">
-        <div className="text-sm lg:text-sm xl:text-lg m-6 mb-2 overflow-hidden transition-all duration-500 ease-in-out">
-          <p>Conwan&apos;s Game of Life is a cellular automaton where cells live or die based on simple rules.
-            Click on cells to toggle them between alive and dead states.  </p>
+        <div className="text-sm lg:text-sm xl:text-lg m-6 mb-2 overflow-hidden transition-all duration-500 ease-in-out flex flex-col gap-3">
+                    <p>
+              <strong>Conway&apos;s Game of Life</strong> is a fascinating cellular automaton where the fate of each cell – whether it lives or dies – is governed by a simple set of rules.
+              Pause the simulation and click or drag across the grid to toggle individual cells between their alive and dead states.
+            </p>
+            <p>
+              I initially implemented this project as a pure React application, and I vividly recall my CPU fan working overtime/screaming! Now, I&apos;ve significantly improved 
+              performance by leveraging the power of <strong>WebAssembly (Wasm) with Rust</strong>. It&apos;s amazing how these four fundamental rules can give rise to incredibly complex and dynamic patterns.
+            </p>
+            <p className="mt-2 underline">Here are the simple rules that dictate the game:</p>
+            <ul className="list-disc pl-5">
+              <li>Any <strong>live</strong> cell with fewer than two live neighbours <strong>dies</strong> (underpopulation).</li>
+              <li>Any <strong>live</strong> cell with two or three live neighbours <strong>lives</strong> on to the next generation.</li>
+              <li>Any <strong>live</strong> cell with more than three live neighbours <strong>dies</strong> (overpopulation).</li>
+              <li>Any <strong>dead</strong> cell with exactly three live neighbours becomes a <strong>live</strong> cell (reproduction).</li>
+            </ul>
+
         </div>
       </div>
       </div>

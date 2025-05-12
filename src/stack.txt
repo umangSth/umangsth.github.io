@@ -50,3 +50,14 @@ Error: recursive use of an object detected which would lead to unsafe aliasing i
     at http://localhost:3000/_next/static/media/hello_wasm_bg.c282af6e.wasm:wasm-function[245]:0x15088
     at __wbg_adapter_26 (webpack-internal:///(app-pages-browser)/./src/app/games/hello-wasm/pkg/hello_wasm.js:218:10)
     at real (webpack-internal:///(app-pages-browser)/./src/app/games/hello-wasm/pkg/hello_wasm.js:74:20)
+
+
+RuntimeError: unreachable
+    at http://localhost:3000/_next/static/media/hello_wasm_bg.6c55c477.wasm:wasm-function[129]:0x10d84
+    at http://localhost:3000/_next/static/media/hello_wasm_bg.6c55c477.wasm:wasm-function[206]:0x14a75
+    at http://localhost:3000/_next/static/media/hello_wasm_bg.6c55c477.wasm:wasm-function[185]:0x1358b
+    at http://localhost:3000/_next/static/media/hello_wasm_bg.6c55c477.wasm:wasm-function[265]:0x1651f
+    at http://localhost:3000/_next/static/media/hello_wasm_bg.6c55c477.wasm:wasm-function[147]:0x121ff
+    at http://localhost:3000/_next/static/media/hello_wasm_bg.6c55c477.wasm:wasm-function[145]:0x11f67
+    at Universe.tick (webpack-internal:///(app-pages-browser)/./src/app/games/hello-wasm/pkg/hello_wasm.js:355:14)
+    at renderLoop (webpack-internal:///(app-pages-browser)/./src/app/games/conway-gol/page.tsx:88:22)
