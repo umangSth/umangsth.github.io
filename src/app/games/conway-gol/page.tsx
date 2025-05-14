@@ -2,6 +2,7 @@
 import { useRef, useState, useEffect } from "react";
 import init, * as wasm from '../hello-wasm/pkg/hello_wasm';
 import dynamic from 'next/dynamic';
+import { patterns_data } from "./helper/helper";
 
 const CELL_SIZE = 5;
 const GRID_COLOR = '#CCCCCC';
@@ -18,6 +19,8 @@ const ConwayGame = () => {
   const [wasmMemory, setWasmMemory] = useState<WebAssembly.Memory | null>(null);
   const [speed, setSpeed] = useState(100);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [currentPattern, setCurrentPattern] = useState('glider');
+  const [numberOfPatterns, setNumberOfPatterns] = useState(1);
 
   const animationRef = useRef<number | null>(null);
   const lastTimeRef = useRef<number>(0);
@@ -336,6 +339,31 @@ const togglePlay = () => {
   }
 
 
+  // load the current pattern
+  const loadPattern = () => {
+    if (universe && wasmMemory) {
+      const rawData = patterns_data[currentPattern];
+      const pattern = new Uint32Array(rawData.data)
+      const randomPositions = loadRandomPositions(numberOfPatterns, universe.width(), universe.height());
+      universe.load_multiple_patterns_flat(pattern, rawData.width, rawData.height, randomPositions);
+      drawGrid();
+      drawCells();
+    }
+  }
+
+
+
+  const loadRandomPositions = (numberOfPatterns: number, width: number, height: number): Uint32Array => {
+    const randomPositions = new Array();
+    for (let i = 0; i < numberOfPatterns; i++) {
+      const row = Math.floor(Math.random() * height);
+      const col = Math.floor(Math.random() * width);
+      randomPositions.push(row, col);
+    }
+    const result = new Uint32Array(randomPositions);
+    return result;
+  }
+
 
 
 
@@ -390,6 +418,28 @@ const togglePlay = () => {
               className="flex bg-red-400 text-white py-2 px-3.5 rounded-full hover:bg-red-500 items-center justify-center cursor-pointer"
               onClick={() => resetGame()}>Reset</button>
         </div>
+        <div className="flex items-center gap-2 flex-row">
+          <select id="pattern" 
+                className="bg-gray-200 text-gray-700 border-none rounded-md px-2 py-1 w-32 outline-none" 
+                onChange={(e)=>{setCurrentPattern(e.target.value as string)}}>
+                  {
+                   Object.keys(patterns_data).map((key, index) => {
+                    return <option key={index} value={key}>{key}</option>
+                  })
+                  }
+          </select>
+          <input type="number"
+              min="1"
+              max='30'
+              value={numberOfPatterns}
+              onChange={(e)=>{setNumberOfPatterns( parseInt(e.target.value))}}
+              className="bg-gray-200 text-gray-700 border-none rounded-md px-2 py-1 w-32 outline-none" 
+              />
+          <button id="load" 
+              className="flex bg-amber-500 text-white py-2 px-3.5 rounded-full hover:bg-amber-600 items-center justify-center cursor-pointer"
+              onClick={() => loadPattern()}>Load</button> 
+        </div>
+
         <div className="flex items-center gap-2">
           <span>{speed < 50 ? 'Fast' : speed < 150 ? 'Medium' : 'Slow'}</span>
           <input

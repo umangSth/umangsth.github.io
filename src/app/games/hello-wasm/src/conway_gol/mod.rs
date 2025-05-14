@@ -215,43 +215,40 @@ impl Universe {
         }
     }
 
-    pub fn reset_and_load_pattern(&mut self, pattern_data: Vec<usize>, start_row: usize, start_col: usize) {
+    pub fn load_multiple_patterns_flat(
+        &mut self,
+        pattern_data: Vec<usize>, // [0,1, 1,2, 2,0, 2,1, 2,2]
+        pattern_width: usize,
+        pattern_height: usize,
+        flat_positions: Vec<usize>,  // [pos_row1, pos_col1, pos_row2, pos_col2, ...]
+    ) -> Result<JsValue, JsValue> {
+        self.clear();
 
-            // clear the universe
-            self.clear();
-
-            // load the pattern data into the cells
-            // pattern_data is a flat: [row1, col1, row2, col2, ...] relative to pattern's 0, 0
-            for i in (0..pattern_data.len()).step_by(2) {
-                if i + 1 < pattern_data.len() {
-                    let p_row = pattern_data[i];
-                    let p_col = pattern_data[i+1];
-
-                    // calculate the absolute position of the main grid, with wrapping
-                    let abs_row = (start_row + p_row) % self.height;
-                    let abs_col = (start_col + p_col) % self.width;
-
-                    if abs_row < self.height && abs_col < self.width { // if within bounds
-                        let idx = self.get_index(abs_row, abs_col);
-                        self.cells[idx] = Cell::Alive;
-
-                        // mark this cell and its neighbors as changed
-                        for dr_offset in [self.height - 1, 0, 1].iter().cloned() {
-                            for dc_offset in [self.width - 1, 0, 1].iter().cloned() {
-                                let neighbor_row = (abs_row + dr_offset) % self.height;
-                                let neighbor_col = (abs_col + dc_offset) % self.width;
-                                self.changed_cells.insert(
-                                    Position { row: neighbor_row, column: neighbor_col }
-                                );
+        for chunk in flat_positions.chunks(2) {
+            if let [start_row, start_col] = *chunk {
+                // check if the pattern placement is within the universe bounds
+                if start_row < self.height && start_col < self.width {
+                    for pattern_chunk in pattern_data.chunks(2){
+                        if let [pattern_row, pattern_col] = *pattern_chunk {
+                            let universe_row = start_row + pattern_row;
+                            let universe_col = start_col + pattern_col;
+                            if universe_row < self.height && universe_col < self.width {
+                                let idx = self.get_index(universe_row, universe_col);
+                                if idx < self.cells.len() {
+                                    self.cells[idx] = Cell::Alive;
+                                    self.changed_cells.insert(Position { row: universe_row, column: universe_col });
+                                }
                             }
                         }
-                }
+                    }
+                } 
+            }else {
+                return Err(JsValue::from_str("Pattern placement is out of bounds"));
             }
         }
 
+        Ok(JsValue::from_str("Patterns loaded successfully!"))
     }
-
-
 }
 
 
