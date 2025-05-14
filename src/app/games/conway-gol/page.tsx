@@ -8,6 +8,7 @@ const CELL_SIZE = 5;
 const GRID_COLOR = '#CCCCCC';
 const DEAD_COLOR = '#FFFFFF';
 const ALIVE_COLOR = '#000000';
+const DYING_FADE_DURATION_MS = 300;
 const WIDTH = 200;
 const HEIGHT = 100;
 
@@ -21,6 +22,7 @@ const ConwayGame = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentPattern, setCurrentPattern] = useState('glider');
   const [numberOfPatterns, setNumberOfPatterns] = useState(1);
+  
 
   const animationRef = useRef<number | null>(null);
   const lastTimeRef = useRef<number>(0);
@@ -29,13 +31,13 @@ const ConwayGame = () => {
 
   const [isDragging, setIsDragging] = useState(false);
   const lastDraggedCellRef = useRef<{row: number, col: number} | null>(null);
+  const fadeMapRef = useRef<Map<string, number>>(new Map()); // (row, col) => time remaining
+
 
   // keep the speedRef is sync with speed state
   useEffect(()=> {
     speedRef.current = speed;
   }, [speed]);
-
-
 
   useEffect(() => {
     const loadWasm = async () => {
@@ -84,14 +86,16 @@ const renderLoop = (timeStamp: number) => {
   if (elapsed >= speedRef.current || lastTimeRef.current === 0) {
     // Update our timestamp reference AFTER checking elapsed time
     lastTimeRef.current = timeStamp;
-    
-    // Update the game state
-    universe.tick();
     const width = universe.width();
     const height = universe.height();
     
+    // Update the game state
+    universe.tick();
+   
+    
     // Get the cells that changed and update the display
     const changedCellsArray = universe.changed_cells();
+    // updateDyingCells(previousCells);
     
     if (changedCellsArray.length > 0) {
       // If many cells changed, redraw everything for efficiency
@@ -174,22 +178,6 @@ const renderLoop = (timeStamp: number) => {
         );
       }
     }
-
-    // // Draw dead cells
-    // ctx.fillStyle = DEAD_COLOR;
-    // for (let row = 0; row < height; row++) {
-    //   for (let col = 0; col < width; col++) {
-    //     const idx = row * width + col;
-    //     if (cells[idx] !== wasm.Cell.Dead) continue;
-
-    //     ctx.fillRect(
-    //       col * CELL_SIZE,
-    //       row * CELL_SIZE,
-    //       CELL_SIZE,
-    //       CELL_SIZE
-    //     );
-    //   }
-    // }
 
     drawGrid();
   };
@@ -455,10 +443,11 @@ const togglePlay = () => {
       </div>
       <div id='description' className="flex flex-col gap-1 items-left p-6 bg-[var(--secondary1)] rounded-b-2xl shadow-md hover:shadow-neutral-900">
         <div className="text-sm lg:text-sm xl:text-lg m-6 mb-2 overflow-hidden transition-all duration-500 ease-in-out flex flex-col gap-3">
-                    <p>
-              <strong>Conway&apos;s Game of Life</strong> is a fascinating cellular automaton where the fate of each cell – whether it lives or dies – is governed by a simple set of rules.
-              Pause the simulation and click or drag across the grid to toggle individual cells between their alive and dead states.
+              <p>
+                Here's my implementation of <strong>Conway&apos;s Game of Life</strong> in Rust(WebAssembly) and Next(TypeScript). It's a fascinating cellular automaton where the fate of each cell – whether it lives or dies – is governed by a simple set of rules.
+                Pause the simulation and click or drag across the grid to toggle individual cells between their alive and dead states.
             </p>
+            <p> If you want to learn more about Conway&apos;s Game of Life, check out the <a className="underline text-blue-500" href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life" target="_blank" rel="noreferrer">Wikipedia page</a> or <a href="https://www.conwaylife.com/" className="underline text-blue-500" target="_blank" rel="noreferrer">ConwayLife.com</a>. </p>
             <p>
               I initially implemented this project as a pure React application, and I vividly recall my CPU fan working overtime/screaming! Now, I&apos;ve significantly improved 
               performance by leveraging the power of <strong>WebAssembly (Wasm) with Rust</strong>. It&apos;s amazing how these four fundamental rules can give rise to incredibly complex and dynamic patterns.
