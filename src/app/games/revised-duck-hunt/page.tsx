@@ -17,7 +17,7 @@ const BACKGROUND_SRC = '/game/revise-duck-hunt/background.jpg';
 const DUCK_SPEED = 1;
 const DUCK_FLAP_VELOCITY_Y = -0.5; // upward velocity when flapping (spacebar pressed)
 const DUCK_INCLINE_ANGLE = Math.PI / 10; //   angle for the upward incline (eg, 18 degrees)
-const DUCK_DECCELERATION = 0.98; // deceleration factor for the duck's horizontal movement
+// const DUCK_DECCELERATION = 0.98; // deceleration factor for the duck's horizontal movement
 const GRAVITY = 0.005; // To simulate gravity effect on the duck's vertical movement
 const FLAP_DURATION_FRAMES = 60 * 2; // 1.5 seconds of flapping at 60 FPS
 
@@ -230,8 +230,8 @@ const DuckHuntRevised = () => {
                         let newFlapDurationTimer = prevDuck.flapDurationTimer;
 
                         let newBoostActive = prevDuck.boostActive;
-                        let newBoostStartTime = prevDuck.boostStartTime;
-                        let newBoostTimeoutId = prevDuck.boostTimeoutId; // keep existing timeout if any
+                        const newBoostStartTime = prevDuck.boostStartTime;
+                        // let newBoostTimeoutId = prevDuck.boostTimeoutId; // keep existing timeout if any
 
 
                         // -- check for sustained press boost activation ---
