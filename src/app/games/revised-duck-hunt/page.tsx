@@ -266,7 +266,7 @@ const DuckHuntRevised = () => {
                             newFlapDurationTimer = Math.max(0, newFlapDurationTimer - 1); // decrement flap timer
                             if (newFlapDurationTimer > 0) {
                                 newAnimate = 'flap'; // still flapping
-                                newVelocityY != GRAVITY; // apply gravity effect
+                                newVelocityY += GRAVITY; // apply gravity effect
                             } else {
                                 newAnimate = 'glide'; // switch to gliding animation
                                 newVelocityY += GRAVITY; // apply gravity effect
