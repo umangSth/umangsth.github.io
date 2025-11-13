@@ -1,4 +1,4 @@
-import {Position, DuckState} from './types';
+import {Position} from './types';
 import { DUCK_DISPLAY_SIZE, DUCK_FRAME_HEIGHT, DUCK_FRAME_WIDTH } from './constants';
 
 
@@ -10,7 +10,7 @@ export const loadImage = (src: string): Promise<HTMLImageElement> => {
         const img = new Image();
         img.src = src;
         img.onload = () => resolve(img);
-        img.onerror = (error) => reject(new Error(`Failed to load image: ${src}`));
+        img.onerror = (error) => reject(new Error(`Failed to load image: ${src} ${error}`));
     })
 }
 

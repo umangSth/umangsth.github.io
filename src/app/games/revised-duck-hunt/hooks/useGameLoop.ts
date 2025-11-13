@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { loadImage, drawDuck } from "../utils/helpers";
-import { BACKGROUND_SRC, DUCK_SPRITE_SRC, DUCK_SPRITE_SRC_LEFT,DUCK_SPRITE_STANDING_SRC, DUCK_SPRITE_STANDING_SRC_LEFT, WIDTH, HEIGHT, CLOUD_SKY_SRC, MOUNTAINS_SRC, GREEN_HILLS_1_SRC, GREEN_FIELD_SRC } from "../utils/constants";
+import { DUCK_SPRITE_SRC, DUCK_SPRITE_SRC_LEFT,DUCK_SPRITE_STANDING_SRC, DUCK_SPRITE_STANDING_SRC_LEFT, WIDTH, HEIGHT, CLOUD_SKY_SRC, MOUNTAINS_SRC, GREEN_HILLS_1_SRC, GREEN_FIELD_SRC } from "../utils/constants";
 import { DuckState } from "../utils/types";
 
 interface UseGameLoopProps {
@@ -54,11 +54,11 @@ export const useGameLoop = ({ canvasRef, duckState, updateDuck }: UseGameLoopPro
         let duckSpriteStandingLeft: HTMLImageElement | null = null;
 
         // background images 
-        let cloudSkyImage: HTMLImageElement | null = null;
-        let mountainsImage: HTMLImageElement | null = null;
-        let greenHills1Image: HTMLImageElement | null = null;
-        let greenHills2Image: HTMLImageElement | null = null;
-        let greenFieldImage: HTMLImageElement | null = null;
+        // const cloudSkyImage: HTMLImageElement | null = null;
+        // const mountainsImage: HTMLImageElement | null = null;
+        // const greenHills1Image: HTMLImageElement | null = null;
+        // const greenHills2Image: HTMLImageElement | null = null;
+        // const greenFieldImage: HTMLImageElement | null = null;
 
         const loadAssetsAndStartLoop = async () => {
             try { 

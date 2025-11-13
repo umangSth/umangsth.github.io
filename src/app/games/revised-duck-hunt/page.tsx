@@ -1,5 +1,5 @@
 'use client';
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef } from 'react';
 import { 
     WIDTH, 
     HEIGHT, 
