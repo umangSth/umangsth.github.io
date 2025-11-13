@@ -24,8 +24,6 @@ const DuckHuntRevised = () => {
     });
 
 
-
-
 // console.log("Duck State:", duck); // for debugging purposes, you can remove this later
     return (
         <div className={`flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4 pt-35`}>
@@ -40,7 +38,7 @@ const DuckHuntRevised = () => {
                     <h2 className="font-bold text-3xl text-gray-700  mb-1">
                         Revised Duck hunt
                     </h2>
-                    <span className="text-xl">(with WebAssembly & native Typescript)</span>
+                    {/* <span className="text-xl">(with WebAssembly & native Typescript)</span> */}
                 </div>
             </div>
         

@@ -2,12 +2,7 @@ import {useState, useEffect} from 'react';
 import { 
     WIDTH, 
     HEIGHT, 
-    DUCK_SPRITE_SRC, 
-    DUCK_SPRITE_SRC_LEFT, 
-    BACKGROUND_SRC, 
     DUCK_DISPLAY_SIZE, 
-    DUCK_FRAME_WIDTH, 
-    DUCK_FRAME_HEIGHT, 
     DUCK_SPRITE_TOTAL_FRAMES, 
     DUCK_GLIDE_INDEX_LEFT, 
     DUCK_GLIDE_INDEX_RIGHT, 
@@ -122,40 +117,13 @@ import {
             });
         };
 
-        const handleKeyUpBoost = (event: KeyboardEvent) => {
-            if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
-                setDuck((prevDuck) => {
-                    // Only deactivate boost if it's not a short boost still running
-                    if (prevDuck.boostActive && prevDuck.boostTimeoutId === null) {
-                        return {
-                            ...prevDuck,
-                            boostActive: false,
-                            boostStartTime: null,
-                            boostTimeoutId: null,
-                        }
-                    } else if (prevDuck.boostTimeoutId) {
-                        // clear the short boost timeout if key is released early
-                        clearTimeout(prevDuck.boostTimeoutId);
-                        return {
-                            ...prevDuck,
-                            boostActive: false,
-                            boostStartTime: null,
-                            boostTimeoutId: null,
-                        }
-                    }
-                    return prevDuck; // no change if boost was not active
-                })
-            }
-        }
 
         // Add event listeners for keydown and keyup events
         window.addEventListener('keydown', handleKeyDownBoost);
-        window.addEventListener('keyup', handleKeyUpBoost);
 
         // Cleanup function to remove event listeners
         return () => {
             window.removeEventListener('keydown', handleKeyDownBoost);
-            window.removeEventListener('keyup', handleKeyUpBoost);
         };
     }, []); // only run once on mount
 
@@ -194,15 +162,6 @@ import {
             const currentSpeed = DUCK_SPEED * (newBoostActive ? BOOST_MULTIPLIER : 1);
 
 
-            // Gradually reduce boost speed if active 
-            if (newBoostActive && !keysPressed.has('ArrowLeft') && !keysPressed.has('ArrowRight')) {
-                // if the boost is active and no arrow key is pressed, reduce the speed gradually
-                // this is to prevent the duck from moving too fast when the boost is active
-                newVelocityX *= 0.98; // reduce horizontal speed gradually
-                newVelocityY *= 0.98; // reduce vertical speed gradually
-            }
-
-
              // handle spacebar (push flight with incline)
             if (keysPressed.has(' ')) {
                 // debugger
@@ -224,11 +183,16 @@ import {
                 // if the flap duration timer is greater than 0, it means the duck is still flapping
                 if (newFlapDurationTimer > 0 || newBoostActive) {
                     newAnimate = 'flap'; // still flapping
-                    newVelocityY += GRAVITY; // apply gravity effect
+                    if(!newBoostActive) {
+                          newVelocityY += GRAVITY; // apply gravity effect
+                    }
                 } else {
                     // when the flap duration timer is 0, switch to gliding animation
                     newAnimate = 'glide'; // switch to gliding animation
-                    newVelocityY += GRAVITY; // apply gravity effect
+                    if (!newBoostActive){
+                        newVelocityY += GRAVITY; // apply gravity effect
+                    }
+                   
                     // Reduce incline when not flapping
                     // this will make the duck angle to gradually return to horizontal
                     if (newAngle > 0) newAngle = Math.max(0, newAngle - GRAVITY / 5);
@@ -268,17 +232,17 @@ import {
 
             // checking the boundaries of the canvas
             // if the newX is less than 0, it means the duck is hitting the left boundary
-            if (newX < 0) {
-                newX = 0;
-                newVelocityX = 0; // stop if hitting left boundary
-                newBoostActive = false; // deactivate boost if hitting boundary
-            }
-            // if the newX is greater than the width of the canvas minus the duck display size, it means the duck is hitting the right boundary 
-            else if (newX + DUCK_DISPLAY_SIZE > WIDTH) {
-                newX = WIDTH - DUCK_DISPLAY_SIZE;
-                newVelocityX = 0; // stop if hitting right boundary
-                newBoostActive = false; // deactivate boost if hitting boundary
-            }
+            // if (newX < 0) {
+            //     newX = 0;
+            //     newVelocityX = 0; // stop if hitting left boundary
+            //     newBoostActive = false; // deactivate boost if hitting boundary
+            // }
+            // // if the newX is greater than the width of the canvas minus the duck display size, it means the duck is hitting the right boundary 
+            // else if (newX + DUCK_DISPLAY_SIZE > WIDTH) {
+            //     newX = WIDTH - DUCK_DISPLAY_SIZE;
+            //     newVelocityX = 0; // stop if hitting right boundary
+            //     newBoostActive = false; // deactivate boost if hitting boundary
+            // }
             // if the newY is less than 0, it means the duck is hitting the top boundary
             if (newY < 0) {
                 newY = 0;
@@ -288,7 +252,11 @@ import {
             // this will ensure the duck doesn't go out of the canvas 
             else if (newY + DUCK_DISPLAY_SIZE > HEIGHT) {
                 newY = HEIGHT - DUCK_DISPLAY_SIZE;
+                newX = prevDuck.position.x; // maintain horizontal position when hitting bottom
                 newVelocityY = 0; // stop if hitting bottom boundary
+                newBoostActive = false; // deactivate boost if hitting boundary
+                newAnimate = 'standing'; // switch to standing animation when hitting bottom
+                
             }
             // --- Animation Frame Update (Moved into setDuck for consistency) ---
             // update the sprite frame index based on the animation state
@@ -306,13 +274,17 @@ import {
                     // Increment the sprite frame index
                     newSpriteFrameIndex = (newSpriteFrameIndex + 1) % DUCK_SPRITE_TOTAL_FRAMES;
                 }
-            } else {
+            } else if (newAnimate === 'glide') {
                 // When gliding, ensure the frame index is always the first (glide) frame
                 if (newDirection === 'right') {
                     newSpriteFrameIndex = DUCK_GLIDE_INDEX_RIGHT; // right glide frame
                 }else {
                     newSpriteFrameIndex = DUCK_GLIDE_INDEX_LEFT; // left glide frame
                 }
+            } else {
+                // For standing or shot, reset to the first frame
+                newSpriteFrameIndex = 0; // reset to standing frame
+                newAngle = 0; // reset angle to horizontal
             }
 
             // return the updated duck state
@@ -331,5 +303,9 @@ import {
             };
         })
     }
+
     return { duck, updateDuck }; // return the duck state and the update function
  }
+
+
+ 

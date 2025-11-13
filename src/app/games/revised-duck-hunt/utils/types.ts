@@ -13,7 +13,7 @@ export interface DuckState {
     spriteFrameIndex: number;   // current frame index in the sprite sheet
     animationTimer: number;   // timer to control the animation speed
     currentAngle: number;   // current angle of the duck for incline effect
-    animate: 'flap' | 'glide' | 'shot'  // state of the duck,  flap means the sprite is changing creating flapping effects, glide means the duck glide sprite image is shown, for left and right its different sprite index, while shot is not yet create for now
+    animate: 'flap' | 'glide' | 'shot' | 'standing';  // state of the duck,  flap means the sprite is changing creating flapping effects, glide means the duck glide sprite image is shown, for left and right its different sprite index, while shot is not yet create for now
     flapDurationTimer: number; // timer to mark the animation frames, time to tell changing in the sprite frame index
 
     boostActive: boolean; // whether boost is currently active
