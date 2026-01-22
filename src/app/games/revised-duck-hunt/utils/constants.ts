@@ -1,7 +1,7 @@
 // src/utils/constants.ts
 
-export const WIDTH = 1400;
-export const HEIGHT = 750;
+export const WIDTH = 1100;
+export const HEIGHT = 600;
 
 export const DUCK_GLIDE_INDEX_LEFT = 2; // index for the left glide frame
 export const DUCK_GLIDE_INDEX_RIGHT = 1; // index for the right glide frame
@@ -9,9 +9,8 @@ export const DUCK_FRAME_WIDTH = 30;
 export const DUCK_FRAME_HEIGHT = 20;
 export const DUCK_SPRITE_TOTAL_FRAMES = 4;
 export const DUCK_DISPLAY_SIZE = 60;
-export const DUCK_SPRITE_SRC = '/game/revise-duck-hunt/duck_flight.png';
-export const DUCK_SPRITE_SRC_LEFT = '/game/revise-duck-hunt/duck_flight-left.png';
-export const BACKGROUND_SRC = '/game/revise-duck-hunt/background.jpg';
+export const DUCK_SPRITE_SRC = '/game/revise-duck-hunt/duck_flight_1.png';
+export const DUCK_SPRITE_SRC_LEFT = '/game/revise-duck-hunt/duck_flight_left_1.png';
 export const DUCK_SPRITE_STANDING_SRC = '/game/revise-duck-hunt/duck_standing.png'; // standing sprite for the duck
 export const DUCK_SPRITE_STANDING_SRC_LEFT = '/game/revise-duck-hunt/duck_standing-left.png'; // standing sprite for the duck facing left
 export const CLOUD_SKY_SRC = '/game/revise-duck-hunt/cloud_sky.png';

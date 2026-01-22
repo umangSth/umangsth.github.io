@@ -1,32 +1,74 @@
 'use client';
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { 
     WIDTH, 
     HEIGHT, 
 } from './utils/constants'; // import the constants for the game
-import { useInput } from './hooks/useInput'; // custom hook to handle input
-import { useDuckLogic } from './hooks/useDuckLogic'; // custom hook to handle duck logic
-import { useGameLoop } from './hooks/useGameLoop'; // custom hook to handle the game loop
-
+import init, { set_canvas_dimensions, set_user_input } from '../hello-wasm/pkg/hello_wasm';
+import { loadAllAssets } from './utils/gameLoop';
+import { gameLoop } from './utils/gameLoop';
 
 const DuckHuntRevised = () => {
-    const canvasRef = useRef<HTMLCanvasElement>(null);  // reference to the canvas element using useRef hook
-    
-    const keysPressed = useInput(); // custom hook to handle input, it returns a Set of keys pressed
+    const canvas_ref = useRef(null);
+    const isRunning = useRef(true);
+    // initialize the wasm 
+    useEffect(()=>{
+        isRunning.current = true;
+       const start = async ()=>{
+            await init();
+            set_canvas_dimensions(WIDTH, HEIGHT);
 
-    const { duck:duckState, updateDuck } = useDuckLogic(keysPressed); // custom hook to handle duck logic, it returns the duck state and a function to update the duck state
-    
-    // run the game loop using the useGameLoop custom hook
-    const { assetsLoaded } = useGameLoop({
-        canvasRef, // pass the canvas reference to the game loop
-        duckState, // pass the duck state to the game loop
-        updateDuck // pass the function to update the duck state to the game loop
-    });
+            await loadAllAssets();
+            if(canvas_ref.current){
+            const canvas:HTMLCanvasElement = canvas_ref.current;
+            if(canvas){
+                const ctx = canvas.getContext('2d');
+                if(ctx) {
+                    gameLoop(ctx, isRunning);
+                }
+            }
+        }  
+       }
+       start();
+       // CleanUp: this runs when the component disappears
+       return () => {
+        isRunning.current = false;
+       }
+    },[]);
 
 
-// console.log("Duck State:", duck); // for debugging purposes, you can remove this later
+ 
+
+
+    // Input handler 
+    useEffect(()=> {
+        const handleInput = (e:KeyboardEvent) => {
+           switch (e.code){
+            case 'ArrowLeft':
+            case 'KeyA':
+                set_user_input(1);
+                break;
+            case 'ArrowRight':
+            case 'KeyD':
+                set_user_input(2);
+                break;
+            case 'Space':
+                e.preventDefault();
+                break;
+           }
+        };
+
+        window.addEventListener('keydown', handleInput);
+        return ()=>{
+            window.removeEventListener('keydown', handleInput)
+        }
+    }, [])
+
+
+
+
     return (
-        <div className={`flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4 pt-35`}>
+        <div className={`flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4 pt-15`}>
             <div id='header' className='flex flex-col justify-start mb-4'
                 style={{ width: WIDTH }}
             >
@@ -38,29 +80,24 @@ const DuckHuntRevised = () => {
                     <h2 className="font-bold text-3xl text-gray-700  mb-1">
                         Revised Duck hunt
                     </h2>
-                    {/* <span className="text-xl">(with WebAssembly & native Typescript)</span> */}
                 </div>
             </div>
         
         {/* the main canvas where all the things will happen */}
             <canvas
-                ref={canvasRef}
+                ref={canvas_ref}
                 width={WIDTH}
-                height= {HEIGHT}
+                height={HEIGHT}
                 style={{
-                    border: '1px solid black'
+                    border: '3px solid black',
+                    margin: '0 auto',
+                    display: 'block',
                 }}
             />
-            {/* display a message when assets are loading */}
-            {!assetsLoaded && (
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                    <p className="text-xl font-bold text-gray-700">Loading...</p>
-                </div>
-            )}
-
         </div>
     )
 
 }
 
 export default DuckHuntRevised;
+
