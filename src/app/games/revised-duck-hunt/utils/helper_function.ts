@@ -19,3 +19,27 @@ export function extract_duck_co(co: number):{x:number, y:number} {
 }
 
 
+interface Duck_State {
+    isRight: boolean,
+    isFlapping: boolean,
+    isStanding: boolean
+}
+export function extract_duck_packed_state(state: number):Duck_State{
+    const isRight = (state & (1 << 0)) !== 0;
+    const isFlapping  = (state & (1 << 1)) !== 0;
+    const isStanding = (state & (1 << 2 )) !== 0;
+
+    return {
+        isRight,
+        isFlapping,
+        isStanding
+    }
+}
+
+
+// Return the frame for flapping animation
+export function extract_duck_flapping_frame(time: number):number{
+    return Math.floor((time / 50) % 4) + 1
+}
+
+

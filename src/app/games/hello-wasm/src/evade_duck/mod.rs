@@ -2,17 +2,31 @@ use wasm_bindgen::prelude::*;
 use std::sync::{Mutex, LazyLock};
 
 
-
-const DUCK_SPEED: u16 = 5;
-const GRAVITY: u16 = 1;
+const DUCK_SPEED: i16 = 3;
+const GRAVITY: i16 = 2;
 
 struct CanvasConfig {
     width: u32,
     height: u32,
+
+}
+
+struct Duck {
+    duck_x: i16,
+    duck_y: i16,
+    boost_frames: i16,
+    boost_dir: i16,
 }
 
 
+
 static SCREEN: Mutex<CanvasConfig> = Mutex::new(CanvasConfig {width: 0, height: 0});
+static INPUT: LazyLock<Mutex<u32>> = LazyLock::new(|| Mutex::new(1));
+static DUCK_STATE: LazyLock<Mutex<Duck>> = LazyLock::new(|| {
+    Mutex::new(Duck {duck_x: 100, duck_y: 100, boost_frames: 0, boost_dir: -1})
+});
+static DUCK_FLAP_FLAG: LazyLock<Mutex<bool>> = LazyLock::new(|| Mutex::new(false));
+static DUCK_STANDING_FLAG: LazyLock<Mutex<bool>> = LazyLock::new(|| Mutex::new(false));
 
 
 #[wasm_bindgen]
@@ -23,41 +37,70 @@ pub fn set_canvas_dimensions(width: u32, height: u32){
 }
 
 
-static INPUT: LazyLock<Mutex<u32>> = LazyLock::new(|| Mutex::new(1));
-
-struct Duck {
-    duck_x: u16,
-    duck_y: u16,
-}
-
-static DUCK_STATE: LazyLock<Mutex<Duck>> = LazyLock::new(|| {
-    Mutex::new(Duck {duck_x: 100, duck_y: 100})
-});
 
 #[wasm_bindgen]
 pub fn get_duck_co() -> u32 {
  
     apply_gravity();
     let state = DUCK_STATE.lock().unwrap();
-    return ((state.duck_x as u32) << 16) | (state.duck_y as u32);
+
+    // ensure values are between 0 and 65535 so they fit in 16 bits safely 
+    let x = state.duck_x.max(0) as u32;
+    let y = state.duck_y.max(0) as u32;
+
+    return (x << 16) | (y & 0xFFFF);
 }
 
+
+
+// First bit will be for left and right direction of duck
+// second bit will be for the flapping state of the duck
+#[wasm_bindgen]
+pub fn get_duck_states() -> u8 {
+    let flap = *DUCK_FLAP_FLAG.lock().unwrap();
+    let stand = *DUCK_STANDING_FLAG.lock().unwrap();
+    let duck_dir ={
+        let duck_state =  DUCK_STATE.lock().unwrap();
+        duck_state.boost_dir != -1
+    };
+    let mut packed_state:u8 = 0;
+
+    if duck_dir {
+        packed_state |= 1 << 0;
+    }
+    if flap {
+        packed_state |= 1 << 1;
+    }
+    if stand {
+        packed_state |= 1 << 2;
+    }
+    packed_state
+}
+
+
+
 // The list of input 
-// 1 -> left
-// 2 -> right
+// 1 -> right
+// 2 -> left
 // 3 -> space (lift)
 #[wasm_bindgen]
 pub fn set_user_input(input: u32) {
     let mut data = INPUT.lock().unwrap();
-    let mut duck_co = DUCK_STATE.lock().unwrap();
+    let mut duck = DUCK_STATE.lock().unwrap();
+    let mut flap = DUCK_FLAP_FLAG.lock().unwrap();
     match input {
         1 => {
             *data = 1;
-            duck_co.duck_x -= 1;
+            duck.boost_frames = 40;
+            duck.boost_dir = -1;
+            *flap = true;
+
         }
         2 => {
             *data = 2;
-            duck_co.duck_x += 1;
+            duck.boost_frames = 40;
+            duck.boost_dir = 1;
+            *flap = true;
         }
         3 => {
             *data = 3;
@@ -72,14 +115,46 @@ pub fn set_user_input(input: u32) {
 
 fn apply_gravity(){
     let mut duck = DUCK_STATE.lock().unwrap();
-    let screen = SCREEN.lock().unwrap();
+    let mut stand = DUCK_STANDING_FLAG.lock().unwrap();
+    
+    // screen height minus 50px
+    let screen_height = {
+        let screen = SCREEN.lock().unwrap();
+        screen.height as i16
+    } - 50;
 
-    // apply gravity
-    duck.duck_y += GRAVITY;
-
-    let update_height = screen.height - 50;
-    if (duck.duck_y as u32) >= (update_height) {
-        duck.duck_y = update_height as u16;
+    // apply gravity/physics for Y-axis
+    if duck.duck_y >= screen_height {
+        duck.duck_y = screen_height;
+        *stand = true;
+    }else {
+        duck.duck_y += GRAVITY;
+        *stand = false;
     }
 
+//------------------------------
+    // apply physics for X-axis
+    if duck.duck_x <= 0 {
+        if duck.duck_y >= screen_height {
+            duck.duck_x = 0;
+        } else {
+            duck.duck_x += (DUCK_SPEED * duck.boost_dir);
+        }   
+    } else {
+        if duck.duck_y < screen_height {
+            // applying this to show gliding effects
+            duck.duck_x += (DUCK_SPEED * duck.boost_dir);
+        }       
+    }
+
+//--------------------------------
+    // when the boost/lift/flapping 
+    if duck.boost_frames > 0 {
+        duck.duck_x += (DUCK_SPEED * duck.boost_dir);
+        duck.duck_y -= DUCK_SPEED + 3;
+
+        duck.boost_frames -= 1;
+    } else {
+            *DUCK_FLAP_FLAG.lock().unwrap() = false;
+    }
 }
