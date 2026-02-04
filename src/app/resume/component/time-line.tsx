@@ -44,6 +44,7 @@ interface ColorYearArray {
 }
 
 
+const CURRENT_YEARS_MINUS_1 = new Date().getFullYear() - 1;
 
 
 export const TimeLine = () => {
@@ -310,7 +311,7 @@ export const TimeLine = () => {
                                 let remaining = 0;
 
 
-                                if (year === '2024' && preTemp === undefined) {
+                                if (year === CURRENT_YEARS_MINUS_1.toString() && preTemp === undefined) {
                                     takenHeight = lineHeight + 28 + 28;
                                     preTemp = {
                                         top: {
