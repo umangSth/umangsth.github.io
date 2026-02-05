@@ -27,12 +27,12 @@ export async function loadBackGround(ctx: any, duck_co: {x:number, y:number}){
             let tempWidth = scaledWidth;
             
            
-            let speed = Background_Layer[img.currentSrc] || 1;
+            const speed = Background_Layer[img.currentSrc] || 1;
              // as the cloud bg image is not width of 5600, so changing its width to 2800
             if(img.currentSrc.includes('cloud')){
                 tempWidth = scaledCloudWidth;
             }
-            let xOffset = -(duck_co.x * speed) % tempWidth;
+            const xOffset = -(duck_co.x * speed) % tempWidth;
             ctx.drawImage(img, xOffset, 0, tempWidth, HEIGHT);
             if (xOffset < 0){
                 ctx.drawImage(img, xOffset + tempWidth, 0, tempWidth, HEIGHT)
