@@ -12,10 +12,10 @@ const scaledCloudWidth = CLOUD_WIDTH * (HEIGHT/IMAGE_HEIGHT)
 
 
 const Background_Layer:Record<string, number>={
-    CLOUD_SKY_SRC:0.1,
-    MOUNTAINS_SRC:0.3,
-    GREEN_HILLS_1_SRC:0.6,
-    GREEN_FIELD_SRC:0.9
+    [CLOUD_SKY_SRC]:0.1,
+    [MOUNTAINS_SRC]:0.3,
+    [GREEN_HILLS_1_SRC]:0.6,
+    [GREEN_FIELD_SRC]:0.9
 }
 
 

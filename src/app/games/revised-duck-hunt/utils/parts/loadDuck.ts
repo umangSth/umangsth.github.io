@@ -1,6 +1,3 @@
-import { extract_duck_flapping_frame } from "../helper_function";
-
-
 
 type Duck_Direction = 'left' | 'right';
 const FRAME_WIDTH = 30;
