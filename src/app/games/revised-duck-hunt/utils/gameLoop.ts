@@ -27,12 +27,12 @@ export function gameLoop(ctx: CanvasRenderingContext2D, isRunning: React.RefObje
   
 
     const duckDirection = duck_states.isRight ? 'right' : 'left';
-    let duckFrameType = duck_states.isFlapping ? 'flapping' : duck_states.isStanding? 'standing' : 'glide';
+    const duckFrameType = duck_states.isFlapping ? 'flapping' : duck_states.isStanding? 'standing' : 'glide';
     let duckFrameIndex = 3;
 
     // Draw Backgrounds from global constants
    if (Assets.backgrounds){
-       loadBackGround(ctx)
+       loadBackGround(ctx, duck)
    }
 
     if (Assets.duckSprite) {
@@ -71,6 +71,7 @@ export async function loadAllAssets() {
     Assets.isReady = true;
     console.log("All assets loaded into global store");
 }
+
 
 
 
