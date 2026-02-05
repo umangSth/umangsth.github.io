@@ -21,7 +21,7 @@ const Background_Layer:Record<string, number>={
 
 
 // load the bg_images
-export async function loadBackGround(ctx: any, duck_co: {x:number, y:number}){
+export async function loadBackGround(ctx: CanvasRenderingContext2D, duck_co: {x:number, y:number}){
     try{
         Assets.backgrounds.forEach((img) => {
             let tempWidth = scaledWidth;
