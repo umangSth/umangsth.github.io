@@ -2,8 +2,7 @@
 import React, { useRef, useEffect } from 'react';
 import { 
     WIDTH, 
-    HEIGHT, 
-    DUCK_FRAME_WIDTH
+    HEIGHT,
 } from './utils/constants'; // import the constants for the game
 import init, { set_canvas_dimensions, set_user_input } from '../hello-wasm/pkg/hello_wasm';
 import { loadAllAssets } from './utils/gameLoop';
