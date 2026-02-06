@@ -8,7 +8,7 @@ import init, { set_canvas_dimensions, set_user_input } from '../hello-wasm/pkg/h
 import { loadAllAssets } from './utils/gameLoop';
 import { gameLoop } from './utils/gameLoop';
 
-export const BUFFER_WIDTH = 150;
+const BUFFER_WIDTH = 150;
 
 const DuckHuntRevised = () => {
     const canvas_ref = useRef(null);
