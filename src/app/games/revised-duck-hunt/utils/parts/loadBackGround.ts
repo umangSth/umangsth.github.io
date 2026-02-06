@@ -21,7 +21,7 @@ const Background_Layer:Record<string, number>={
 
 
 // load the bg_images
-export async function loadBackGround(ctx: CanvasRenderingContext2D, duck_co: {x:number, y:number}){
+export async function loadBackGround(ctx: CanvasRenderingContext2D, duck: {x:number, y:number, cameraX:number}){
     try{
         Assets.backgrounds.forEach((img) => {
             let tempWidth = scaledWidth;
@@ -32,10 +32,12 @@ export async function loadBackGround(ctx: CanvasRenderingContext2D, duck_co: {x:
             if(img.currentSrc.includes('cloud')){
                 tempWidth = scaledCloudWidth;
             }
-            const xOffset = -(duck_co.x * speed) % tempWidth;
+            const xOffset =  -(duck.cameraX * speed) % tempWidth;
             ctx.drawImage(img, xOffset, 0, tempWidth, HEIGHT);
             if (xOffset < 0){
-                ctx.drawImage(img, xOffset + tempWidth, 0, tempWidth, HEIGHT)
+                ctx.drawImage(img, xOffset + tempWidth, 0, tempWidth, HEIGHT);
+            }else{
+                ctx.drawImage(img, xOffset - tempWidth, 0, tempWidth, HEIGHT);
             }
         })
     }catch(error) {

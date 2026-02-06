@@ -3,10 +3,13 @@ import React, { useRef, useEffect } from 'react';
 import { 
     WIDTH, 
     HEIGHT, 
+    DUCK_FRAME_WIDTH
 } from './utils/constants'; // import the constants for the game
 import init, { set_canvas_dimensions, set_user_input } from '../hello-wasm/pkg/hello_wasm';
 import { loadAllAssets } from './utils/gameLoop';
 import { gameLoop } from './utils/gameLoop';
+
+export const BUFFER_WIDTH = 150;
 
 const DuckHuntRevised = () => {
     const canvas_ref = useRef(null);
@@ -16,7 +19,7 @@ const DuckHuntRevised = () => {
         isRunning.current = true;
        const start = async ()=>{
             await init();
-            set_canvas_dimensions(WIDTH, HEIGHT);
+            set_canvas_dimensions(WIDTH - BUFFER_WIDTH, HEIGHT);
 
             await loadAllAssets();
             if(canvas_ref.current){

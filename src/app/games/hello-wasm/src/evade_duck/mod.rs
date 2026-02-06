@@ -4,13 +4,17 @@ use std::sync::{Mutex, LazyLock};
 
 const DUCK_SPEED: i16 = 3;
 const GRAVITY: i16 = 2;
+const BUFFER_WIDTH: i16 = 150;
 
 struct CanvasConfig {
     width: u32,
     height: u32,
 
 }
-
+struct ScreenDim {
+    width: i16,
+    height: i16,
+}
 struct Duck {
     duck_x: i16,
     duck_y: i16,
@@ -23,7 +27,7 @@ struct Duck {
 static SCREEN: Mutex<CanvasConfig> = Mutex::new(CanvasConfig {width: 0, height: 0});
 static INPUT: LazyLock<Mutex<u32>> = LazyLock::new(|| Mutex::new(1));
 static DUCK_STATE: LazyLock<Mutex<Duck>> = LazyLock::new(|| {
-    Mutex::new(Duck {duck_x: 100, duck_y: 100, boost_frames: 0, boost_dir: -1})
+    Mutex::new(Duck {duck_x: 400, duck_y: 200, boost_frames: 0, boost_dir: -1})
 });
 static DUCK_FLAP_FLAG: LazyLock<Mutex<bool>> = LazyLock::new(|| Mutex::new(false));
 static DUCK_STANDING_FLAG: LazyLock<Mutex<bool>> = LazyLock::new(|| Mutex::new(false));
@@ -118,14 +122,19 @@ fn apply_gravity(){
     let mut stand = DUCK_STANDING_FLAG.lock().unwrap();
     
     // screen height minus 50px
-    let screen_height = {
+    let screen = {
         let screen = SCREEN.lock().unwrap();
-        screen.height as i16
-    } - 50;
+        ScreenDim {
+            height: screen.height as i16 - 50,
+            width: screen.width as i16,
+        }
+    };
+
+    
 
     // apply gravity/physics for Y-axis
-    if duck.duck_y >= screen_height {
-        duck.duck_y = screen_height;
+    if duck.duck_y >= screen.height {
+        duck.duck_y = screen.height;
         *stand = true;
     }else {
         duck.duck_y += GRAVITY;
@@ -134,17 +143,15 @@ fn apply_gravity(){
 
 //------------------------------
     // apply physics for X-axis
-    if duck.duck_x <= 0 {
-        if duck.duck_y >= screen_height {
-            duck.duck_x = 0;
-        } else {
-            duck.duck_x += (DUCK_SPEED * duck.boost_dir);
-        }   
-    } else {
-        if duck.duck_y < screen_height {
+    if duck.duck_x <= BUFFER_WIDTH {
+        duck.duck_x = BUFFER_WIDTH; 
+    } else if duck.duck_x < screen.width{
+        if duck.duck_y < screen.height {
             // applying this to show gliding effects
             duck.duck_x += (DUCK_SPEED * duck.boost_dir);
         }       
+    } else {
+        duck.duck_x = screen.width
     }
 
 //--------------------------------
